@@ -1,5 +1,5 @@
 import { createFileRoute, Link, useRouter } from "@tanstack/react-router";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { MapPin, Package, Scale, Truck, Share2, Bookmark, BookmarkCheck, Flag, Lock, ShoppingCart, HandCoins } from "lucide-react";
 import { toast } from "sonner";
 import { PublicShell } from "@/components/site-chrome";
@@ -37,8 +37,16 @@ function ListingPage() {
   const hydrated = useHydratedFlag();
   const router = useRouter();
   const gate = useTradeGate();
-  const [offerOpen, setOfferOpen] = useState(action === "offer");
-  const [buyOpen, setBuyOpen] = useState(action === "buy");
+  const [offerOpen, setOfferOpen] = useState(false);
+  const [buyOpen, setBuyOpen] = useState(false);
+  // Resume a preserved intent (?action=offer|buy) — it still passes through the verification gate.
+  useEffect(() => {
+    if (!hydrated || !l || !action) return;
+    const base0 = `/marketplace/${l.id}`;
+    if (action === "offer") gate({ path: `${base0}?action=offer`, label: "Make an offer", level: "basic" }, () => setOfferOpen(true));
+    if (action === "buy") gate({ path: `${base0}?action=buy`, label: "Proceed to purchase", level: "full" }, () => setBuyOpen(true));
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [hydrated, action, l?.id]);
   const [price, setPrice] = useState(l ? String(l.price) : "");
   const [qty, setQty] = useState(l ? String(l.minOrder) : "");
   const [conds, setConds] = useState<string[]>([]);
