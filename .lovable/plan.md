@@ -6,34 +6,17 @@ The full six-page correction document and its accompanying instructions have bee
 
 Preserve the existing logo, palette, typography, layout, sidebar and Marketplace/AkuBin switcher. This is targeted refinement, not a rebuild.
 
-### Already present and worth preserving
+### Existing foundations
 
-- Public Marketplace browsing, listing details, search/filtering and public bin information.
-- One shared account, registration consent with Terms and Privacy links, separate Marketplace verification and saved-action restoration.
-- The signed-in sidebar, For You feed, listings, offers, orders, buyer requests, saved items, settings and supporting portals.
-- Structured offers/counteroffers, partner eligibility filtering, quote selection and simulated payment/delivery/dispute/settlement actions.
-- Buyer total calculation without an added surcharge, plus separate seller and partner commission deductions.
-- Demo bin map/list/search and closest-bin controls, deposit history, redemptions and period selectors for leaderboards.
-- Advertising submission/review and news/article editorial controls.
+Public browsing/search/details; one account and consent links; separate trading verification and saved intent; signed-in sidebar/service switcher; For You, listings/offers/orders/requests/saved/settings; structured negotiations and eligible-partner quotes; simulated payment/delivery/disputes; separate commission calculations; demo locator/history/rewards; advertising and editorial review portals.
 
-These are existing foundations, not confirmation that every workflow meets the new specification.
+### Confirmed gaps
 
-### Main corrections and missing functionality
+About lacks the approved Mission/Vision; images repeat, em dashes remain and bin imagery has multiple intakes. Accounts activate without email confirmation; onboarding lacks Both and distinct dashboards. Internal listing/news/bin links leave the sidebar. Independent pickup remains; quotes lack adjustable buyer-proposed fares. Checkout exposes extra/internal financial rows. Transaction-qualified reviews and secure operational disclosure are incomplete. AkuBin uses alphanumeric codes/PIN cues and consumes the session on its first deposit. Reward promises and seeded leaderboard entries conflict with the new rules. News discovery, separate ad products and centralized policy/scopes are incomplete.
 
-- About has different Vision text and no separate approved Mission section. Public photos repeat, em dashes remain, and AkuBin imagery shows multiple openings rather than the specified device.
-- Signup activates a local account immediately without email ownership confirmation. Onboarding currently presents Buyer or Seller, not all three required choices.
-- Marketplace has a discovery feed but no distinct Buyer/Seller overview or instant dashboard role switch. Some record lists are user-scoped, but role scoping needs completion.
-- For You listing links lead to the public detail page. Saved/listing/offer links and authenticated news/bin navigation share similar sidebar-loss problems.
-- Checkout still permits independent pickup. Quotes use generated amounts and a lowest-price cue, not buyer-proposed recommended fares with plus/minus adjustment and partner acceptance/counters.
-- Checkout exposes an extra zero buyer-commission row and an internal payout breakdown rather than the required buyer-only price summary.
-- Transaction-qualified seller reviews and moderation are missing. Privacy protection and operational partner disclosure need a complete review, not just hiding fields.
-- AkuBin uses alphanumeric codes and phone/PIN cues; its code is consumed by the first deposit. Account-wide numeric codes and safe multi-deposit sessions are missing.
-- Reward screens promise expiry/value terms and fixed examples; leaderboards include seeded entries instead of being wholly calculated from eligible records.
-- News intake is seeded/manual, not a simulated discovery/deduplication pipeline. Ads lack separate sponsorship/business products, centrally configured packages and genuine event reporting.
+### Review evidence
 
-### What was checked in the browser
-
-Home, About, public Marketplace, public AkuBin and Signup opened without page errors during this review. About and AkuBin were visually inspected, confirming the copy and bin-image mismatches. Authenticated workflow findings below are based on source review, not newly completed end-to-end tests.
+The full document was compared with current routes, shared records, actions, rules and tests. Home, About, public Marketplace, public AkuBin and Signup opened without browser page errors. About/AkuBin screenshots confirmed copy and imagery mismatches. Authenticated findings are source-reviewed, not newly completed end-to-end tests.
 
 ## Approval and review process
 
@@ -89,10 +72,10 @@ To connect individuals and businesses that have reusable waste with businesses t
 
 **Approval requested:** Correction 1 only. All other items stay pending.
 
-## Technical dependencies and honest prototype limits
+## Technical dependencies and prototype limits
 
-- Current data, accounts, credentials, roles, payments and bin events are stored in the browser. They are editable/inspectable there. Do not enter real passwords or sensitive identity documents into this prototype.
-- Client-side gates cannot establish genuine email ownership, private-data protection, server permissions or trusted bin/payment events. These need a separately approved Lovable Cloud security/data foundation before claiming those requirements are fulfilled. No service connection or data migration is authorized by this plan.
-- Production payment/split/hold/refund capabilities and live bin connections remain out of scope without credentials and verified support. News discovery can be a labeled simulation until real sources/scheduling are approved.
-- No production fare, reward, expiry or advertising policy has been supplied. Do not substitute hardcoded examples for those decisions. Use explicit configured demo policy where needed and request actual policy before production use.
-- Reuse existing routes, components, shared records and rule tests. Add concrete behavioral tests for every approved business-rule change and verify the affected real user journey before reporting it complete.
+- Accounts, credentials, roles, payments and bin events currently live in an inspectable/editable browser store. Do not enter real passwords or sensitive identity documents.
+- Genuine email ownership, confidential data, server permissions and trusted payment/bin events require a separately approved Lovable Cloud security/data foundation. No connection or migration is authorized by this plan.
+- Live payment/split/hold/refund support and hardware remain out of scope without credentials and verified capabilities. Real news monitoring also needs approved sources/scheduling; simulations must be labeled.
+- Production fare, reward, expiry and advertising policies have not been supplied. Explicit configured demo values are not production policy.
+- Reuse existing routes/components/shared records. Add concrete tests for each approved business-rule change and verify its affected user journey before completion.
