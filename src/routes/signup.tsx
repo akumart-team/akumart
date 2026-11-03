@@ -100,9 +100,9 @@ function Signup() {
         <Field label="Phone (optional)" error={err.phone} hint="Useful for airtime rewards and bin sign-in by PIN.">
           <input className={inputCls} type="tel" value={f.phone} onChange={(e) => setF({ ...f, phone: e.target.value })} placeholder="+234 803 000 0000" />
         </Field>
-        <Field label="Password" error={err.pw}>
+        <Field label="Password" error={err.pw} htmlFor="su-pw">
           <div className="relative">
-            <input className={inputCls + " pr-11"} type={show ? "text" : "password"} autoComplete="new-password" value={f.pw} onChange={(e) => setF({ ...f, pw: e.target.value })} />
+            <input id="su-pw" className={inputCls + " pr-11"} type={show ? "text" : "password"} autoComplete="new-password" value={f.pw} onChange={(e) => setF({ ...f, pw: e.target.value })} />
             <button type="button" onClick={() => setShow(!show)} aria-label={show ? "Hide password" : "Show password"} className="absolute right-3 top-1/2 -translate-y-1/2 text-muted-foreground">
               {show ? <EyeOff className="size-4" /> : <Eye className="size-4" />}
             </button>
