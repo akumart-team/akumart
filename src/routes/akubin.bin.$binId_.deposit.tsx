@@ -107,7 +107,7 @@ function Deposit() {
       const s = left <= 0 ? "expired" : checkBinSession(code);
       if (s !== "ok") return setIdErr(s === "used" ? "This session was already used. Generate a new one." : s === "expired" ? "Session expired. Generate a new code." : "Invalid session.");
     } else {
-      if (!/^\+?[\d\s]{10,15}$/.test(phone)) return setIdErr("Enter your phone number.");
+      if (!/^\+?[\d\s-]{10,18}$/.test(phone)) return setIdErr("Enter your phone number.");
       if (!/^\d{4}$/.test(pin)) return setIdErr("Enter a 4-digit PIN.");
       if (me.pin && me.pin !== pin) return setIdErr("Incorrect PIN.");
       if (!me.pin) setPin(pin);

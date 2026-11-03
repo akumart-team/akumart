@@ -53,7 +53,7 @@ function Signup() {
     const er: Record<string, string> = {};
     if (f.name.trim().length < 2) er.name = "Enter your name";
     if (!/^\S+@\S+\.\S+$/.test(f.email)) er.email = "Enter a valid email";
-    if (f.phone && !/^\+?[\d\s]{10,15}$/.test(f.phone)) er.phone = "Enter a valid phone number";
+    if (f.phone && !/^\+?[\d\s-]{10,18}$/.test(f.phone)) er.phone = "Enter a valid phone number";
     if (f.pw.length < 8) er.pw = "Use at least 8 characters";
     if (!agree) er.agree = "You must accept the Terms & Conditions and acknowledge the Privacy Policy to continue.";
     setErr(er);

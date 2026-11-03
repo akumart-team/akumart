@@ -78,7 +78,7 @@ function Verification() {
         need("registeredAddress");
         need("contactPerson");
       }
-      if (!/^\+?[\d\s]{10,15}$/.test(f.phone ?? "")) er.phone = "Enter a valid phone number";
+      if (!/^\+?[\d\s-]{10,18}$/.test(f.phone ?? "")) er.phone = "Enter a valid phone number";
     } else {
       const docs = v.type === "business" ? ["cacCert", "regDoc", "repId"] : ["idDoc", "selfie"];
       docs.forEach((d) => !files[d] && (er[d] = "Upload required"));
