@@ -6,24 +6,20 @@ The full six-page correction document and its accompanying instructions have bee
 
 Preserve the existing logo, palette, typography, layout, sidebar and Marketplace/AkuBin switcher. This is targeted refinement, not a rebuild.
 
-### Existing foundations
+### Existing foundations and gaps
 
-Public browsing/search/details; one account and consent links; separate trading verification and saved intent; signed-in sidebar/service switcher; For You, listings/offers/orders/requests/saved/settings; structured negotiations and eligible-partner quotes; simulated payment/delivery/disputes; separate commission calculations; demo locator/history/rewards; advertising and editorial review portals.
+Existing: public browsing/search, shared account/consent, separate trading verification, sidebar/service switcher, listing/offer/order/request portals, partner quotes, simulated payments/disputes, locator/rewards, ads and editorial review.
 
-### Confirmed gaps
+Gaps: approved About copy, varied imagery, email activation, Both/separate dashboards, internal detail navigation, partner-only proposed fares, buyer-only checkout summary, reviews/privacy, numeric multi-deposit sessions, configured rewards/record-based rankings, news automation and distinct ad products.
 
-About lacks the approved Mission/Vision; images repeat, em dashes remain and bin imagery has multiple intakes. Accounts activate without email confirmation; onboarding lacks Both and distinct dashboards. Internal listing/news/bin links leave the sidebar. Independent pickup remains; quotes lack adjustable buyer-proposed fares. Checkout exposes extra/internal financial rows. Transaction-qualified reviews and secure operational disclosure are incomplete. AkuBin uses alphanumeric codes/PIN cues and consumes the session on its first deposit. Reward promises and seeded leaderboard entries conflict with the new rules. News discovery, separate ad products and centralized policy/scopes are incomplete.
-
-### Review evidence
-
-The full document was compared with current routes, shared records, actions, rules and tests. Home, About, public Marketplace, public AkuBin and Signup opened without browser page errors. About/AkuBin screenshots confirmed copy and imagery mismatches. Authenticated findings are source-reviewed, not newly completed end-to-end tests.
+Review combined source inspection with browser checks of Home, About, Marketplace, AkuBin and Signup, with no page errors. About/AkuBin screenshots confirmed mismatches. Authenticated journeys were source-reviewed, not newly tested end-to-end.
 
 ## Approval and review process
 
-1. Approve **one numbered correction only** before its implementation. Approval of this plan does not authorize every correction.
-2. Before touching an existing screen, provide its current state, required change, implementation approach and effects on other screens. Explain missing screens/features before building them too.
-3. Implement only that approved correction, test its affected journey and report the result for your review.
-4. Wait for your review and explicit approval before the next correction. New discoveries that expand the scope require another proposal.
+1. Approve **one correction only**. Plan approval does not authorize the remaining items.
+2. Before each change, explain the screen, current state, correction, approach and impacts, including new features.
+3. Implement that correction only, test it and report for review.
+4. Wait for explicit approval before the next correction or expanded scope.
 
 ## Recommended implementation order
 
