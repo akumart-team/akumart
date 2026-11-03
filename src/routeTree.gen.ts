@@ -10,33 +10,668 @@
 
 import { Route as rootRouteImport } from './routes/__root'
 import { Route as IndexRouteImport } from './routes/index'
+import { Route as AboutRouteImport } from './routes/about'
+import { Route as AdminRouteImport } from './routes/admin'
+import { Route as AdvertiseRouteImport } from './routes/advertise'
+import { Route as AppRouteImport } from './routes/app'
+import { Route as ContactRouteImport } from './routes/contact'
+import { Route as FaqRouteImport } from './routes/faq'
+import { Route as ForgotPasswordRouteImport } from './routes/forgot-password'
+import { Route as HelpRouteImport } from './routes/help'
+import { Route as HowItWorksRouteImport } from './routes/how-it-works'
+import { Route as LoginRouteImport } from './routes/login'
+import { Route as OnboardingRouteImport } from './routes/onboarding'
+import { Route as SignupRouteImport } from './routes/signup'
+import { Route as AdminIndexRouteImport } from './routes/admin.index'
+import { Route as AdminAdsRouteImport } from './routes/admin.ads'
+import { Route as AdminBinsRouteImport } from './routes/admin.bins'
+import { Route as AdminContentRouteImport } from './routes/admin.content'
+import { Route as AdminFinanceRouteImport } from './routes/admin.finance'
+import { Route as AdminListingsRouteImport } from './routes/admin.listings'
+import { Route as AdminPartnersRouteImport } from './routes/admin.partners'
+import { Route as AdminSettingsRouteImport } from './routes/admin.settings'
+import { Route as AdminSupportRouteImport } from './routes/admin.support'
+import { Route as AdminVerificationRouteImport } from './routes/admin.verification'
+import { Route as AkubinIndexRouteImport } from './routes/akubin.index'
+import { Route as AppIndexRouteImport } from './routes/app.index'
+import { Route as AppAdvertiseRouteImport } from './routes/app.advertise'
+import { Route as AppMarketplaceRouteImport } from './routes/app.marketplace'
+import { Route as AppNotificationsRouteImport } from './routes/app.notifications'
+import { Route as AppOffersRouteImport } from './routes/app.offers'
+import { Route as AppPartnerRouteImport } from './routes/app.partner'
+import { Route as AppRequestsRouteImport } from './routes/app.requests'
+import { Route as AppSavedRouteImport } from './routes/app.saved'
+import { Route as AppSettingsRouteImport } from './routes/app.settings'
+import { Route as AppSupportRouteImport } from './routes/app.support'
+import { Route as AppVerificationRouteImport } from './routes/app.verification'
+import { Route as ArticlesIndexRouteImport } from './routes/articles.index'
+import { Route as ArticlesSlugRouteImport } from './routes/articles.$slug'
+import { Route as BinBinIdRouteImport } from './routes/bin.$binId'
+import { Route as DevRolesRouteImport } from './routes/dev.roles'
+import { Route as LegalDocRouteImport } from './routes/legal.$doc'
+import { Route as MarketplaceIndexRouteImport } from './routes/marketplace.index'
+import { Route as MarketplaceIdRouteImport } from './routes/marketplace.$id'
+import { Route as AkubinBinBinIdRouteImport } from './routes/akubin.bin.$binId'
+import { Route as AkubinBinsBinIdRouteImport } from './routes/akubin.bins.$binId'
+import { Route as AppAkubinIndexRouteImport } from './routes/app.akubin.index'
+import { Route as AppAkubinLeaderboardRouteImport } from './routes/app.akubin.leaderboard'
+import { Route as AppAkubinRewardsRouteImport } from './routes/app.akubin.rewards'
+import { Route as AppListingsIndexRouteImport } from './routes/app.listings.index'
+import { Route as AppListingsNewRouteImport } from './routes/app.listings.new'
+import { Route as AppOrdersIndexRouteImport } from './routes/app.orders.index'
+import { Route as AppOrdersIdRouteImport } from './routes/app.orders.$id'
+import { Route as AkubinBinBinIdDepositRouteImport } from './routes/akubin.bin.$binId_.deposit'
 
 const IndexRoute = IndexRouteImport.update({
   id: '/',
   path: '/',
   getParentRoute: () => rootRouteImport,
 } as any)
+const AboutRoute = AboutRouteImport.update({
+  id: '/about',
+  path: '/about',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const AdminRoute = AdminRouteImport.update({
+  id: '/admin',
+  path: '/admin',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const AdvertiseRoute = AdvertiseRouteImport.update({
+  id: '/advertise',
+  path: '/advertise',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const AppRoute = AppRouteImport.update({
+  id: '/app',
+  path: '/app',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ContactRoute = ContactRouteImport.update({
+  id: '/contact',
+  path: '/contact',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const FaqRoute = FaqRouteImport.update({
+  id: '/faq',
+  path: '/faq',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ForgotPasswordRoute = ForgotPasswordRouteImport.update({
+  id: '/forgot-password',
+  path: '/forgot-password',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const HelpRoute = HelpRouteImport.update({
+  id: '/help',
+  path: '/help',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const HowItWorksRoute = HowItWorksRouteImport.update({
+  id: '/how-it-works',
+  path: '/how-it-works',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const LoginRoute = LoginRouteImport.update({
+  id: '/login',
+  path: '/login',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const OnboardingRoute = OnboardingRouteImport.update({
+  id: '/onboarding',
+  path: '/onboarding',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const SignupRoute = SignupRouteImport.update({
+  id: '/signup',
+  path: '/signup',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const AdminIndexRoute = AdminIndexRouteImport.update({
+  id: '/',
+  path: '/',
+  getParentRoute: () => AdminRoute,
+} as any)
+const AdminAdsRoute = AdminAdsRouteImport.update({
+  id: '/ads',
+  path: '/ads',
+  getParentRoute: () => AdminRoute,
+} as any)
+const AdminBinsRoute = AdminBinsRouteImport.update({
+  id: '/bins',
+  path: '/bins',
+  getParentRoute: () => AdminRoute,
+} as any)
+const AdminContentRoute = AdminContentRouteImport.update({
+  id: '/content',
+  path: '/content',
+  getParentRoute: () => AdminRoute,
+} as any)
+const AdminFinanceRoute = AdminFinanceRouteImport.update({
+  id: '/finance',
+  path: '/finance',
+  getParentRoute: () => AdminRoute,
+} as any)
+const AdminListingsRoute = AdminListingsRouteImport.update({
+  id: '/listings',
+  path: '/listings',
+  getParentRoute: () => AdminRoute,
+} as any)
+const AdminPartnersRoute = AdminPartnersRouteImport.update({
+  id: '/partners',
+  path: '/partners',
+  getParentRoute: () => AdminRoute,
+} as any)
+const AdminSettingsRoute = AdminSettingsRouteImport.update({
+  id: '/settings',
+  path: '/settings',
+  getParentRoute: () => AdminRoute,
+} as any)
+const AdminSupportRoute = AdminSupportRouteImport.update({
+  id: '/support',
+  path: '/support',
+  getParentRoute: () => AdminRoute,
+} as any)
+const AdminVerificationRoute = AdminVerificationRouteImport.update({
+  id: '/verification',
+  path: '/verification',
+  getParentRoute: () => AdminRoute,
+} as any)
+const AkubinIndexRoute = AkubinIndexRouteImport.update({
+  id: '/akubin/',
+  path: '/akubin/',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const AppIndexRoute = AppIndexRouteImport.update({
+  id: '/',
+  path: '/',
+  getParentRoute: () => AppRoute,
+} as any)
+const AppAdvertiseRoute = AppAdvertiseRouteImport.update({
+  id: '/advertise',
+  path: '/advertise',
+  getParentRoute: () => AppRoute,
+} as any)
+const AppMarketplaceRoute = AppMarketplaceRouteImport.update({
+  id: '/marketplace',
+  path: '/marketplace',
+  getParentRoute: () => AppRoute,
+} as any)
+const AppNotificationsRoute = AppNotificationsRouteImport.update({
+  id: '/notifications',
+  path: '/notifications',
+  getParentRoute: () => AppRoute,
+} as any)
+const AppOffersRoute = AppOffersRouteImport.update({
+  id: '/offers',
+  path: '/offers',
+  getParentRoute: () => AppRoute,
+} as any)
+const AppPartnerRoute = AppPartnerRouteImport.update({
+  id: '/partner',
+  path: '/partner',
+  getParentRoute: () => AppRoute,
+} as any)
+const AppRequestsRoute = AppRequestsRouteImport.update({
+  id: '/requests',
+  path: '/requests',
+  getParentRoute: () => AppRoute,
+} as any)
+const AppSavedRoute = AppSavedRouteImport.update({
+  id: '/saved',
+  path: '/saved',
+  getParentRoute: () => AppRoute,
+} as any)
+const AppSettingsRoute = AppSettingsRouteImport.update({
+  id: '/settings',
+  path: '/settings',
+  getParentRoute: () => AppRoute,
+} as any)
+const AppSupportRoute = AppSupportRouteImport.update({
+  id: '/support',
+  path: '/support',
+  getParentRoute: () => AppRoute,
+} as any)
+const AppVerificationRoute = AppVerificationRouteImport.update({
+  id: '/verification',
+  path: '/verification',
+  getParentRoute: () => AppRoute,
+} as any)
+const ArticlesIndexRoute = ArticlesIndexRouteImport.update({
+  id: '/articles/',
+  path: '/articles/',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ArticlesSlugRoute = ArticlesSlugRouteImport.update({
+  id: '/articles/$slug',
+  path: '/articles/$slug',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const BinBinIdRoute = BinBinIdRouteImport.update({
+  id: '/bin/$binId',
+  path: '/bin/$binId',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const DevRolesRoute = DevRolesRouteImport.update({
+  id: '/dev/roles',
+  path: '/dev/roles',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const LegalDocRoute = LegalDocRouteImport.update({
+  id: '/legal/$doc',
+  path: '/legal/$doc',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const MarketplaceIndexRoute = MarketplaceIndexRouteImport.update({
+  id: '/marketplace/',
+  path: '/marketplace/',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const MarketplaceIdRoute = MarketplaceIdRouteImport.update({
+  id: '/marketplace/$id',
+  path: '/marketplace/$id',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const AkubinBinBinIdRoute = AkubinBinBinIdRouteImport.update({
+  id: '/akubin/bin/$binId',
+  path: '/akubin/bin/$binId',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const AkubinBinsBinIdRoute = AkubinBinsBinIdRouteImport.update({
+  id: '/akubin/bins/$binId',
+  path: '/akubin/bins/$binId',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const AppAkubinIndexRoute = AppAkubinIndexRouteImport.update({
+  id: '/akubin/',
+  path: '/akubin/',
+  getParentRoute: () => AppRoute,
+} as any)
+const AppAkubinLeaderboardRoute = AppAkubinLeaderboardRouteImport.update({
+  id: '/akubin/leaderboard',
+  path: '/akubin/leaderboard',
+  getParentRoute: () => AppRoute,
+} as any)
+const AppAkubinRewardsRoute = AppAkubinRewardsRouteImport.update({
+  id: '/akubin/rewards',
+  path: '/akubin/rewards',
+  getParentRoute: () => AppRoute,
+} as any)
+const AppListingsIndexRoute = AppListingsIndexRouteImport.update({
+  id: '/listings/',
+  path: '/listings/',
+  getParentRoute: () => AppRoute,
+} as any)
+const AppListingsNewRoute = AppListingsNewRouteImport.update({
+  id: '/listings/new',
+  path: '/listings/new',
+  getParentRoute: () => AppRoute,
+} as any)
+const AppOrdersIndexRoute = AppOrdersIndexRouteImport.update({
+  id: '/orders/',
+  path: '/orders/',
+  getParentRoute: () => AppRoute,
+} as any)
+const AppOrdersIdRoute = AppOrdersIdRouteImport.update({
+  id: '/orders/$id',
+  path: '/orders/$id',
+  getParentRoute: () => AppRoute,
+} as any)
+const AkubinBinBinIdDepositRoute = AkubinBinBinIdDepositRouteImport.update({
+  id: '/akubin/bin/$binId_/deposit',
+  path: '/akubin/bin/$binId/deposit',
+  getParentRoute: () => rootRouteImport,
+} as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
+  '/about': typeof AboutRoute
+  '/admin': typeof AdminRouteWithChildren
+  '/advertise': typeof AdvertiseRoute
+  '/app': typeof AppRouteWithChildren
+  '/contact': typeof ContactRoute
+  '/faq': typeof FaqRoute
+  '/forgot-password': typeof ForgotPasswordRoute
+  '/help': typeof HelpRoute
+  '/how-it-works': typeof HowItWorksRoute
+  '/login': typeof LoginRoute
+  '/onboarding': typeof OnboardingRoute
+  '/signup': typeof SignupRoute
+  '/admin/ads': typeof AdminAdsRoute
+  '/admin/bins': typeof AdminBinsRoute
+  '/admin/content': typeof AdminContentRoute
+  '/admin/finance': typeof AdminFinanceRoute
+  '/admin/listings': typeof AdminListingsRoute
+  '/admin/partners': typeof AdminPartnersRoute
+  '/admin/settings': typeof AdminSettingsRoute
+  '/admin/support': typeof AdminSupportRoute
+  '/admin/verification': typeof AdminVerificationRoute
+  '/app/advertise': typeof AppAdvertiseRoute
+  '/app/marketplace': typeof AppMarketplaceRoute
+  '/app/notifications': typeof AppNotificationsRoute
+  '/app/offers': typeof AppOffersRoute
+  '/app/partner': typeof AppPartnerRoute
+  '/app/requests': typeof AppRequestsRoute
+  '/app/saved': typeof AppSavedRoute
+  '/app/settings': typeof AppSettingsRoute
+  '/app/support': typeof AppSupportRoute
+  '/app/verification': typeof AppVerificationRoute
+  '/articles/$slug': typeof ArticlesSlugRoute
+  '/bin/$binId': typeof BinBinIdRoute
+  '/dev/roles': typeof DevRolesRoute
+  '/legal/$doc': typeof LegalDocRoute
+  '/marketplace/$id': typeof MarketplaceIdRoute
+  '/admin/': typeof AdminIndexRoute
+  '/akubin/': typeof AkubinIndexRoute
+  '/app/': typeof AppIndexRoute
+  '/articles/': typeof ArticlesIndexRoute
+  '/marketplace/': typeof MarketplaceIndexRoute
+  '/akubin/bin/$binId': typeof AkubinBinBinIdRoute
+  '/akubin/bins/$binId': typeof AkubinBinsBinIdRoute
+  '/app/akubin/leaderboard': typeof AppAkubinLeaderboardRoute
+  '/app/akubin/rewards': typeof AppAkubinRewardsRoute
+  '/app/listings/new': typeof AppListingsNewRoute
+  '/app/orders/$id': typeof AppOrdersIdRoute
+  '/app/akubin/': typeof AppAkubinIndexRoute
+  '/app/listings/': typeof AppListingsIndexRoute
+  '/app/orders/': typeof AppOrdersIndexRoute
+  '/akubin/bin/$binId/deposit': typeof AkubinBinBinIdDepositRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
+  '/about': typeof AboutRoute
+  '/advertise': typeof AdvertiseRoute
+  '/contact': typeof ContactRoute
+  '/faq': typeof FaqRoute
+  '/forgot-password': typeof ForgotPasswordRoute
+  '/help': typeof HelpRoute
+  '/how-it-works': typeof HowItWorksRoute
+  '/login': typeof LoginRoute
+  '/onboarding': typeof OnboardingRoute
+  '/signup': typeof SignupRoute
+  '/admin/ads': typeof AdminAdsRoute
+  '/admin/bins': typeof AdminBinsRoute
+  '/admin/content': typeof AdminContentRoute
+  '/admin/finance': typeof AdminFinanceRoute
+  '/admin/listings': typeof AdminListingsRoute
+  '/admin/partners': typeof AdminPartnersRoute
+  '/admin/settings': typeof AdminSettingsRoute
+  '/admin/support': typeof AdminSupportRoute
+  '/admin/verification': typeof AdminVerificationRoute
+  '/app/advertise': typeof AppAdvertiseRoute
+  '/app/marketplace': typeof AppMarketplaceRoute
+  '/app/notifications': typeof AppNotificationsRoute
+  '/app/offers': typeof AppOffersRoute
+  '/app/partner': typeof AppPartnerRoute
+  '/app/requests': typeof AppRequestsRoute
+  '/app/saved': typeof AppSavedRoute
+  '/app/settings': typeof AppSettingsRoute
+  '/app/support': typeof AppSupportRoute
+  '/app/verification': typeof AppVerificationRoute
+  '/articles/$slug': typeof ArticlesSlugRoute
+  '/bin/$binId': typeof BinBinIdRoute
+  '/dev/roles': typeof DevRolesRoute
+  '/legal/$doc': typeof LegalDocRoute
+  '/marketplace/$id': typeof MarketplaceIdRoute
+  '/admin': typeof AdminIndexRoute
+  '/akubin': typeof AkubinIndexRoute
+  '/app': typeof AppIndexRoute
+  '/articles': typeof ArticlesIndexRoute
+  '/marketplace': typeof MarketplaceIndexRoute
+  '/akubin/bin/$binId': typeof AkubinBinBinIdRoute
+  '/akubin/bins/$binId': typeof AkubinBinsBinIdRoute
+  '/app/akubin/leaderboard': typeof AppAkubinLeaderboardRoute
+  '/app/akubin/rewards': typeof AppAkubinRewardsRoute
+  '/app/listings/new': typeof AppListingsNewRoute
+  '/app/orders/$id': typeof AppOrdersIdRoute
+  '/app/akubin': typeof AppAkubinIndexRoute
+  '/app/listings': typeof AppListingsIndexRoute
+  '/app/orders': typeof AppOrdersIndexRoute
+  '/akubin/bin/$binId/deposit': typeof AkubinBinBinIdDepositRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
+  '/about': typeof AboutRoute
+  '/admin': typeof AdminRouteWithChildren
+  '/advertise': typeof AdvertiseRoute
+  '/app': typeof AppRouteWithChildren
+  '/contact': typeof ContactRoute
+  '/faq': typeof FaqRoute
+  '/forgot-password': typeof ForgotPasswordRoute
+  '/help': typeof HelpRoute
+  '/how-it-works': typeof HowItWorksRoute
+  '/login': typeof LoginRoute
+  '/onboarding': typeof OnboardingRoute
+  '/signup': typeof SignupRoute
+  '/admin/ads': typeof AdminAdsRoute
+  '/admin/bins': typeof AdminBinsRoute
+  '/admin/content': typeof AdminContentRoute
+  '/admin/finance': typeof AdminFinanceRoute
+  '/admin/listings': typeof AdminListingsRoute
+  '/admin/partners': typeof AdminPartnersRoute
+  '/admin/settings': typeof AdminSettingsRoute
+  '/admin/support': typeof AdminSupportRoute
+  '/admin/verification': typeof AdminVerificationRoute
+  '/app/advertise': typeof AppAdvertiseRoute
+  '/app/marketplace': typeof AppMarketplaceRoute
+  '/app/notifications': typeof AppNotificationsRoute
+  '/app/offers': typeof AppOffersRoute
+  '/app/partner': typeof AppPartnerRoute
+  '/app/requests': typeof AppRequestsRoute
+  '/app/saved': typeof AppSavedRoute
+  '/app/settings': typeof AppSettingsRoute
+  '/app/support': typeof AppSupportRoute
+  '/app/verification': typeof AppVerificationRoute
+  '/articles/$slug': typeof ArticlesSlugRoute
+  '/bin/$binId': typeof BinBinIdRoute
+  '/dev/roles': typeof DevRolesRoute
+  '/legal/$doc': typeof LegalDocRoute
+  '/marketplace/$id': typeof MarketplaceIdRoute
+  '/admin/': typeof AdminIndexRoute
+  '/akubin/': typeof AkubinIndexRoute
+  '/app/': typeof AppIndexRoute
+  '/articles/': typeof ArticlesIndexRoute
+  '/marketplace/': typeof MarketplaceIndexRoute
+  '/akubin/bin/$binId': typeof AkubinBinBinIdRoute
+  '/akubin/bins/$binId': typeof AkubinBinsBinIdRoute
+  '/app/akubin/leaderboard': typeof AppAkubinLeaderboardRoute
+  '/app/akubin/rewards': typeof AppAkubinRewardsRoute
+  '/app/listings/new': typeof AppListingsNewRoute
+  '/app/orders/$id': typeof AppOrdersIdRoute
+  '/app/akubin/': typeof AppAkubinIndexRoute
+  '/app/listings/': typeof AppListingsIndexRoute
+  '/app/orders/': typeof AppOrdersIndexRoute
+  '/akubin/bin/$binId_/deposit': typeof AkubinBinBinIdDepositRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths: '/'
+  fullPaths:
+    | '/'
+    | '/about'
+    | '/admin'
+    | '/advertise'
+    | '/app'
+    | '/contact'
+    | '/faq'
+    | '/forgot-password'
+    | '/help'
+    | '/how-it-works'
+    | '/login'
+    | '/onboarding'
+    | '/signup'
+    | '/admin/ads'
+    | '/admin/bins'
+    | '/admin/content'
+    | '/admin/finance'
+    | '/admin/listings'
+    | '/admin/partners'
+    | '/admin/settings'
+    | '/admin/support'
+    | '/admin/verification'
+    | '/app/advertise'
+    | '/app/marketplace'
+    | '/app/notifications'
+    | '/app/offers'
+    | '/app/partner'
+    | '/app/requests'
+    | '/app/saved'
+    | '/app/settings'
+    | '/app/support'
+    | '/app/verification'
+    | '/articles/$slug'
+    | '/bin/$binId'
+    | '/dev/roles'
+    | '/legal/$doc'
+    | '/marketplace/$id'
+    | '/admin/'
+    | '/akubin/'
+    | '/app/'
+    | '/articles/'
+    | '/marketplace/'
+    | '/akubin/bin/$binId'
+    | '/akubin/bins/$binId'
+    | '/app/akubin/leaderboard'
+    | '/app/akubin/rewards'
+    | '/app/listings/new'
+    | '/app/orders/$id'
+    | '/app/akubin/'
+    | '/app/listings/'
+    | '/app/orders/'
+    | '/akubin/bin/$binId/deposit'
   fileRoutesByTo: FileRoutesByTo
-  to: '/'
-  id: '__root__' | '/'
+  to:
+    | '/'
+    | '/about'
+    | '/advertise'
+    | '/contact'
+    | '/faq'
+    | '/forgot-password'
+    | '/help'
+    | '/how-it-works'
+    | '/login'
+    | '/onboarding'
+    | '/signup'
+    | '/admin/ads'
+    | '/admin/bins'
+    | '/admin/content'
+    | '/admin/finance'
+    | '/admin/listings'
+    | '/admin/partners'
+    | '/admin/settings'
+    | '/admin/support'
+    | '/admin/verification'
+    | '/app/advertise'
+    | '/app/marketplace'
+    | '/app/notifications'
+    | '/app/offers'
+    | '/app/partner'
+    | '/app/requests'
+    | '/app/saved'
+    | '/app/settings'
+    | '/app/support'
+    | '/app/verification'
+    | '/articles/$slug'
+    | '/bin/$binId'
+    | '/dev/roles'
+    | '/legal/$doc'
+    | '/marketplace/$id'
+    | '/admin'
+    | '/akubin'
+    | '/app'
+    | '/articles'
+    | '/marketplace'
+    | '/akubin/bin/$binId'
+    | '/akubin/bins/$binId'
+    | '/app/akubin/leaderboard'
+    | '/app/akubin/rewards'
+    | '/app/listings/new'
+    | '/app/orders/$id'
+    | '/app/akubin'
+    | '/app/listings'
+    | '/app/orders'
+    | '/akubin/bin/$binId/deposit'
+  id:
+    | '__root__'
+    | '/'
+    | '/about'
+    | '/admin'
+    | '/advertise'
+    | '/app'
+    | '/contact'
+    | '/faq'
+    | '/forgot-password'
+    | '/help'
+    | '/how-it-works'
+    | '/login'
+    | '/onboarding'
+    | '/signup'
+    | '/admin/ads'
+    | '/admin/bins'
+    | '/admin/content'
+    | '/admin/finance'
+    | '/admin/listings'
+    | '/admin/partners'
+    | '/admin/settings'
+    | '/admin/support'
+    | '/admin/verification'
+    | '/app/advertise'
+    | '/app/marketplace'
+    | '/app/notifications'
+    | '/app/offers'
+    | '/app/partner'
+    | '/app/requests'
+    | '/app/saved'
+    | '/app/settings'
+    | '/app/support'
+    | '/app/verification'
+    | '/articles/$slug'
+    | '/bin/$binId'
+    | '/dev/roles'
+    | '/legal/$doc'
+    | '/marketplace/$id'
+    | '/admin/'
+    | '/akubin/'
+    | '/app/'
+    | '/articles/'
+    | '/marketplace/'
+    | '/akubin/bin/$binId'
+    | '/akubin/bins/$binId'
+    | '/app/akubin/leaderboard'
+    | '/app/akubin/rewards'
+    | '/app/listings/new'
+    | '/app/orders/$id'
+    | '/app/akubin/'
+    | '/app/listings/'
+    | '/app/orders/'
+    | '/akubin/bin/$binId_/deposit'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
+  AboutRoute: typeof AboutRoute
+  AdminRoute: typeof AdminRouteWithChildren
+  AdvertiseRoute: typeof AdvertiseRoute
+  AppRoute: typeof AppRouteWithChildren
+  ContactRoute: typeof ContactRoute
+  FaqRoute: typeof FaqRoute
+  ForgotPasswordRoute: typeof ForgotPasswordRoute
+  HelpRoute: typeof HelpRoute
+  HowItWorksRoute: typeof HowItWorksRoute
+  LoginRoute: typeof LoginRoute
+  OnboardingRoute: typeof OnboardingRoute
+  SignupRoute: typeof SignupRoute
+  ArticlesSlugRoute: typeof ArticlesSlugRoute
+  BinBinIdRoute: typeof BinBinIdRoute
+  DevRolesRoute: typeof DevRolesRoute
+  LegalDocRoute: typeof LegalDocRoute
+  MarketplaceIdRoute: typeof MarketplaceIdRoute
+  AkubinIndexRoute: typeof AkubinIndexRoute
+  ArticlesIndexRoute: typeof ArticlesIndexRoute
+  MarketplaceIndexRoute: typeof MarketplaceIndexRoute
+  AkubinBinBinIdRoute: typeof AkubinBinBinIdRoute
+  AkubinBinsBinIdRoute: typeof AkubinBinsBinIdRoute
+  AkubinBinBinIdDepositRoute: typeof AkubinBinBinIdDepositRoute
 }
 
 declare module '@tanstack/react-router' {
@@ -48,11 +683,463 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof IndexRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/about': {
+      id: '/about'
+      path: '/about'
+      fullPath: '/about'
+      preLoaderRoute: typeof AboutRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/admin': {
+      id: '/admin'
+      path: '/admin'
+      fullPath: '/admin'
+      preLoaderRoute: typeof AdminRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/advertise': {
+      id: '/advertise'
+      path: '/advertise'
+      fullPath: '/advertise'
+      preLoaderRoute: typeof AdvertiseRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/app': {
+      id: '/app'
+      path: '/app'
+      fullPath: '/app'
+      preLoaderRoute: typeof AppRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/contact': {
+      id: '/contact'
+      path: '/contact'
+      fullPath: '/contact'
+      preLoaderRoute: typeof ContactRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/faq': {
+      id: '/faq'
+      path: '/faq'
+      fullPath: '/faq'
+      preLoaderRoute: typeof FaqRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/forgot-password': {
+      id: '/forgot-password'
+      path: '/forgot-password'
+      fullPath: '/forgot-password'
+      preLoaderRoute: typeof ForgotPasswordRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/help': {
+      id: '/help'
+      path: '/help'
+      fullPath: '/help'
+      preLoaderRoute: typeof HelpRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/how-it-works': {
+      id: '/how-it-works'
+      path: '/how-it-works'
+      fullPath: '/how-it-works'
+      preLoaderRoute: typeof HowItWorksRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/login': {
+      id: '/login'
+      path: '/login'
+      fullPath: '/login'
+      preLoaderRoute: typeof LoginRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/onboarding': {
+      id: '/onboarding'
+      path: '/onboarding'
+      fullPath: '/onboarding'
+      preLoaderRoute: typeof OnboardingRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/signup': {
+      id: '/signup'
+      path: '/signup'
+      fullPath: '/signup'
+      preLoaderRoute: typeof SignupRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/admin/': {
+      id: '/admin/'
+      path: '/'
+      fullPath: '/admin/'
+      preLoaderRoute: typeof AdminIndexRouteImport
+      parentRoute: typeof AdminRoute
+    }
+    '/admin/ads': {
+      id: '/admin/ads'
+      path: '/ads'
+      fullPath: '/admin/ads'
+      preLoaderRoute: typeof AdminAdsRouteImport
+      parentRoute: typeof AdminRoute
+    }
+    '/admin/bins': {
+      id: '/admin/bins'
+      path: '/bins'
+      fullPath: '/admin/bins'
+      preLoaderRoute: typeof AdminBinsRouteImport
+      parentRoute: typeof AdminRoute
+    }
+    '/admin/content': {
+      id: '/admin/content'
+      path: '/content'
+      fullPath: '/admin/content'
+      preLoaderRoute: typeof AdminContentRouteImport
+      parentRoute: typeof AdminRoute
+    }
+    '/admin/finance': {
+      id: '/admin/finance'
+      path: '/finance'
+      fullPath: '/admin/finance'
+      preLoaderRoute: typeof AdminFinanceRouteImport
+      parentRoute: typeof AdminRoute
+    }
+    '/admin/listings': {
+      id: '/admin/listings'
+      path: '/listings'
+      fullPath: '/admin/listings'
+      preLoaderRoute: typeof AdminListingsRouteImport
+      parentRoute: typeof AdminRoute
+    }
+    '/admin/partners': {
+      id: '/admin/partners'
+      path: '/partners'
+      fullPath: '/admin/partners'
+      preLoaderRoute: typeof AdminPartnersRouteImport
+      parentRoute: typeof AdminRoute
+    }
+    '/admin/settings': {
+      id: '/admin/settings'
+      path: '/settings'
+      fullPath: '/admin/settings'
+      preLoaderRoute: typeof AdminSettingsRouteImport
+      parentRoute: typeof AdminRoute
+    }
+    '/admin/support': {
+      id: '/admin/support'
+      path: '/support'
+      fullPath: '/admin/support'
+      preLoaderRoute: typeof AdminSupportRouteImport
+      parentRoute: typeof AdminRoute
+    }
+    '/admin/verification': {
+      id: '/admin/verification'
+      path: '/verification'
+      fullPath: '/admin/verification'
+      preLoaderRoute: typeof AdminVerificationRouteImport
+      parentRoute: typeof AdminRoute
+    }
+    '/akubin/': {
+      id: '/akubin/'
+      path: '/akubin'
+      fullPath: '/akubin/'
+      preLoaderRoute: typeof AkubinIndexRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/app/': {
+      id: '/app/'
+      path: '/'
+      fullPath: '/app/'
+      preLoaderRoute: typeof AppIndexRouteImport
+      parentRoute: typeof AppRoute
+    }
+    '/app/advertise': {
+      id: '/app/advertise'
+      path: '/advertise'
+      fullPath: '/app/advertise'
+      preLoaderRoute: typeof AppAdvertiseRouteImport
+      parentRoute: typeof AppRoute
+    }
+    '/app/marketplace': {
+      id: '/app/marketplace'
+      path: '/marketplace'
+      fullPath: '/app/marketplace'
+      preLoaderRoute: typeof AppMarketplaceRouteImport
+      parentRoute: typeof AppRoute
+    }
+    '/app/notifications': {
+      id: '/app/notifications'
+      path: '/notifications'
+      fullPath: '/app/notifications'
+      preLoaderRoute: typeof AppNotificationsRouteImport
+      parentRoute: typeof AppRoute
+    }
+    '/app/offers': {
+      id: '/app/offers'
+      path: '/offers'
+      fullPath: '/app/offers'
+      preLoaderRoute: typeof AppOffersRouteImport
+      parentRoute: typeof AppRoute
+    }
+    '/app/partner': {
+      id: '/app/partner'
+      path: '/partner'
+      fullPath: '/app/partner'
+      preLoaderRoute: typeof AppPartnerRouteImport
+      parentRoute: typeof AppRoute
+    }
+    '/app/requests': {
+      id: '/app/requests'
+      path: '/requests'
+      fullPath: '/app/requests'
+      preLoaderRoute: typeof AppRequestsRouteImport
+      parentRoute: typeof AppRoute
+    }
+    '/app/saved': {
+      id: '/app/saved'
+      path: '/saved'
+      fullPath: '/app/saved'
+      preLoaderRoute: typeof AppSavedRouteImport
+      parentRoute: typeof AppRoute
+    }
+    '/app/settings': {
+      id: '/app/settings'
+      path: '/settings'
+      fullPath: '/app/settings'
+      preLoaderRoute: typeof AppSettingsRouteImport
+      parentRoute: typeof AppRoute
+    }
+    '/app/support': {
+      id: '/app/support'
+      path: '/support'
+      fullPath: '/app/support'
+      preLoaderRoute: typeof AppSupportRouteImport
+      parentRoute: typeof AppRoute
+    }
+    '/app/verification': {
+      id: '/app/verification'
+      path: '/verification'
+      fullPath: '/app/verification'
+      preLoaderRoute: typeof AppVerificationRouteImport
+      parentRoute: typeof AppRoute
+    }
+    '/articles/': {
+      id: '/articles/'
+      path: '/articles'
+      fullPath: '/articles/'
+      preLoaderRoute: typeof ArticlesIndexRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/articles/$slug': {
+      id: '/articles/$slug'
+      path: '/articles/$slug'
+      fullPath: '/articles/$slug'
+      preLoaderRoute: typeof ArticlesSlugRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/bin/$binId': {
+      id: '/bin/$binId'
+      path: '/bin/$binId'
+      fullPath: '/bin/$binId'
+      preLoaderRoute: typeof BinBinIdRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/dev/roles': {
+      id: '/dev/roles'
+      path: '/dev/roles'
+      fullPath: '/dev/roles'
+      preLoaderRoute: typeof DevRolesRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/legal/$doc': {
+      id: '/legal/$doc'
+      path: '/legal/$doc'
+      fullPath: '/legal/$doc'
+      preLoaderRoute: typeof LegalDocRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/marketplace/': {
+      id: '/marketplace/'
+      path: '/marketplace'
+      fullPath: '/marketplace/'
+      preLoaderRoute: typeof MarketplaceIndexRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/marketplace/$id': {
+      id: '/marketplace/$id'
+      path: '/marketplace/$id'
+      fullPath: '/marketplace/$id'
+      preLoaderRoute: typeof MarketplaceIdRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/akubin/bin/$binId': {
+      id: '/akubin/bin/$binId'
+      path: '/akubin/bin/$binId'
+      fullPath: '/akubin/bin/$binId'
+      preLoaderRoute: typeof AkubinBinBinIdRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/akubin/bins/$binId': {
+      id: '/akubin/bins/$binId'
+      path: '/akubin/bins/$binId'
+      fullPath: '/akubin/bins/$binId'
+      preLoaderRoute: typeof AkubinBinsBinIdRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/app/akubin/': {
+      id: '/app/akubin/'
+      path: '/akubin'
+      fullPath: '/app/akubin/'
+      preLoaderRoute: typeof AppAkubinIndexRouteImport
+      parentRoute: typeof AppRoute
+    }
+    '/app/akubin/leaderboard': {
+      id: '/app/akubin/leaderboard'
+      path: '/akubin/leaderboard'
+      fullPath: '/app/akubin/leaderboard'
+      preLoaderRoute: typeof AppAkubinLeaderboardRouteImport
+      parentRoute: typeof AppRoute
+    }
+    '/app/akubin/rewards': {
+      id: '/app/akubin/rewards'
+      path: '/akubin/rewards'
+      fullPath: '/app/akubin/rewards'
+      preLoaderRoute: typeof AppAkubinRewardsRouteImport
+      parentRoute: typeof AppRoute
+    }
+    '/app/listings/': {
+      id: '/app/listings/'
+      path: '/listings'
+      fullPath: '/app/listings/'
+      preLoaderRoute: typeof AppListingsIndexRouteImport
+      parentRoute: typeof AppRoute
+    }
+    '/app/listings/new': {
+      id: '/app/listings/new'
+      path: '/listings/new'
+      fullPath: '/app/listings/new'
+      preLoaderRoute: typeof AppListingsNewRouteImport
+      parentRoute: typeof AppRoute
+    }
+    '/app/orders/': {
+      id: '/app/orders/'
+      path: '/orders'
+      fullPath: '/app/orders/'
+      preLoaderRoute: typeof AppOrdersIndexRouteImport
+      parentRoute: typeof AppRoute
+    }
+    '/app/orders/$id': {
+      id: '/app/orders/$id'
+      path: '/orders/$id'
+      fullPath: '/app/orders/$id'
+      preLoaderRoute: typeof AppOrdersIdRouteImport
+      parentRoute: typeof AppRoute
+    }
+    '/akubin/bin/$binId_/deposit': {
+      id: '/akubin/bin/$binId_/deposit'
+      path: '/akubin/bin/$binId/deposit'
+      fullPath: '/akubin/bin/$binId/deposit'
+      preLoaderRoute: typeof AkubinBinBinIdDepositRouteImport
+      parentRoute: typeof rootRouteImport
+    }
   }
 }
 
+interface AdminRouteChildren {
+  AdminAdsRoute: typeof AdminAdsRoute
+  AdminBinsRoute: typeof AdminBinsRoute
+  AdminContentRoute: typeof AdminContentRoute
+  AdminFinanceRoute: typeof AdminFinanceRoute
+  AdminListingsRoute: typeof AdminListingsRoute
+  AdminPartnersRoute: typeof AdminPartnersRoute
+  AdminSettingsRoute: typeof AdminSettingsRoute
+  AdminSupportRoute: typeof AdminSupportRoute
+  AdminVerificationRoute: typeof AdminVerificationRoute
+  AdminIndexRoute: typeof AdminIndexRoute
+}
+
+const AdminRouteChildren: AdminRouteChildren = {
+  AdminAdsRoute: AdminAdsRoute,
+  AdminBinsRoute: AdminBinsRoute,
+  AdminContentRoute: AdminContentRoute,
+  AdminFinanceRoute: AdminFinanceRoute,
+  AdminListingsRoute: AdminListingsRoute,
+  AdminPartnersRoute: AdminPartnersRoute,
+  AdminSettingsRoute: AdminSettingsRoute,
+  AdminSupportRoute: AdminSupportRoute,
+  AdminVerificationRoute: AdminVerificationRoute,
+  AdminIndexRoute: AdminIndexRoute,
+}
+
+const AdminRouteWithChildren = AdminRoute._addFileChildren(AdminRouteChildren)
+
+interface AppRouteChildren {
+  AppAdvertiseRoute: typeof AppAdvertiseRoute
+  AppMarketplaceRoute: typeof AppMarketplaceRoute
+  AppNotificationsRoute: typeof AppNotificationsRoute
+  AppOffersRoute: typeof AppOffersRoute
+  AppPartnerRoute: typeof AppPartnerRoute
+  AppRequestsRoute: typeof AppRequestsRoute
+  AppSavedRoute: typeof AppSavedRoute
+  AppSettingsRoute: typeof AppSettingsRoute
+  AppSupportRoute: typeof AppSupportRoute
+  AppVerificationRoute: typeof AppVerificationRoute
+  AppIndexRoute: typeof AppIndexRoute
+  AppAkubinLeaderboardRoute: typeof AppAkubinLeaderboardRoute
+  AppAkubinRewardsRoute: typeof AppAkubinRewardsRoute
+  AppListingsNewRoute: typeof AppListingsNewRoute
+  AppOrdersIdRoute: typeof AppOrdersIdRoute
+  AppAkubinIndexRoute: typeof AppAkubinIndexRoute
+  AppListingsIndexRoute: typeof AppListingsIndexRoute
+  AppOrdersIndexRoute: typeof AppOrdersIndexRoute
+}
+
+const AppRouteChildren: AppRouteChildren = {
+  AppAdvertiseRoute: AppAdvertiseRoute,
+  AppMarketplaceRoute: AppMarketplaceRoute,
+  AppNotificationsRoute: AppNotificationsRoute,
+  AppOffersRoute: AppOffersRoute,
+  AppPartnerRoute: AppPartnerRoute,
+  AppRequestsRoute: AppRequestsRoute,
+  AppSavedRoute: AppSavedRoute,
+  AppSettingsRoute: AppSettingsRoute,
+  AppSupportRoute: AppSupportRoute,
+  AppVerificationRoute: AppVerificationRoute,
+  AppIndexRoute: AppIndexRoute,
+  AppAkubinLeaderboardRoute: AppAkubinLeaderboardRoute,
+  AppAkubinRewardsRoute: AppAkubinRewardsRoute,
+  AppListingsNewRoute: AppListingsNewRoute,
+  AppOrdersIdRoute: AppOrdersIdRoute,
+  AppAkubinIndexRoute: AppAkubinIndexRoute,
+  AppListingsIndexRoute: AppListingsIndexRoute,
+  AppOrdersIndexRoute: AppOrdersIndexRoute,
+}
+
+const AppRouteWithChildren = AppRoute._addFileChildren(AppRouteChildren)
+
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
+  AboutRoute: AboutRoute,
+  AdminRoute: AdminRouteWithChildren,
+  AdvertiseRoute: AdvertiseRoute,
+  AppRoute: AppRouteWithChildren,
+  ContactRoute: ContactRoute,
+  FaqRoute: FaqRoute,
+  ForgotPasswordRoute: ForgotPasswordRoute,
+  HelpRoute: HelpRoute,
+  HowItWorksRoute: HowItWorksRoute,
+  LoginRoute: LoginRoute,
+  OnboardingRoute: OnboardingRoute,
+  SignupRoute: SignupRoute,
+  ArticlesSlugRoute: ArticlesSlugRoute,
+  BinBinIdRoute: BinBinIdRoute,
+  DevRolesRoute: DevRolesRoute,
+  LegalDocRoute: LegalDocRoute,
+  MarketplaceIdRoute: MarketplaceIdRoute,
+  AkubinIndexRoute: AkubinIndexRoute,
+  ArticlesIndexRoute: ArticlesIndexRoute,
+  MarketplaceIndexRoute: MarketplaceIndexRoute,
+  AkubinBinBinIdRoute: AkubinBinBinIdRoute,
+  AkubinBinsBinIdRoute: AkubinBinsBinIdRoute,
+  AkubinBinBinIdDepositRoute: AkubinBinBinIdDepositRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)
