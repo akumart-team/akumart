@@ -24,7 +24,7 @@ function Offers() {
   const me = useMe()!;
   const offers = useDB((d) => d.offers.filter((o) => o.buyerId === me.id || o.sellerId === me.id));
   const listings = useDB((d) => d.listings);
-  const [tab, setTab] = useState<"received" | "sent">("received");
+  const [tab, setTab] = useState<"received" | "sent">(() => (offers.some((o) => o.sellerId === me.id && (o.status === "awaiting_seller")) || !offers.some((o) => o.buyerId === me.id) ? "received" : "sent"));
   const list = offers.filter((o) => (tab === "received" ? o.sellerId === me.id : o.buyerId === me.id));
   return (
     <div className="max-w-4xl">
