@@ -1,4 +1,4 @@
-import { useRef, useSyncExternalStore } from "react";
+import { useSyncExternalStore } from "react";
 import { createSeed, TERMS_VERSION, PRIVACY_VERSION } from "./seed";
 import type { DB, User, Intent } from "./types";
 import { currentUser } from "./rules";
@@ -56,24 +56,14 @@ function subscribe(l: () => void) {
 }
 
 const serverSeed = createSeed();
-function same(a: unknown, b: unknown) {
-  if (Object.is(a, b)) return true;
-  if (Array.isArray(a) && Array.isArray(b)) return a.length === b.length && a.every((x, i) => Object.is(x, b[i]));
-  return false;
-}
-/** Derived arrays are reused when their elements are unchanged, so useSyncExternalStore stays stable. */
+/** Subscribes to the DB snapshot (stable identity) and derives the selection during render. */
 export function useDB<T>(sel: (d: DB) => T): T {
-  const cache = useRef<{ has: boolean; val: T }>({ has: false, val: undefined as T });
-  const read = (src: DB) => {
-    const v = sel(src);
-    if (!cache.current.has || !same(cache.current.val, v)) cache.current = { has: true, val: v };
-    return cache.current.val;
-  };
-  return useSyncExternalStore(
+  const snap = useSyncExternalStore(
     subscribe,
-    () => read(db),
-    () => read(serverSeed),
+    () => db,
+    () => serverSeed,
   );
+  return sel(snap);
 }
 
 export function useHydratedFlag() {
