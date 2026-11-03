@@ -1,4 +1,4 @@
-import { useSyncExternalStore } from "react";
+import { useRef, useSyncExternalStore } from "react";
 import { createSeed, TERMS_VERSION, PRIVACY_VERSION } from "./seed";
 import type { DB, User, Intent } from "./types";
 import { currentUser } from "./rules";
@@ -56,11 +56,17 @@ function subscribe(l: () => void) {
 }
 
 const serverSeed = createSeed();
+/** Selector results are cached per DB snapshot so derived arrays don't loop useSyncExternalStore. */
 export function useDB<T>(sel: (d: DB) => T): T {
+  const cache = useRef<{ src: DB | null; val: T }>({ src: null, val: undefined as T });
+  const read = (src: DB) => {
+    if (cache.current.src !== src) cache.current = { src, val: sel(src) };
+    return cache.current.val;
+  };
   return useSyncExternalStore(
     subscribe,
-    () => sel(db),
-    () => sel(serverSeed),
+    () => read(db),
+    () => read(serverSeed),
   );
 }
 
