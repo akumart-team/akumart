@@ -56,11 +56,17 @@ function subscribe(l: () => void) {
 }
 
 const serverSeed = createSeed();
-/** Selector results are cached per DB snapshot so derived arrays don't loop useSyncExternalStore. */
+function same(a: unknown, b: unknown) {
+  if (Object.is(a, b)) return true;
+  if (Array.isArray(a) && Array.isArray(b)) return a.length === b.length && a.every((x, i) => Object.is(x, b[i]));
+  return false;
+}
+/** Derived arrays are reused when their elements are unchanged, so useSyncExternalStore stays stable. */
 export function useDB<T>(sel: (d: DB) => T): T {
-  const cache = useRef<{ src: DB | null; val: T }>({ src: null, val: undefined as T });
+  const cache = useRef<{ has: boolean; val: T }>({ has: false, val: undefined as T });
   const read = (src: DB) => {
-    if (cache.current.src !== src) cache.current = { src, val: sel(src) };
+    const v = sel(src);
+    if (!cache.current.has || !same(cache.current.val, v)) cache.current = { has: true, val: v };
     return cache.current.val;
   };
   return useSyncExternalStore(
