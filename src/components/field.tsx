@@ -1,12 +1,25 @@
+import { cloneElement, isValidElement, useId } from "react";
 import { cn } from "@/lib/utils";
 
+/** Labelled form field. Auto-links the label to a single input/select/textarea child for accessibility. */
 export function Field({ label, error, hint, children, className, htmlFor }: { label: string; error?: string; hint?: string; children: React.ReactNode; className?: string; htmlFor?: string }) {
+  const auto = useId();
+  let id = htmlFor;
+  let content = children;
+  if (!id && isValidElement(children) && typeof children.type === "string" && ["input", "select", "textarea"].includes(children.type)) {
+    const props = children.props as { id?: string };
+    id = props.id ?? auto;
+    content = cloneElement(children as React.ReactElement<{ id?: string; "aria-invalid"?: boolean }>, { id, "aria-invalid": !!error || undefined });
+  } else if (!id && isValidElement(children) && (children.type as { displayName?: string }).displayName === "Textarea") {
+    id = auto;
+    content = cloneElement(children as React.ReactElement<{ id?: string }>, { id });
+  }
   return (
     <div className={cn("space-y-1.5", className)}>
-      <label htmlFor={htmlFor} className="text-sm font-medium">
+      <label htmlFor={id} className="block text-sm font-medium">
         {label}
       </label>
-      {children}
+      {content}
       {hint && !error && <p className="text-xs text-muted-foreground">{hint}</p>}
       {error && (
         <p role="alert" className="text-xs font-medium text-destructive">
