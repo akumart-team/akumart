@@ -20,7 +20,7 @@ function MyListings() {
       <PageTitle
         eyebrow="Seller"
         title="My listings"
-        intro={me.prefs.marketRole === "buyer" ? "You signed up as a buyer — you can still sell any time." : undefined}
+        intro={me.prefs.marketRole === "buyer" ? "You signed up as a buyer, you can still sell any time." : undefined}
         actions={
           <Button asChild>
             <Link to="/app/listings/new">

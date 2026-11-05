@@ -10,7 +10,7 @@ import { DemoTag } from "@/components/brand";
 export const Route = createFileRoute("/articles/")({
   head: () => ({
     meta: [
-      { title: "Articles & insights — AkuMart" },
+      { title: "Articles & insights | AkuMart" },
       { name: "description", content: "Guides on grading recyclables, AkuBin rewards, logistics and trust & safety." },
       { property: "og:title", content: "AkuMart articles" },
       { property: "og:description", content: "Practical recycling and trading guides from AkuMart." },

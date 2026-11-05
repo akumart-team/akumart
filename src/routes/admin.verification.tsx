@@ -48,7 +48,7 @@ function AdminVerification() {
                 <p className="font-medium">{u.name}</p>
                 <p className="text-xs text-muted-foreground">{u.email}{u.demo && " · seed"}</p>
               </td>
-              <td className={td + " capitalize"}>{u.verification.type ?? "—"}</td>
+              <td className={td + " capitalize"}>{u.verification.type ?? ", "}</td>
               <td className={td}>
                 <StatusChip status={u.verification.basic} />
               </td>
@@ -81,7 +81,7 @@ function AdminVerification() {
                         )}
                         {!Object.keys(u.verification.data).length && <p className="text-muted-foreground">No submission.</p>}
                       </dl>
-                      <p className="mt-3 text-xs text-muted-foreground">Automated check outcome: {u.verification.reason ?? "—"} (DEMO)</p>
+                      <p className="mt-3 text-xs text-muted-foreground">Automated check outcome: {u.verification.reason ?? ", "} (DEMO)</p>
                     </Panel>
                     <Panel title="Decision">
                       <input className={inputCls} placeholder="Reason (shown to user, no sensitive data)" value={reason} onChange={(e) => setReason(e.target.value)} />
@@ -102,7 +102,7 @@ function AdminVerification() {
                       <ul className="mt-4 max-h-32 space-y-1 overflow-y-auto text-xs text-muted-foreground">
                         {u.verification.history.map((h, i) => (
                           <li key={i}>
-                            {h.action} — {h.actor}
+                            {h.action}, {h.actor}
                           </li>
                         ))}
                       </ul>

@@ -6,7 +6,7 @@ import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from "@/
 export const Route = createFileRoute("/faq")({
   head: () => ({
     meta: [
-      { title: "FAQs — AkuMart" },
+      { title: "FAQs | AkuMart" },
       { name: "description", content: "Answers about AkuMart accounts, Marketplace verification, payments, fees, AkuBin points and logistics." },
       { property: "og:title", content: "AkuMart FAQs" },
       { property: "og:description", content: "Common questions about trading and recycling with AkuMart." },

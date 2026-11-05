@@ -12,7 +12,7 @@ import type { Material } from "@/lib/types";
 export const Route = createFileRoute("/akubin/bin/$binId_/deposit")({
   head: ({ params }) => ({
     meta: [
-      { title: `Deposit at ${params.binId} — AkuBin` },
+      { title: `Deposit at ${params.binId}, AkuBin` },
       { name: "description", content: "Identify yourself at the bin, deposit verified recyclables and earn points." },
       { property: "og:title", content: `Deposit at ${params.binId}` },
       { property: "og:description", content: "AkuBin deposit flow." },

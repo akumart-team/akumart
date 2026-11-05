@@ -17,7 +17,7 @@ export function distanceKm(a: { lat: number; lng: number }, b: { lat: number; ln
   return 2 * R * Math.asin(Math.sqrt(x));
 }
 
-/** Simulated, schematic map of Nigeria — not a live GIS map. */
+/** Simulated, schematic map of Nigeria, not a live GIS map. */
 export function BinMap({ bins, selected, onSelect, me }: { bins: Bin[]; selected?: string; onSelect?: (id: string) => void; me?: { lat: number; lng: number } | null }) {
   const pos = (lat: number, lng: number) => ({ left: `${((lng - 2.6) / 12.2) * 100}%`, top: `${(1 - (lat - 4.2) / 9.8) * 100}%` });
   return (

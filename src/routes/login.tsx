@@ -12,7 +12,7 @@ export const Route = createFileRoute("/login")({
   validateSearch: (s: Record<string, unknown>): { redirect?: string } => ({ redirect: typeof s.redirect === "string" ? s.redirect : undefined }),
   head: () => ({
     meta: [
-      { title: "Sign in — AkuMart" },
+      { title: "Sign in | AkuMart" },
       { name: "description", content: "Sign in to your AkuMart account for the Marketplace and AkuBin." },
       { property: "og:title", content: "Sign in to AkuMart" },
       { property: "og:description", content: "Access your shared Marketplace and AkuBin account." },

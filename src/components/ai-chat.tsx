@@ -29,12 +29,12 @@ function answer(q: string): Msg {
     return { from: "bot", text: `You have ${u.points.toLocaleString()} points from ${u.deposits.filter((d) => d.status === "verified").length} verified deposit(s).`, link: { to: "/app/akubin/rewards", label: "Open rewards" } };
   }
   if (/(verif|kyc|cac|id\b|identity)/.test(t)) {
-    if (/(recycl|bin|akubin)/.test(t)) return { from: "bot", text: "No — AkuBin recycling never needs Marketplace verification. You only need a basic account to earn points." };
-    if (u) return { from: "bot", text: `Your Marketplace verification: basic — ${u.verification.basic.replace(/_/g, " ")}, full — ${u.verification.full.replace(/_/g, " ")}.`, link: { to: "/app/verification", label: "Verification centre" } };
+    if (/(recycl|bin|akubin)/.test(t)) return { from: "bot", text: "No, AkuBin recycling never needs Marketplace verification. You only need a basic account to earn points." };
+    if (u) return { from: "bot", text: `Your Marketplace verification: basic, ${u.verification.basic.replace(/_/g, " ")}, full, ${u.verification.full.replace(/_/g, " ")}.`, link: { to: "/app/verification", label: "Verification centre" } };
     return { from: "bot", text: "Marketplace verification is only requested when you first make an offer, publish a listing or check out. Recycling with AkuBin never requires it." };
   }
   if (/(bin|recycl|deposit|qr)/.test(t)) return { from: "bot", text: "Use the AkuBin locator to search by city, area or landmark, or allow location to find the closest demo bin. Scanning a bin’s QR opens its own page.", link: { to: "/akubin", label: "Find a bin" } };
-  if (/(fee|commission|charge|cost)/.test(t)) return { from: "bot", text: `Buyers pay the agreed waste price plus the chosen delivery quote — no extra buyer surcharge. Provisional fees: ${db.settings.sellerFee}% from seller proceeds and ${db.settings.partnerFee}% from the logistics fee.` };
+  if (/(fee|commission|charge|cost)/.test(t)) return { from: "bot", text: `Buyers pay the agreed waste price plus the chosen delivery quote, no extra buyer surcharge. Provisional fees: ${db.settings.sellerFee}% from seller proceeds and ${db.settings.partnerFee}% from the logistics fee.` };
   if (/(escrow|payment|pay|refund)/.test(t)) return { from: "bot", text: "Payments are handled by a licensed third-party provider under conditional settlement. AkuMart never holds your funds. In this prototype payments are simulated." };
   if (/(sell|list)/.test(t)) return { from: "bot", text: "To sell, create a listing with photos, grade, quantity, price and pickup area. Basic verification is required before publishing.", link: { to: "/app/listings/new", label: "Create a listing" } };
   if (/(buy|listing|material|plastic|metal|price)/.test(t)) return { from: "bot", text: "Browse and filter verified listings by material, city and price. Saving is free; offers need basic verification.", link: { to: "/marketplace", label: "Browse Marketplace" } };
@@ -73,7 +73,7 @@ export function AIChat() {
     const last = [...msgs].reverse().find((m) => m.from === "me")?.text ?? "Chat escalation";
     const id = createTicket({ userId: u?.id, name: u?.name ?? "Guest", email: u?.email ?? "guest", subject: "Chat escalation", message: last, channel: "ai_chat", priority: "normal" });
     setEscalate(false);
-    setMsgs((m) => [...m, { from: "bot", text: `Ticket ${id} created. A support agent will follow up (simulated — no live agent in this prototype).` }]);
+    setMsgs((m) => [...m, { from: "bot", text: `Ticket ${id} created. A support agent will follow up (simulated, no live agent in this prototype).` }]);
   };
 
   return (

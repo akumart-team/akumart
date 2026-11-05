@@ -6,10 +6,10 @@ import { Button } from "@/components/ui/button";
 export const Route = createFileRoute("/how-it-works")({
   head: () => ({
     meta: [
-      { title: "How AkuMart works — Marketplace and AkuBin" },
+      { title: "How AkuMart works, Marketplace and AkuBin" },
       { name: "description", content: "Step-by-step: trading recyclables on the Marketplace and earning rewards at AkuBin smart bins." },
       { property: "og:title", content: "How AkuMart works" },
-      { property: "og:description", content: "Join, list, agree, deliver, complete — or find, scan, deposit, earn, redeem." },
+      { property: "og:description", content: "Join, list, agree, deliver, complete, or find, scan, deposit, earn, redeem." },
     ],
   }),
   component: Page,

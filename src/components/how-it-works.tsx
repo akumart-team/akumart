@@ -6,7 +6,7 @@ const FLOWS = {
   marketplace: [
     { icon: UserPlus, t: "Join", d: "Create one free account with basic details." },
     { icon: Search, t: "Discover or list", d: "Browse graded materials or publish your own listing." },
-    { icon: Handshake, t: "Agree on trade", d: "Structured offers and counteroffers — verified traders only." },
+    { icon: Handshake, t: "Agree on trade", d: "Structured offers and counteroffers, verified traders only." },
     { icon: Truck, t: "Arrange fulfilment", d: "Pick up yourself or compare quotes from approved partners." },
     { icon: CheckCircle2, t: "Complete", d: "Provider-handled payment, confirmation, then settlement." },
   ],

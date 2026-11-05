@@ -103,7 +103,7 @@ function AkuBinDash() {
           </div>
           <Panel className="bg-secondary">
             <p className="font-semibold">Also on AkuMart</p>
-            <p className="mt-1 text-sm text-muted-foreground">Browse recyclable materials on the Marketplace — buying or selling needs verification later, recycling never does.</p>
+            <p className="mt-1 text-sm text-muted-foreground">Browse recyclable materials on the Marketplace, buying or selling needs verification later, recycling never does.</p>
             <Button asChild size="sm" className="mt-3">
               <Link to="/app/marketplace">
                 <Store /> Open Marketplace

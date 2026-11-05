@@ -1,6 +1,7 @@
+import { validateBinCode } from "./rules";
 import { update, getDB, notify } from "./store";
 import { nowIso, uid } from "./format";
-import { checkoutSplit, depositPoints, eligiblePartners, orderKg, rewardEligibility } from "./rules";
+import { recommendedFare, fareBounds, checkoutSplit, depositPoints, eligiblePartners, orderKg, rewardEligibility } from "./rules";
 import type { DB, Listing, Material, Offer, Order, Partner, Campaign, Ticket, VStatus, VType, AdminRole } from "./types";
 
 const meIn = (d: DB) => d.users.find((u) => u.id === d.sessionUserId)!;
@@ -28,7 +29,7 @@ export function resolveVerification(level: "basic" | "full", outcome: DemoOutcom
       outcome === "rejected"
         ? "The document image was unreadable (demo reason). Please re-upload a clearer copy."
         : outcome === "provider_unavailable"
-          ? "Verification provider unavailable (simulated) — moved to manual review."
+          ? "Verification provider unavailable (simulated), moved to manual review."
           : undefined;
     u.verification.history.unshift({ at: nowIso(), actor: "demo-provider", action: `${level} → ${map[outcome]}`, detail: "DEMO result" });
     notify(d, u.id, `Verification ${map[outcome].replace(/_/g, " ")}`, `Your ${level} Marketplace verification is now ${map[outcome].replace(/_/g, " ")}.`, "/app/verification");
@@ -144,7 +145,7 @@ export function respondOffer(offerId: string, by: "buyer" | "seller", action: "a
         quotes: [],
         payment: "unpaid",
         status: "choose_fulfilment",
-        timeline: [{ at: nowIso(), actor: by, action: "Offer accepted — order created" }],
+        timeline: [{ at: nowIso(), actor: by, action: "Offer accepted, order created" }],
         createdAt: nowIso(),
       };
       d.orders.unshift(order);
@@ -172,33 +173,52 @@ const mutOrder = (id: string, fn: (o: Order, d: DB) => void) =>
     if (o) fn(o, d);
   });
 
-export function chooseFulfilment(orderId: string, mode: "pickup" | "delivery", destination?: string) {
+/** Buyer proposes a fare within configured bounds; every eligible approved partner is notified. No self-pickup. */
+export function requestLogistics(orderId: string, proposedFare: number, destination: string) {
   mutOrder(orderId, (o, d) => {
-    o.fulfilment = mode;
+    const kg = orderKg(o);
+    const rec = recommendedFare(kg, d.settings);
+    const b = fareBounds(rec, d.settings);
+    o.fulfilment = "delivery";
     o.destination = destination;
-    if (mode === "pickup") {
-      o.status = "awaiting_payment";
-      o.timeline.push({ at: nowIso(), actor: "buyer", action: "Independent pickup selected" });
-      return;
-    }
-    const el = eligiblePartners(d.partners, o.pickupCity, o.material, orderKg(o));
+    o.recommendedFare = rec;
+    o.proposedFare = Math.min(b.max, Math.max(b.min, proposedFare));
+    o.quoteDeadline = hrs(d.settings.quoteDeadlineHours);
+    const el = eligiblePartners(d.partners, o.pickupCity, o.material, kg);
     o.notified = el.map((p) => p.id);
     o.status = el.length ? "awaiting_quotes" : "no_quotes";
-    o.timeline.push({ at: nowIso(), actor: "system", action: `Delivery requested — ${el.length} eligible partner(s) notified`, detail: el.map((p) => p.business).join(", ") });
+    o.timeline.push({ at: nowIso(), actor: "buyer", action: `Proposed delivery fare ${o.proposedFare} (recommended ${rec})` });
+    o.timeline.push({ at: nowIso(), actor: "system", action: `${el.length} eligible partner(s) notified`, detail: "Only general areas and load details shared before assignment" });
     el.forEach((p) => p.ownerId && notify(d, p.ownerId, "New delivery job", `${o.title} from ${o.pickupCity}`, "/app/partner"));
   });
 }
+/** @deprecated kept for older callers; always routes to logistics partners. */
+export function chooseFulfilment(orderId: string, _mode: "pickup" | "delivery", destination?: string) {
+  const o = getDB().orders.find((x) => x.id === orderId);
+  if (!o) return;
+  requestLogistics(orderId, recommendedFare(orderKg(o), getDB().settings), destination || "Buyer site");
+}
 
-/** Simulates quotes arriving from notified seeded partners (user-owned partners quote manually). */
+export function extendQuoteDeadline(orderId: string) {
+  mutOrder(orderId, (o, d) => {
+    o.quoteDeadline = hrs(d.settings.quoteDeadlineHours);
+    o.timeline.push({ at: nowIso(), actor: "buyer", action: "Logistics deadline extended" });
+  });
+}
+
+/** Simulated partner responses: accept the proposed fare or counter within bounds. */
 export function simulateQuotes(orderId: string) {
   mutOrder(orderId, (o, d) => {
-    const kg = orderKg(o);
+    const fare = o.proposedFare ?? recommendedFare(orderKg(o), d.settings);
+    const b = fareBounds(o.recommendedFare ?? fare, d.settings);
     o.notified.forEach((pid, i) => {
       const p = d.partners.find((x) => x.id === pid)!;
       if (p.ownerId || o.quotes.some((q) => q.partnerId === pid)) return;
-      o.quotes.push({ id: uid("Q"), partnerId: pid, partnerName: p.business, amount: Math.round((25000 + kg * (6 + i * 1.5)) / 100) * 100, eta: `${1 + i} day(s)`, vehicle: p.vehicles, status: "submitted" });
+      const counter = i % 2 === 1;
+      const amount = counter ? Math.min(b.max, fare + b.step * (i + 1)) : fare;
+      o.quotes.push({ id: uid("Q"), partnerId: pid, partnerName: p.business, amount, eta: `${1 + i} day(s)`, vehicle: p.vehicles, status: "submitted", kind: counter ? "counter" : "accept" });
     });
-    o.timeline.push({ at: nowIso(), actor: "partners", action: `${o.quotes.length} quote(s) received` });
+    o.timeline.push({ at: nowIso(), actor: "partners (simulated)", action: `${o.quotes.length} response(s) received` });
   });
 }
 
@@ -206,7 +226,8 @@ export function submitQuote(orderId: string, partnerId: string, amount: number, 
   mutOrder(orderId, (o, d) => {
     const p = d.partners.find((x) => x.id === partnerId)!;
     o.quotes = o.quotes.filter((q) => q.partnerId !== partnerId);
-    o.quotes.push({ id: uid("Q"), partnerId, partnerName: p.business, amount, eta, vehicle: p.vehicles, status: "submitted" });
+    if (o.quoteId) return;
+    o.quotes.push({ id: uid("Q"), partnerId, partnerName: p.business, amount, eta, vehicle: p.vehicles, status: "submitted", kind: amount === o.proposedFare ? "accept" : "counter" });
     o.timeline.push({ at: nowIso(), actor: p.business, action: `Quote submitted ${amount}` });
     notify(d, o.buyerId, "New delivery quote", `${p.business} quoted for ${o.title}`, `/app/orders/${o.id}`);
   });
@@ -214,13 +235,18 @@ export function submitQuote(orderId: string, partnerId: string, amount: number, 
 
 export function selectQuote(orderId: string, quoteId: string) {
   mutOrder(orderId, (o, d) => {
+    if (o.quoteId) return; // one frozen selection, no double assignment
     o.quoteId = quoteId;
     o.quotes.forEach((q) => (q.status = q.id === quoteId ? "selected" : "declined"));
     o.status = "awaiting_payment";
     const q = o.quotes.find((x) => x.id === quoteId)!;
     o.timeline.push({ at: nowIso(), actor: "buyer", action: `Selected ${q.partnerName}` });
     const p = d.partners.find((x) => x.id === q.partnerId);
-    if (p?.ownerId) notify(d, p.ownerId, "Quote selected", `You were selected for ${o.title}`, "/app/partner");
+    if (p?.ownerId) notify(d, p.ownerId, "Quote selected", `You were selected for ${o.title}. Agreed fare is frozen.`, "/app/partner");
+    o.quotes.forEach((x) => {
+      const op = d.partners.find((y) => y.id === x.partnerId);
+      if (x.id !== quoteId && op?.ownerId) notify(d, op.ownerId, "Job assigned to another partner", o.title, "/app/partner");
+    });
   });
 }
 
@@ -228,13 +254,13 @@ export function pay(orderId: string, outcome: "success" | "failed") {
   mutOrder(orderId, (o, d) => {
     if (outcome === "failed") {
       o.payment = "failed";
-      o.timeline.push({ at: nowIso(), actor: "payment-provider (simulated)", action: "Payment failed — card declined (demo)" });
+      o.timeline.push({ at: nowIso(), actor: "payment-provider (simulated)", action: "Payment failed, card declined (demo)" });
       return;
     }
     o.payment = "held";
     o.status = "paid";
     o.timeline.push({ at: nowIso(), actor: "payment-provider (simulated)", action: "Payment collected and held by provider for conditional settlement" });
-    notify(d, o.sellerId, "Order paid", `${o.title} — prepare for ${o.fulfilment}`, `/app/orders/${o.id}`);
+    notify(d, o.sellerId, "Order paid", `${o.title}, prepare for ${o.fulfilment}`, `/app/orders/${o.id}`);
   });
 }
 
@@ -264,11 +290,19 @@ export function confirmAndSettle(orderId: string) {
   });
 }
 
+/** Transaction-qualified seller review: buyer of a settled order, once. */
+export function reviewOrder(orderId: string, stars: number, text?: string) {
+  mutOrder(orderId, (o, d) => {
+    if (o.status !== "settled" || o.review || o.buyerId !== d.sessionUserId) return;
+    o.review = { stars: Math.max(1, Math.min(5, Math.round(stars))), text: text?.trim() || undefined, at: nowIso() };
+  });
+}
+
 export function openDispute(orderId: string, reason: string, evidence: string) {
   mutOrder(orderId, (o, d) => {
     o.status = "disputed";
     o.dispute = { reason, evidence, status: "open", at: nowIso() };
-    o.timeline.push({ at: nowIso(), actor: "buyer", action: "Dispute opened — settlement on hold", detail: reason });
+    o.timeline.push({ at: nowIso(), actor: "buyer", action: "Dispute opened, settlement on hold", detail: reason });
     d.tickets.unshift({ id: uid("T"), userId: o.buyerId, name: o.buyerName, email: "", subject: `Dispute on ${o.id}`, message: reason, channel: "dispute", priority: "high", status: "open", at: nowIso() });
   });
 }
@@ -277,7 +311,7 @@ export function decideDispute(orderId: string, decision: "refund" | "partial" | 
   mutOrder(orderId, (o, d) => {
     if (!o.dispute) return;
     o.dispute.status = "resolved";
-    o.dispute.decision = decision === "refund" ? "Full refund to buyer" : decision === "partial" ? "Partial refund / price adjustment" : "Closed — funds released to seller";
+    o.dispute.decision = decision === "refund" ? "Full refund to buyer" : decision === "partial" ? "Partial refund / price adjustment" : "Closed, funds released to seller";
     o.payment = decision === "refund" ? "refunded" : decision === "partial" ? "partially_refunded" : "released";
     o.status = decision === "release" ? "settled" : "refunded";
     o.timeline.push({ at: nowIso(), actor, action: `Dispute resolved: ${o.dispute.decision}` });
@@ -312,28 +346,48 @@ export function respondRequest(reqId: string, price: number, qty: number, note: 
 }
 
 /* ---------------- AkuBin ---------------- */
-export function createBinSession(binId: string) {
-  const code = "AKB-" + Math.random().toString(36).slice(2, 8).toUpperCase();
+/** Short-lived, single-use 6-digit numeric code for the signed-in account. Usable at any connected bin. */
+export function createBinSession(_binId?: string) {
+  const code = String(Math.floor(100000 + Math.random() * 900000));
   update((d) => {
-    d.binSessions.unshift({ code, binId, userId: d.sessionUserId!, expiresAt: new Date(Date.now() + 120_000).toISOString(), used: false });
+    d.binSessions = d.binSessions.filter((x) => !(x.userId === d.sessionUserId && !x.used));
+    d.binSessions.unshift({ code, binId: "", userId: d.sessionUserId!, expiresAt: new Date(Date.now() + 120_000).toISOString(), used: false });
   });
   return code;
 }
 
-export function checkBinSession(code: string) {
-  const s = getDB().binSessions.find((x) => x.code === code);
-  if (!s) return "invalid";
-  if (s.used) return "used";
-  if (new Date(s.expiresAt).getTime() < Date.now()) return "expired";
-  return "ok";
+export function checkBinSession(code: string, binId?: string) {
+  const d = getDB();
+  return validateBinCode(d.binSessions, code, binId ?? "", d.sessionUserId, Date.now());
+}
+
+/** Bin keypad entry: validates the code, consumes it and opens one multi-deposit session on that bin. */
+export function startBinSession(code: string, binId: string) {
+  const r = checkBinSession(code, binId);
+  if (r !== "ok") return r;
+  update((d) => {
+    d.binSessions.forEach((x) => x.binId === binId && x.used && x.active && (x.active = false));
+    const s = d.binSessions.find((x) => x.code === code)!;
+    s.used = true;
+    s.binId = binId;
+    s.active = true;
+  });
+  return r;
+}
+
+export function endBinSession(code: string) {
+  update((d) => {
+    const s = d.binSessions.find((x) => x.code === code);
+    if (s) s.active = false;
+  });
 }
 
 export function recordDeposit(binId: string, code: string, material: Material, measure: "weight" | "count", amount: number, verified: boolean, reason?: string) {
   let result = { points: 0, kg: 0 };
   update((d) => {
     const u = meIn(d);
-    const s = d.binSessions.find((x) => x.code === code);
-    if (s) s.used = true;
+    const s = d.binSessions.find((x) => x.code === code && x.binId === binId && x.active);
+    if (!s) return;
     result = depositPoints(d.settings, material, measure, amount, verified);
     u.deposits.unshift({ id: uid("D"), binId, material, measure, kg: result.kg, count: measure === "count" ? amount : undefined, points: result.points, status: verified ? "verified" : "rejected", reason, at: nowIso() });
     u.points += result.points;
@@ -388,7 +442,7 @@ export function decideRedemption(id: string, approve: boolean, actor: string) {
     if (!approve) {
       const u = d.users.find((x) => x.id === r.userId);
       if (u) u.points += r.cost;
-      r.reason = "Rejected by finance review (demo) — points returned.";
+      r.reason = "Rejected by finance review (demo), points returned.";
     }
     d.audit.unshift({ at: nowIso(), actor, action: `Redemption ${r.status}`, detail: r.id });
     notify(d, r.userId, `Redemption ${r.status}`, r.rewardName, "/app/akubin/rewards");

@@ -10,8 +10,8 @@ import { Field, inputCls } from "@/components/field";
 import { DemoTag } from "@/components/brand";
 import { useTradeGate } from "@/components/gate";
 import { useDB, useMe } from "@/lib/store";
-import { chooseFulfilment, simulateQuotes, selectQuote, pay, advanceOrder, confirmAndSettle, openDispute, cancelOrder } from "@/lib/actions";
-import { checkoutSplit } from "@/lib/rules";
+import { requestLogistics, extendQuoteDeadline, reviewOrder, simulateQuotes, selectQuote, pay, advanceOrder, confirmAndSettle, openDispute, cancelOrder } from "@/lib/actions";
+import { checkoutSplit, fareBounds, recommendedFare, orderKg } from "@/lib/rules";
 import { naira, dt } from "@/lib/format";
 import { cn } from "@/lib/utils";
 import type { OrderStatus } from "@/lib/types";
@@ -21,9 +21,10 @@ export const Route = createFileRoute("/app/orders/$id")({
 });
 
 const STAGES: { s: OrderStatus[]; label: string }[] = [
-  { s: ["choose_fulfilment", "awaiting_quotes", "no_quotes"], label: "Accepted" },
-  { s: ["awaiting_payment"], label: "Checkout" },
-  { s: ["paid"], label: "Paid" },
+  { s: ["choose_fulfilment"], label: "Offer accepted" },
+  { s: ["awaiting_quotes", "no_quotes"], label: "Logistics" },
+  { s: ["awaiting_payment"], label: "Payment" },
+  { s: ["paid"], label: "Confirmed" },
   { s: ["picked_up"], label: "Picked up" },
   { s: ["in_transit"], label: "In transit" },
   { s: ["delivered", "proof_uploaded"], label: "Delivered" },
@@ -39,6 +40,9 @@ function OrderPage() {
   const settings = useDB((d) => d.settings);
   const gate = useTradeGate();
   const [dest, setDest] = useState("");
+  const [fare, setFare] = useState<number | null>(null);
+  const [stars, setStars] = useState(0);
+  const [reviewText, setReviewText] = useState("");
   const [paying, setPaying] = useState(false);
   const [payOutcome, setPayOutcome] = useState<"success" | "failed">("success");
   const [proof, setProof] = useState("");
@@ -85,7 +89,7 @@ function OrderPage() {
       <PageTitle eyebrow={`Order ${o.id}`} title={o.title} intro={`${o.qty.toLocaleString()} ${o.unit} at ${naira(o.unitPrice)}/${o.unit} · ${isBuyer ? `Seller: ${o.sellerName}` : `Buyer: ${o.buyerName}`}`} actions={<StatusChip status={o.status} className="text-sm" />} />
 
       {stageIdx >= 0 && (
-        <ol className="mb-8 grid grid-cols-7 gap-1" aria-label="Order progress">
+        <ol className="mb-8 grid grid-cols-8 gap-1" aria-label="Order progress">
           {STAGES.map((s, i) => (
             <li key={s.label} className="text-center">
               <div className={cn("h-1.5 rounded-full", i <= stageIdx ? "bg-primary" : "bg-border")} />
@@ -97,50 +101,59 @@ function OrderPage() {
 
       <div className="grid gap-6 lg:grid-cols-[1.5fr_1fr]">
         <div className="space-y-6">
-          {/* Fulfilment choice */}
-          {o.status === "choose_fulfilment" && (
-            <Panel title="Choose fulfilment">
-              {isBuyer ? (
-                <div className="space-y-4">
-                  <p className="text-sm text-muted-foreground">Options approved by the seller for this listing:</p>
-                  <div className="grid gap-3 sm:grid-cols-2">
-                    {listing?.fulfilment.includes("pickup") && (
-                      <button onClick={() => chooseFulfilment(o.id, "pickup")} className="rounded-2xl border p-5 text-left hover:border-primary">
-                        <PackageCheck className="size-6 text-primary" />
-                        <p className="mt-2 font-semibold">Independent pickup</p>
-                        <p className="text-sm text-muted-foreground">Collect from {o.pickupArea}, {o.pickupCity}.</p>
-                      </button>
-                    )}
-                    {listing?.fulfilment.includes("delivery") && (
-                      <div className="rounded-2xl border p-5">
-                        <Truck className="size-6 text-primary" />
-                        <p className="mt-2 font-semibold">Logistics delivery</p>
-                        <input className={inputCls + " mt-3"} placeholder="Delivery destination" value={dest} onChange={(e) => setDest(e.target.value)} />
-                        <Button size="sm" className="mt-3" disabled={dest.length < 3} onClick={() => chooseFulfilment(o.id, "delivery", dest)}>
-                          Request quotes
-                        </Button>
+          {/* Logistics fare proposal */}
+          {o.status === "choose_fulfilment" && (() => {
+            const rec = recommendedFare(orderKg(o), settings);
+            const bnd = fareBounds(rec, settings);
+            const f = fare ?? rec;
+            return (
+              <Panel title="Propose a delivery fare" action={<DemoTag>Configured demo rules</DemoTag>}>
+                {isBuyer ? (
+                  <div className="space-y-4">
+                    <p className="text-sm text-muted-foreground">All deliveries use approved AkuMart logistics partners. Partners can accept your fare, counter it or decline. You pay only after choosing one partner.</p>
+                    <Field label="Delivery destination (shared only with the assigned partner)">
+                      <input className={inputCls} placeholder="Area and city" value={dest} onChange={(e) => setDest(e.target.value)} />
+                    </Field>
+                    <div className="rounded-2xl border p-4">
+                      <p className="text-xs text-muted-foreground">Recommended Fare</p>
+                      <p className="font-display text-lg font-semibold">{naira(rec)}</p>
+                      <div className="mt-3 flex items-center gap-3">
+                        <Button size="icon" variant="outline" aria-label="Lower fare" disabled={f <= bnd.min} onClick={() => setFare(Math.max(bnd.min, f - bnd.step))}>−</Button>
+                        <p className="min-w-32 text-center font-display text-2xl font-bold" aria-live="polite">{naira(f)}</p>
+                        <Button size="icon" variant="outline" aria-label="Raise fare" disabled={f >= bnd.max} onClick={() => setFare(Math.min(bnd.max, f + bnd.step))}>+</Button>
                       </div>
-                    )}
+                      <p className="mt-2 text-xs text-muted-foreground">Allowed range {naira(bnd.min)} to {naira(bnd.max)}, steps of {naira(bnd.step)}.</p>
+                    </div>
+                    <Button disabled={dest.length < 3} onClick={() => requestLogistics(o.id, f, dest)}>
+                      <Truck /> Request logistics partners
+                    </Button>
                   </div>
-                </div>
-              ) : (
-                <p className="text-sm text-muted-foreground">Waiting for the buyer to choose pickup or delivery.</p>
-              )}
-            </Panel>
-          )}
+                ) : (
+                  <p className="text-sm text-muted-foreground">Waiting for the buyer to propose a delivery fare to approved logistics partners.</p>
+                )}
+              </Panel>
+            );
+          })()}
 
           {/* Quotes */}
           {o.fulfilment === "delivery" && (o.status === "awaiting_quotes" || o.status === "no_quotes" || o.quotes.length > 0) && (
             <Panel title="Delivery quotes" action={<DemoTag>Simulated partners</DemoTag>}>
               <p className="mb-4 text-sm text-muted-foreground">
-                {o.notified.length} eligible approved partner(s) notified — matched on route ({o.pickupCity} → {o.destination}), material ({o.material}) and capacity.
+                {o.notified.length} eligible approved partner(s) notified, matched on route ({o.pickupCity} → {o.destination}), material ({o.material}) and capacity.
               </p>
+              {o.proposedFare && <p className="mb-3 text-sm">Your proposed fare: <strong>{naira(o.proposedFare)}</strong>{o.quoteDeadline && <> · responses close {dt(o.quoteDeadline)}</>}</p>}
+              {isBuyer && o.status === "awaiting_quotes" && (
+                <div className="mb-3 flex gap-2">
+                  <Button size="sm" variant="ghost" onClick={() => extendQuoteDeadline(o.id)}>Extend deadline</Button>
+                  <Button size="sm" variant="ghost" onClick={() => cancelOrder(o.id, "buyer")}>Cancel request</Button>
+                </div>
+              )}
               {o.status === "no_quotes" ? (
                 <div className="rounded-2xl bg-destructive/10 p-4 text-sm text-destructive">
                   No approved partner currently serves this route, material and capacity.
                   <div className="mt-3 flex gap-2">
-                    <Button size="sm" variant="outline" onClick={() => chooseFulfilment(o.id, "pickup")}>
-                      Switch to pickup
+                    <Button size="sm" variant="outline" onClick={() => { extendQuoteDeadline(o.id); simulateQuotes(o.id); }}>
+                      Extend deadline
                     </Button>
                     <Button size="sm" variant="ghost" onClick={() => cancelOrder(o.id, "buyer")}>
                       Cancel order
@@ -153,16 +166,16 @@ function OrderPage() {
                 </p>
               ) : (
                 <div className="space-y-2">
-                  {[...o.quotes].sort((a, b) => a.amount - b.amount).map((q, i) => {
+                  {[...o.quotes].map((q) => {
                     const p = partners.find((x) => x.id === q.partnerId);
                     return (
                       <div key={q.id} className={cn("flex flex-wrap items-center justify-between gap-3 rounded-2xl border p-4", q.status === "selected" && "border-primary bg-secondary")}>
                         <div>
                           <p className="font-semibold">
-                            {q.partnerName} {i === 0 && o.status === "awaiting_quotes" && <span className="ml-1 rounded-full bg-lime px-2 py-0.5 text-[10px] font-bold text-lime-foreground">LOWEST</span>}
+                            {q.partnerName} <span className="ml-1 rounded-full bg-secondary px-2 py-0.5 text-[10px] font-bold">{q.kind === "counter" ? "COUNTER-OFFER" : "ACCEPTED YOUR FARE"}</span>
                           </p>
                           <p className="text-xs text-muted-foreground">
-                            {q.vehicle} · ETA {q.eta} · <Star className="inline size-3" /> {p?.rating} · {p?.completed} jobs
+                            {q.vehicle} · ETA {q.eta} · {p?.completed ? `${p.completed} completed jobs (sample)` : "No ratings yet"}
                           </p>
                         </div>
                         <div className="flex items-center gap-3">
@@ -189,11 +202,10 @@ function OrderPage() {
               {isBuyer ? (
                 <>
                   <dl className="space-y-2 text-sm">
-                    <Row k="Waste value" v={naira(value)} />
-                    {quote && <Row k={`Delivery — ${quote.partnerName}`} v={naira(quote.amount)} />}
-                    <Row k="AkuMart buyer commission" v={naira(0)} />
+                    <Row k="Waste Price" v={naira(value)} />
+                    {quote && <Row k="Delivery Fee" v={naira(quote.amount)} />}
                     <div className="border-t pt-2">
-                      <Row k={<strong>Total payable</strong>} v={<strong className="text-lg">{naira(split.buyerTotal)}</strong>} />
+                      <Row k={<strong>Total Payable</strong>} v={<strong className="text-lg">{naira(split.buyerTotal)}</strong>} />
                     </div>
                   </dl>
                   <div className="mt-4 flex gap-2 rounded-2xl bg-muted p-3 text-xs text-muted-foreground">
@@ -257,13 +269,13 @@ function OrderPage() {
               {o.status === "proof_uploaded" && (
                 <div className="mt-4 rounded-2xl bg-secondary p-4">
                   <p className="font-semibold">Proof uploaded: {o.proof}</p>
-                  <p className="text-sm text-muted-foreground">Inspection window ends {o.inspectionDue ? dt(o.inspectionDue) : "—"} ({settings.inspectionHours}h, configurable). If undisputed, settlement releases automatically.</p>
+                  <p className="text-sm text-muted-foreground">Inspection window ends {o.inspectionDue ? dt(o.inspectionDue) : ", "} ({settings.inspectionHours}h, configurable). If undisputed, settlement releases automatically.</p>
                   {isBuyer && (
                     <div className="mt-3 flex flex-wrap gap-2">
                       <Button
                         onClick={() => {
                           confirmAndSettle(o.id);
-                          toast.success("Receipt confirmed — settlement released (simulated)");
+                          toast.success("Receipt confirmed, settlement released (simulated)");
                         }}
                       >
                         <CheckCircle2 /> Confirm receipt
@@ -302,7 +314,7 @@ function OrderPage() {
                     if (!dispute.reason || dispute.evidence.length < 5) return toast.error("Add a reason and evidence");
                     openDispute(o.id, dispute.reason, dispute.evidence);
                     setShowDispute(false);
-                    toast("Dispute opened — settlement on hold");
+                    toast("Dispute opened, settlement on hold");
                   }}
                 >
                   Submit dispute
@@ -331,31 +343,48 @@ function OrderPage() {
                   <p className="text-sm text-muted-foreground">Provider settlement released (simulated).</p>
                 </div>
               </div>
+              {isBuyer && (o.review ? (
+                <p className="mt-4 text-sm">You rated this seller {o.review.stars} of 5{o.review.text ? `: "${o.review.text}"` : "."}</p>
+              ) : (
+                <div className="mt-4 space-y-2 border-t pt-4">
+                  <p className="text-sm font-medium">Rate this seller</p>
+                  <div className="flex gap-1">
+                    {[1, 2, 3, 4, 5].map((n) => (
+                      <button key={n} aria-label={`${n} star${n > 1 ? "s" : ""}`} onClick={() => setStars(n)}>
+                        <Star className={cn("size-6", n <= stars ? "fill-primary text-primary" : "text-muted-foreground")} />
+                      </button>
+                    ))}
+                  </div>
+                  <Textarea rows={2} className="rounded-xl" placeholder="Optional comment" value={reviewText} onChange={(e) => setReviewText(e.target.value)} />
+                  <Button size="sm" disabled={!stars} onClick={() => { reviewOrder(o.id, stars, reviewText); toast.success("Review submitted"); }}>Submit review</Button>
+                </div>
+              ))}
             </Panel>
           )}
           {o.status === "cancelled" && <Panel><p className="text-sm">This order was cancelled{o.payment === "refunded" ? "; payment refunded by provider (simulated)." : "."}</p></Panel>}
         </div>
 
         <div className="space-y-6">
-          <Panel title="Settlement breakdown">
-            <dl className="space-y-2 text-sm">
-              <Row k="Buyer pays" v={naira(split.buyerTotal)} />
-              <Row k="Waste value" v={naira(value)} />
-              <Row k={`Seller fee (${settings.sellerFee}%)`} v={"−" + naira(split.sellerCommission)} />
-              <Row k={<strong>Seller payout</strong>} v={<strong>{naira(split.sellerPayout)}</strong>} />
-              {quote && (
-                <>
-                  <Row k="Delivery fee" v={naira(quote.amount)} />
-                  <Row k={`Partner fee (${settings.partnerFee}%)`} v={"−" + naira(split.partnerCommission)} />
-                  <Row k={<strong>Partner payout</strong>} v={<strong>{naira(split.partnerPayout)}</strong>} />
-                </>
-              )}
-              <div className="border-t pt-2">
-                <Row k="Payment status" v={<StatusChip status={o.payment} />} />
-              </div>
-            </dl>
-            <p className="mt-3 text-xs text-muted-foreground">Provisional, configurable rates. Fees are deducted from proceeds — buyers pay no surcharge.</p>
-          </Panel>
+          {isBuyer ? (
+            <Panel title="Payment summary">
+              <dl className="space-y-2 text-sm">
+                <Row k="Waste Price" v={naira(value)} />
+                <Row k="Delivery Fee" v={quote ? naira(quote.amount) : "Pending partner"} />
+                <Row k={<strong>Total Payable</strong>} v={<strong>{naira(split.buyerTotal)}</strong>} />
+                <div className="border-t pt-2"><Row k="Payment status" v={<StatusChip status={o.payment} />} /></div>
+              </dl>
+            </Panel>
+          ) : (
+            <Panel title="Your earnings">
+              <dl className="space-y-2 text-sm">
+                <Row k="Gross sale" v={naira(value)} />
+                <Row k={`AkuMart commission (${settings.sellerFee}%)`} v={"−" + naira(split.sellerCommission)} />
+                <Row k={<strong>Net earnings</strong>} v={<strong>{naira(split.sellerPayout)}</strong>} />
+                <div className="border-t pt-2"><Row k="Payout status" v={<StatusChip status={o.payment} />} /></div>
+              </dl>
+              <p className="mt-3 text-xs text-muted-foreground">Demo commission, admin-configurable. Released after delivery and inspection.</p>
+            </Panel>
+          )}
           <Panel title="Activity">
             <ol className="space-y-3 text-sm">
               {[...o.timeline].reverse().map((t, i) => (

@@ -14,7 +14,7 @@ export const Route = createFileRoute("/onboarding")({
   validateSearch: (s: Record<string, unknown>): { redirect?: string } => ({ redirect: typeof s.redirect === "string" ? s.redirect : undefined }),
   head: () => ({
     meta: [
-      { title: "Set up your account — AkuMart" },
+      { title: "Set up your account | AkuMart" },
       { name: "description", content: "Choose how you want to use the AkuMart Marketplace and AkuBin." },
       { property: "og:title", content: "Get set up on AkuMart" },
       { property: "og:description", content: "Pick your Marketplace role and turn on AkuBin Recycle & Earn." },
@@ -51,7 +51,7 @@ function Onboarding() {
     <AuthLayout>
       <p className="eyebrow text-primary">Welcome{me ? `, ${me.name.split(" ")[0]}` : ""}</p>
       <h1 className="text-display mt-2 text-4xl">How will you use AkuMart?</h1>
-      <p className="mt-2 text-muted-foreground">Pick either or both. Your choices never lock you out — you can switch services any time.</p>
+      <p className="mt-2 text-muted-foreground">Pick either or both. Your choices never lock you out, you can switch services any time.</p>
       <div className="mt-8 space-y-4">
         <div className="rounded-2xl border p-5">
           <div className="mb-4 flex items-center gap-3">
@@ -88,7 +88,7 @@ function Onboarding() {
         <label className="flex cursor-pointer items-center gap-4 rounded-2xl border bg-forest p-5 text-forest-foreground">
           <Recycle className="size-5 text-lime" />
           <div className="flex-1">
-            <p className="font-display text-lg font-semibold">AkuBin — Recycle & Earn</p>
+            <p className="font-display text-lg font-semibold">AkuBin, Recycle & Earn</p>
             <p className="text-sm text-forest-foreground/70">Deposit at smart bins and earn points. No verification needed.</p>
           </div>
           <Switch

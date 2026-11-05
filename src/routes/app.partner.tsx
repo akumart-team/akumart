@@ -170,7 +170,7 @@ function Dashboard({ partnerId }: { partnerId: string }) {
                           update((d) => {
                             const x = d.orders.find((y) => y.id === o.id)!;
                             x.notified = x.notified.filter((n) => n !== partnerId);
-                            x.timeline.push({ at: new Date().toISOString(), actor: partner.business, action: "Declined job — no capacity" });
+                            x.timeline.push({ at: new Date().toISOString(), actor: partner.business, action: "Declined job, no capacity" });
                           })
                         }
                       >
@@ -223,14 +223,14 @@ function Dashboard({ partnerId }: { partnerId: string }) {
           <ul className="text-sm">
             {lost.map((o) => (
               <li key={o.id} className="py-1">
-                {o.id} · {o.title} — buyer chose another partner
+                {o.id} · {o.title}, buyer chose another partner
               </li>
             ))}
           </ul>
         </Panel>
       )}
       <p className="mt-6 text-xs text-muted-foreground">
-        Rating {partner.rating || "—"} · Applied {dt(partner.appliedAt)} · <Link to="/app/support" className="text-primary">Contact support</Link>
+        Rating {partner.rating || ", "} · Applied {dt(partner.appliedAt)} · <Link to="/app/support" className="text-primary">Contact support</Link>
       </p>
     </div>
   );

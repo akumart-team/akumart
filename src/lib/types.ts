@@ -123,6 +123,7 @@ export interface Quote {
   eta: string;
   vehicle: string;
   status: "submitted" | "selected" | "declined" | "expired";
+  kind?: "accept" | "counter";
 }
 
 export type OrderStatus =
@@ -161,6 +162,10 @@ export interface Order {
   notified: string[];
   quotes: Quote[];
   quoteId?: string;
+  recommendedFare?: number;
+  proposedFare?: number;
+  quoteDeadline?: string;
+  review?: { stars: number; text?: string; at: string };
   payment: "unpaid" | "failed" | "held" | "released" | "refunded" | "partially_refunded";
   status: OrderStatus;
   proof?: string;
@@ -338,6 +343,12 @@ export interface Settings {
   cashMin: number;
   pointValueNaira: number;
   inspectionHours: number;
+  fareBase: number;
+  farePerKg: number;
+  fareStep: number;
+  fareMinPct: number;
+  fareMaxPct: number;
+  quoteDeadlineHours: number;
 }
 
 export interface Enquiry {
@@ -371,6 +382,6 @@ export interface DB {
   enquiries: Enquiry[];
   settings: Settings;
   audit: AuditEntry[];
-  binSessions: { code: string; binId: string; userId: string; expiresAt: string; used: boolean }[];
+  binSessions: { code: string; binId: string; userId: string; expiresAt: string; used: boolean; active?: boolean }[];
   leaderboard: { name: string; city: string; week: number; month: number; all: number }[];
 }

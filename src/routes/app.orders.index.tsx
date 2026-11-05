@@ -34,7 +34,7 @@ function Orders() {
               <td className={td}>{o.buyerId === me.id ? "Buyer" : "Seller"}</td>
               <td className={td + " capitalize"}>{o.material}</td>
               <td className={td}>{naira(o.qty * o.unitPrice)}</td>
-              <td className={td + " capitalize"}>{o.fulfilment ?? "—"}</td>
+              <td className={td + " capitalize"}>{o.fulfilment ?? ", "}</td>
               <td className={td}>
                 <StatusChip status={o.status} />
               </td>

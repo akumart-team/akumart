@@ -98,7 +98,7 @@ function NewListing() {
 
   return (
     <div className="max-w-5xl">
-      <PageTitle eyebrow="Seller" title={existing ? "Edit listing" : "Create a listing"} intro="Save a draft any time. Publishing requires basic Marketplace verification — we’ll keep your draft." />
+      <PageTitle eyebrow="Seller" title={existing ? "Edit listing" : "Create a listing"} intro="Save a draft any time. Publishing requires basic Marketplace verification, we’ll keep your draft." />
       {preview ? (
         <div className="grid gap-6 md:grid-cols-[340px_1fr]">
           <ListingCard l={previewListing} />
@@ -124,7 +124,7 @@ function NewListing() {
               <select className={inputCls} value={f.material} onChange={(e) => setF({ ...f, material: e.target.value as Material, image: f.image.startsWith("data:") ? f.image : e.target.value })}>
                 {MATERIALS.map((m) => (
                   <option key={m.id} value={m.id}>
-                    {m.label} — {m.hint}
+                    {m.label}, {m.hint}
                   </option>
                 ))}
               </select>

@@ -54,9 +54,9 @@ export const Route = createFileRoute("/legal/$doc")({
   },
   head: ({ loaderData }) => ({
     meta: [
-      { title: `${loaderData?.title ?? "Legal"} (draft) — AkuMart` },
-      { name: "description", content: `AkuMart ${loaderData?.title ?? "legal policy"} — draft pending legal review.` },
-      { property: "og:title", content: `${loaderData?.title ?? "Legal"} — AkuMart` },
+      { title: `${loaderData?.title ?? "Legal"} (draft) | AkuMart` },
+      { name: "description", content: `AkuMart ${loaderData?.title ?? "legal policy"}, draft pending legal review.` },
+      { property: "og:title", content: `${loaderData?.title ?? "Legal"} | AkuMart` },
       { property: "og:description", content: "Draft policy pending professional legal review." },
     ],
   }),
