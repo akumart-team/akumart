@@ -1,7 +1,7 @@
 import { validateBinCode } from "./rules";
 import { update, getDB, notify } from "./store";
 import { nowIso, uid } from "./format";
-import { checkoutSplit, depositPoints, eligiblePartners, orderKg, rewardEligibility } from "./rules";
+import { recommendedFare, fareBounds, checkoutSplit, depositPoints, eligiblePartners, orderKg, rewardEligibility } from "./rules";
 import type { DB, Listing, Material, Offer, Order, Partner, Campaign, Ticket, VStatus, VType, AdminRole } from "./types";
 
 const meIn = (d: DB) => d.users.find((u) => u.id === d.sessionUserId)!;
@@ -173,33 +173,52 @@ const mutOrder = (id: string, fn: (o: Order, d: DB) => void) =>
     if (o) fn(o, d);
   });
 
-export function chooseFulfilment(orderId: string, mode: "pickup" | "delivery", destination?: string) {
+/** Buyer proposes a fare within configured bounds; every eligible approved partner is notified. No self-pickup. */
+export function requestLogistics(orderId: string, proposedFare: number, destination: string) {
   mutOrder(orderId, (o, d) => {
-    o.fulfilment = mode;
+    const kg = orderKg(o);
+    const rec = recommendedFare(kg, d.settings);
+    const b = fareBounds(rec, d.settings);
+    o.fulfilment = "delivery";
     o.destination = destination;
-    if (mode === "pickup") {
-      o.status = "awaiting_payment";
-      o.timeline.push({ at: nowIso(), actor: "buyer", action: "Independent pickup selected" });
-      return;
-    }
-    const el = eligiblePartners(d.partners, o.pickupCity, o.material, orderKg(o));
+    o.recommendedFare = rec;
+    o.proposedFare = Math.min(b.max, Math.max(b.min, proposedFare));
+    o.quoteDeadline = hrs(d.settings.quoteDeadlineHours);
+    const el = eligiblePartners(d.partners, o.pickupCity, o.material, kg);
     o.notified = el.map((p) => p.id);
     o.status = el.length ? "awaiting_quotes" : "no_quotes";
-    o.timeline.push({ at: nowIso(), actor: "system", action: `Delivery requested, ${el.length} eligible partner(s) notified`, detail: el.map((p) => p.business).join(", ") });
+    o.timeline.push({ at: nowIso(), actor: "buyer", action: `Proposed delivery fare ${o.proposedFare} (recommended ${rec})` });
+    o.timeline.push({ at: nowIso(), actor: "system", action: `${el.length} eligible partner(s) notified`, detail: "Only general areas and load details shared before assignment" });
     el.forEach((p) => p.ownerId && notify(d, p.ownerId, "New delivery job", `${o.title} from ${o.pickupCity}`, "/app/partner"));
   });
 }
+/** @deprecated kept for older callers; always routes to logistics partners. */
+export function chooseFulfilment(orderId: string, _mode: "pickup" | "delivery", destination?: string) {
+  const o = getDB().orders.find((x) => x.id === orderId);
+  if (!o) return;
+  requestLogistics(orderId, recommendedFare(orderKg(o), getDB().settings), destination || "Buyer site");
+}
 
-/** Simulates quotes arriving from notified seeded partners (user-owned partners quote manually). */
+export function extendQuoteDeadline(orderId: string) {
+  mutOrder(orderId, (o, d) => {
+    o.quoteDeadline = hrs(d.settings.quoteDeadlineHours);
+    o.timeline.push({ at: nowIso(), actor: "buyer", action: "Logistics deadline extended" });
+  });
+}
+
+/** Simulated partner responses: accept the proposed fare or counter within bounds. */
 export function simulateQuotes(orderId: string) {
   mutOrder(orderId, (o, d) => {
-    const kg = orderKg(o);
+    const fare = o.proposedFare ?? recommendedFare(orderKg(o), d.settings);
+    const b = fareBounds(o.recommendedFare ?? fare, d.settings);
     o.notified.forEach((pid, i) => {
       const p = d.partners.find((x) => x.id === pid)!;
       if (p.ownerId || o.quotes.some((q) => q.partnerId === pid)) return;
-      o.quotes.push({ id: uid("Q"), partnerId: pid, partnerName: p.business, amount: Math.round((25000 + kg * (6 + i * 1.5)) / 100) * 100, eta: `${1 + i} day(s)`, vehicle: p.vehicles, status: "submitted" });
+      const counter = i % 2 === 1;
+      const amount = counter ? Math.min(b.max, fare + b.step * (i + 1)) : fare;
+      o.quotes.push({ id: uid("Q"), partnerId: pid, partnerName: p.business, amount, eta: `${1 + i} day(s)`, vehicle: p.vehicles, status: "submitted", kind: counter ? "counter" : "accept" });
     });
-    o.timeline.push({ at: nowIso(), actor: "partners", action: `${o.quotes.length} quote(s) received` });
+    o.timeline.push({ at: nowIso(), actor: "partners (simulated)", action: `${o.quotes.length} response(s) received` });
   });
 }
 
@@ -207,7 +226,8 @@ export function submitQuote(orderId: string, partnerId: string, amount: number, 
   mutOrder(orderId, (o, d) => {
     const p = d.partners.find((x) => x.id === partnerId)!;
     o.quotes = o.quotes.filter((q) => q.partnerId !== partnerId);
-    o.quotes.push({ id: uid("Q"), partnerId, partnerName: p.business, amount, eta, vehicle: p.vehicles, status: "submitted" });
+    if (o.quoteId) return;
+    o.quotes.push({ id: uid("Q"), partnerId, partnerName: p.business, amount, eta, vehicle: p.vehicles, status: "submitted", kind: amount === o.proposedFare ? "accept" : "counter" });
     o.timeline.push({ at: nowIso(), actor: p.business, action: `Quote submitted ${amount}` });
     notify(d, o.buyerId, "New delivery quote", `${p.business} quoted for ${o.title}`, `/app/orders/${o.id}`);
   });
@@ -215,13 +235,18 @@ export function submitQuote(orderId: string, partnerId: string, amount: number, 
 
 export function selectQuote(orderId: string, quoteId: string) {
   mutOrder(orderId, (o, d) => {
+    if (o.quoteId) return; // one frozen selection, no double assignment
     o.quoteId = quoteId;
     o.quotes.forEach((q) => (q.status = q.id === quoteId ? "selected" : "declined"));
     o.status = "awaiting_payment";
     const q = o.quotes.find((x) => x.id === quoteId)!;
     o.timeline.push({ at: nowIso(), actor: "buyer", action: `Selected ${q.partnerName}` });
     const p = d.partners.find((x) => x.id === q.partnerId);
-    if (p?.ownerId) notify(d, p.ownerId, "Quote selected", `You were selected for ${o.title}`, "/app/partner");
+    if (p?.ownerId) notify(d, p.ownerId, "Quote selected", `You were selected for ${o.title}. Agreed fare is frozen.`, "/app/partner");
+    o.quotes.forEach((x) => {
+      const op = d.partners.find((y) => y.id === x.partnerId);
+      if (x.id !== quoteId && op?.ownerId) notify(d, op.ownerId, "Job assigned to another partner", o.title, "/app/partner");
+    });
   });
 }
 
@@ -262,6 +287,14 @@ export function confirmAndSettle(orderId: string) {
       if (p) p.completed += 1;
     }
     notify(d, o.sellerId, "Payout released (simulated)", `${o.title}`, `/app/orders/${o.id}`);
+  });
+}
+
+/** Transaction-qualified seller review: buyer of a settled order, once. */
+export function reviewOrder(orderId: string, stars: number, text?: string) {
+  mutOrder(orderId, (o, d) => {
+    if (o.status !== "settled" || o.review || o.buyerId !== d.sessionUserId) return;
+    o.review = { stars: Math.max(1, Math.min(5, Math.round(stars))), text: text?.trim() || undefined, at: nowIso() };
   });
 }
 

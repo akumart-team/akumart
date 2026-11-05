@@ -77,3 +77,10 @@ export function fareBounds(recommended: number, s: Pick<Settings, "fareMinPct" |
 export function recommendedFare(kg: number, s: Pick<Settings, "fareBase" | "farePerKg" | "fareStep">) {
   return Math.round((s.fareBase + kg * s.farePerKg) / s.fareStep) * s.fareStep;
 }
+
+/** Seller rating from genuine reviews only; null means "New seller". */
+export function sellerRating(orders: Pick<Order, "sellerId" | "review">[], sellerId: string) {
+  const r = orders.filter((o) => o.sellerId === sellerId && o.review).map((o) => o.review!.stars);
+  if (!r.length) return null;
+  return { avg: Math.round((r.reduce((a, b) => a + b, 0) / r.length) * 10) / 10, count: r.length };
+}
