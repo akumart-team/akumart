@@ -8,9 +8,9 @@ import { Button } from "@/components/ui/button";
 export const Route = createFileRoute("/forgot-password")({
   head: () => ({
     meta: [
-      { title: "Reset your password — AkuMart" },
+      { title: "Reset your password | AkuMart" },
       { name: "description", content: "Request a password reset link for your AkuMart account." },
-      { property: "og:title", content: "Reset password — AkuMart" },
+      { property: "og:title", content: "Reset password | AkuMart" },
       { property: "og:description", content: "Recover access to your AkuMart account." },
     ],
   }),
@@ -27,7 +27,7 @@ function Forgot() {
         <div>
           <MailCheck className="size-10 text-primary" />
           <h1 className="text-display mt-4 text-3xl">Check your inbox</h1>
-          <p className="mt-2 text-muted-foreground">If an account exists for {email}, a reset link would be sent. (Simulated — no email is sent in this prototype.)</p>
+          <p className="mt-2 text-muted-foreground">If an account exists for {email}, a reset link would be sent. (Simulated, no email is sent in this prototype.)</p>
           <Button asChild className="mt-6">
             <Link to="/login">Back to sign in</Link>
           </Button>

@@ -143,17 +143,17 @@ const art = (a: Partial<Article> & Pick<Article, "id" | "slug" | "title" | "exce
   publishedAt: ago(24 * 6),
   body: [
     a.excerpt,
-    "Across Nigeria, recyclable materials move through informal networks of collectors, aggregators and processors. Prices vary by quality, sorting and location — which is why clear grading and verified counterparties matter.",
+    "Across Nigeria, recyclable materials move through informal networks of collectors, aggregators and processors. Prices vary by quality, sorting and location, which is why clear grading and verified counterparties matter.",
     "This article is demonstration content written for the AkuMart prototype. It summarises general practice and should not be treated as technical or legal guidance.",
   ],
   ...a,
 });
 
 const articles: Article[] = [
-  art({ id: "a1", slug: "grading-pet-bales", title: "How buyers grade PET bales — and how to get a better price", excerpt: "Colour separation, cap removal and moisture are the three levers sellers control most.", category: "Guides", image: "plastic" }),
+  art({ id: "a1", slug: "grading-pet-bales", title: "How buyers grade PET bales, and how to get a better price", excerpt: "Colour separation, cap removal and moisture are the three levers sellers control most.", category: "Guides", image: "plastic" }),
   art({ id: "a2", slug: "aluminium-can-basics", title: "Aluminium cans: why clean, crushed UBC sells faster", excerpt: "A short primer on UBC purity and what processors look for at the weighbridge.", category: "Materials", image: "metal", publishedAt: ago(24 * 12) }),
   art({ id: "a3", slug: "akubin-points-explained", title: "AkuBin points, explained", excerpt: "Points are only credited for verified deposits. Here’s how weight and item counts are treated.", category: "AkuBin", image: "kiosk", publishedAt: ago(24 * 3) }),
-  art({ id: "a4", slug: "choosing-logistics-quotes", title: "Comparing delivery quotes for bulk recyclables", excerpt: "Price is only one factor — capacity, handling and timing matter too.", category: "Logistics", image: "truck", publishedAt: ago(24 * 20) }),
+  art({ id: "a4", slug: "choosing-logistics-quotes", title: "Comparing delivery quotes for bulk recyclables", excerpt: "Price is only one factor, capacity, handling and timing matter too.", category: "Logistics", image: "truck", publishedAt: ago(24 * 20) }),
   art({ id: "a5", slug: "verification-why", title: "Why Marketplace trading requires verification", excerpt: "Verification protects both sides of a trade. Recycling with AkuBin never needs it.", category: "Trust & Safety", image: "yard", publishedAt: ago(24 * 9) }),
 ];
 

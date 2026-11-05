@@ -28,7 +28,7 @@ export function resolveVerification(level: "basic" | "full", outcome: DemoOutcom
       outcome === "rejected"
         ? "The document image was unreadable (demo reason). Please re-upload a clearer copy."
         : outcome === "provider_unavailable"
-          ? "Verification provider unavailable (simulated) — moved to manual review."
+          ? "Verification provider unavailable (simulated), moved to manual review."
           : undefined;
     u.verification.history.unshift({ at: nowIso(), actor: "demo-provider", action: `${level} → ${map[outcome]}`, detail: "DEMO result" });
     notify(d, u.id, `Verification ${map[outcome].replace(/_/g, " ")}`, `Your ${level} Marketplace verification is now ${map[outcome].replace(/_/g, " ")}.`, "/app/verification");
@@ -144,7 +144,7 @@ export function respondOffer(offerId: string, by: "buyer" | "seller", action: "a
         quotes: [],
         payment: "unpaid",
         status: "choose_fulfilment",
-        timeline: [{ at: nowIso(), actor: by, action: "Offer accepted — order created" }],
+        timeline: [{ at: nowIso(), actor: by, action: "Offer accepted, order created" }],
         createdAt: nowIso(),
       };
       d.orders.unshift(order);
@@ -184,7 +184,7 @@ export function chooseFulfilment(orderId: string, mode: "pickup" | "delivery", d
     const el = eligiblePartners(d.partners, o.pickupCity, o.material, orderKg(o));
     o.notified = el.map((p) => p.id);
     o.status = el.length ? "awaiting_quotes" : "no_quotes";
-    o.timeline.push({ at: nowIso(), actor: "system", action: `Delivery requested — ${el.length} eligible partner(s) notified`, detail: el.map((p) => p.business).join(", ") });
+    o.timeline.push({ at: nowIso(), actor: "system", action: `Delivery requested, ${el.length} eligible partner(s) notified`, detail: el.map((p) => p.business).join(", ") });
     el.forEach((p) => p.ownerId && notify(d, p.ownerId, "New delivery job", `${o.title} from ${o.pickupCity}`, "/app/partner"));
   });
 }
@@ -228,13 +228,13 @@ export function pay(orderId: string, outcome: "success" | "failed") {
   mutOrder(orderId, (o, d) => {
     if (outcome === "failed") {
       o.payment = "failed";
-      o.timeline.push({ at: nowIso(), actor: "payment-provider (simulated)", action: "Payment failed — card declined (demo)" });
+      o.timeline.push({ at: nowIso(), actor: "payment-provider (simulated)", action: "Payment failed, card declined (demo)" });
       return;
     }
     o.payment = "held";
     o.status = "paid";
     o.timeline.push({ at: nowIso(), actor: "payment-provider (simulated)", action: "Payment collected and held by provider for conditional settlement" });
-    notify(d, o.sellerId, "Order paid", `${o.title} — prepare for ${o.fulfilment}`, `/app/orders/${o.id}`);
+    notify(d, o.sellerId, "Order paid", `${o.title}, prepare for ${o.fulfilment}`, `/app/orders/${o.id}`);
   });
 }
 
@@ -268,7 +268,7 @@ export function openDispute(orderId: string, reason: string, evidence: string) {
   mutOrder(orderId, (o, d) => {
     o.status = "disputed";
     o.dispute = { reason, evidence, status: "open", at: nowIso() };
-    o.timeline.push({ at: nowIso(), actor: "buyer", action: "Dispute opened — settlement on hold", detail: reason });
+    o.timeline.push({ at: nowIso(), actor: "buyer", action: "Dispute opened, settlement on hold", detail: reason });
     d.tickets.unshift({ id: uid("T"), userId: o.buyerId, name: o.buyerName, email: "", subject: `Dispute on ${o.id}`, message: reason, channel: "dispute", priority: "high", status: "open", at: nowIso() });
   });
 }
@@ -277,7 +277,7 @@ export function decideDispute(orderId: string, decision: "refund" | "partial" | 
   mutOrder(orderId, (o, d) => {
     if (!o.dispute) return;
     o.dispute.status = "resolved";
-    o.dispute.decision = decision === "refund" ? "Full refund to buyer" : decision === "partial" ? "Partial refund / price adjustment" : "Closed — funds released to seller";
+    o.dispute.decision = decision === "refund" ? "Full refund to buyer" : decision === "partial" ? "Partial refund / price adjustment" : "Closed, funds released to seller";
     o.payment = decision === "refund" ? "refunded" : decision === "partial" ? "partially_refunded" : "released";
     o.status = decision === "release" ? "settled" : "refunded";
     o.timeline.push({ at: nowIso(), actor, action: `Dispute resolved: ${o.dispute.decision}` });
@@ -388,7 +388,7 @@ export function decideRedemption(id: string, approve: boolean, actor: string) {
     if (!approve) {
       const u = d.users.find((x) => x.id === r.userId);
       if (u) u.points += r.cost;
-      r.reason = "Rejected by finance review (demo) — points returned.";
+      r.reason = "Rejected by finance review (demo), points returned.";
     }
     d.audit.unshift({ at: nowIso(), actor, action: `Redemption ${r.status}`, detail: r.id });
     notify(d, r.userId, `Redemption ${r.status}`, r.rewardName, "/app/akubin/rewards");

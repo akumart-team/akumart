@@ -96,7 +96,7 @@ function Advertiser() {
                     if (f.title.length < 5 || f.body.length < 10 || !/^https?:\/\/\S+\.\S+/.test(f.url) || !locs.length) return setErr("Add a headline, body, valid URL and at least one location.");
                     saveCampaign({ ...f, locations: locs, materials: mats, roles });
                     setCreating(false);
-                    toast.success("Campaign saved — complete payment to submit for review");
+                    toast.success("Campaign saved, complete payment to submit for review");
                   }}
                 >
                   Save campaign
@@ -151,7 +151,7 @@ function Advertiser() {
                         size="sm"
                         onClick={() => {
                           payCampaign(c.id, !payFail);
-                          payFail ? toast.error("Payment failed (simulated)") : toast.success("Paid via provider (simulated) — pending admin review");
+                          payFail ? toast.error("Payment failed (simulated)") : toast.success("Paid via provider (simulated), pending admin review");
                         }}
                       >
                         <CreditCard /> Pay {naira(c.price)}

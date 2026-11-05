@@ -19,7 +19,7 @@ export const Route = createFileRoute("/contact")({
   }),
   head: () => ({
     meta: [
-      { title: "Contact AkuMart — Support, partnerships & logistics" },
+      { title: "Contact AkuMart, Support, partnerships & logistics" },
       { name: "description", content: "Send a general enquiry, get support, propose a partnership or apply as an AkuMart logistics partner." },
       { property: "og:title", content: "Contact AkuMart" },
       { property: "og:description", content: "Enquiries, support, partnerships and logistics partner applications." },
@@ -65,7 +65,7 @@ function Contact() {
           {done ? (
             <div className="py-10 text-center">
               <CheckCircle2 className="mx-auto size-12 text-primary" />
-              <h2 className="text-display mt-4 text-3xl">Thanks — we’ve received it.</h2>
+              <h2 className="text-display mt-4 text-3xl">Thanks, we’ve received it.</h2>
               <p className="mt-2 text-muted-foreground">Reference {done}. This is a simulated confirmation; no email has been sent.</p>
               <Button className="mt-6" variant="outline" onClick={() => setDone(null)}>
                 Send another

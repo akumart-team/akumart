@@ -11,7 +11,7 @@ import { cn } from "@/lib/utils";
 export const Route = createFileRoute("/dev/roles")({
   head: () => ({
     meta: [
-      { title: "Dev role switcher — AkuMart (internal)" },
+      { title: "Dev role switcher | AkuMart (internal)" },
       { name: "description", content: "Development-only internal role switcher for prototype testing." },
       { property: "og:title", content: "Dev role switcher" },
       { property: "og:description", content: "Internal testing tool." },

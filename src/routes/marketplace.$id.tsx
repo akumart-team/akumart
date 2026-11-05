@@ -18,7 +18,7 @@ export const Route = createFileRoute("/marketplace/$id")({
   validateSearch: (s: Record<string, unknown>): { action?: "offer" | "buy" } => ({ action: s.action === "offer" || s.action === "buy" ? s.action : undefined }),
   head: () => ({
     meta: [
-      { title: "Listing — AkuMart Marketplace" },
+      { title: "Listing | AkuMart Marketplace" },
       { name: "description", content: "View this recyclable-materials listing on AkuMart." },
       { property: "og:title", content: "AkuMart listing" },
       { property: "og:description", content: "Recyclable materials for sale on the AkuMart Marketplace." },
@@ -39,7 +39,7 @@ function ListingPage() {
   const gate = useTradeGate();
   const [offerOpen, setOfferOpen] = useState(false);
   const [buyOpen, setBuyOpen] = useState(false);
-  // Resume a preserved intent (?action=offer|buy) — it still passes through the verification gate.
+  // Resume a preserved intent (?action=offer|buy), it still passes through the verification gate.
   useEffect(() => {
     if (!hydrated || !l || !action) return;
     const base0 = `/marketplace/${l.id}`;
@@ -201,7 +201,7 @@ function ListingPage() {
         <DialogContent>
           <DialogHeader>
             <DialogTitle className="font-display text-2xl">Make a structured offer</DialogTitle>
-            <DialogDescription>Offers are structured — no free-form chat. The seller can accept, reject or counter.</DialogDescription>
+            <DialogDescription>Offers are structured, no free-form chat. The seller can accept, reject or counter.</DialogDescription>
           </DialogHeader>
           <div className="grid gap-4 sm:grid-cols-2">
             <Field label={`Price (₦ per ${l.unit})`}>

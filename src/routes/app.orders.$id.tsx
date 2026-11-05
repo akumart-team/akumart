@@ -133,7 +133,7 @@ function OrderPage() {
           {o.fulfilment === "delivery" && (o.status === "awaiting_quotes" || o.status === "no_quotes" || o.quotes.length > 0) && (
             <Panel title="Delivery quotes" action={<DemoTag>Simulated partners</DemoTag>}>
               <p className="mb-4 text-sm text-muted-foreground">
-                {o.notified.length} eligible approved partner(s) notified — matched on route ({o.pickupCity} → {o.destination}), material ({o.material}) and capacity.
+                {o.notified.length} eligible approved partner(s) notified, matched on route ({o.pickupCity} → {o.destination}), material ({o.material}) and capacity.
               </p>
               {o.status === "no_quotes" ? (
                 <div className="rounded-2xl bg-destructive/10 p-4 text-sm text-destructive">
@@ -190,7 +190,7 @@ function OrderPage() {
                 <>
                   <dl className="space-y-2 text-sm">
                     <Row k="Waste value" v={naira(value)} />
-                    {quote && <Row k={`Delivery — ${quote.partnerName}`} v={naira(quote.amount)} />}
+                    {quote && <Row k={`Delivery, ${quote.partnerName}`} v={naira(quote.amount)} />}
                     <Row k="AkuMart buyer commission" v={naira(0)} />
                     <div className="border-t pt-2">
                       <Row k={<strong>Total payable</strong>} v={<strong className="text-lg">{naira(split.buyerTotal)}</strong>} />
@@ -257,13 +257,13 @@ function OrderPage() {
               {o.status === "proof_uploaded" && (
                 <div className="mt-4 rounded-2xl bg-secondary p-4">
                   <p className="font-semibold">Proof uploaded: {o.proof}</p>
-                  <p className="text-sm text-muted-foreground">Inspection window ends {o.inspectionDue ? dt(o.inspectionDue) : "—"} ({settings.inspectionHours}h, configurable). If undisputed, settlement releases automatically.</p>
+                  <p className="text-sm text-muted-foreground">Inspection window ends {o.inspectionDue ? dt(o.inspectionDue) : ", "} ({settings.inspectionHours}h, configurable). If undisputed, settlement releases automatically.</p>
                   {isBuyer && (
                     <div className="mt-3 flex flex-wrap gap-2">
                       <Button
                         onClick={() => {
                           confirmAndSettle(o.id);
-                          toast.success("Receipt confirmed — settlement released (simulated)");
+                          toast.success("Receipt confirmed, settlement released (simulated)");
                         }}
                       >
                         <CheckCircle2 /> Confirm receipt
@@ -302,7 +302,7 @@ function OrderPage() {
                     if (!dispute.reason || dispute.evidence.length < 5) return toast.error("Add a reason and evidence");
                     openDispute(o.id, dispute.reason, dispute.evidence);
                     setShowDispute(false);
-                    toast("Dispute opened — settlement on hold");
+                    toast("Dispute opened, settlement on hold");
                   }}
                 >
                   Submit dispute
@@ -354,7 +354,7 @@ function OrderPage() {
                 <Row k="Payment status" v={<StatusChip status={o.payment} />} />
               </div>
             </dl>
-            <p className="mt-3 text-xs text-muted-foreground">Provisional, configurable rates. Fees are deducted from proceeds — buyers pay no surcharge.</p>
+            <p className="mt-3 text-xs text-muted-foreground">Provisional, configurable rates. Fees are deducted from proceeds, buyers pay no surcharge.</p>
           </Panel>
           <Panel title="Activity">
             <ol className="space-y-3 text-sm">

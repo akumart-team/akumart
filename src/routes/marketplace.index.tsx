@@ -19,7 +19,7 @@ export const Route = createFileRoute("/marketplace/")({
   }),
   head: () => ({
     meta: [
-      { title: "Waste Marketplace — Buy & sell recyclables | AkuMart" },
+      { title: "Waste Marketplace, Buy & sell recyclables | AkuMart" },
       { name: "description", content: "Browse graded plastic, metal, glass, cardboard and paper from verified Nigerian sellers. Filter by city, price and quantity." },
       { property: "og:title", content: "AkuMart Waste Marketplace" },
       { property: "og:description", content: "Search recyclable materials from verified sellers across Nigeria." },

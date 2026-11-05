@@ -10,7 +10,7 @@ import { DemoTag } from "@/components/brand";
 export const Route = createFileRoute("/akubin/bin/$binId")({
   head: ({ params }) => ({
     meta: [
-      { title: `AkuBin ${params.binId} — Recycle & Earn` },
+      { title: `AkuBin ${params.binId}, Recycle & Earn` },
       { name: "description", content: `Recycle at AkuBin ${params.binId}: accepted materials, status and how to deposit.` },
       { property: "og:title", content: `AkuBin ${params.binId}` },
       { property: "og:description", content: "Scan, deposit verified recyclables and earn AkuBin points." },
@@ -21,9 +21,9 @@ export const Route = createFileRoute("/akubin/bin/$binId")({
 
 const STATUS = {
   online: { icon: CheckCircle2, title: "Online and accepting deposits", tone: "bg-primary/12 text-primary" },
-  full: { icon: AlertTriangle, title: "Bin is full — awaiting collection", tone: "bg-warning/20 text-warning-foreground" },
+  full: { icon: AlertTriangle, title: "Bin is full, awaiting collection", tone: "bg-warning/20 text-warning-foreground" },
   maintenance: { icon: Wrench, title: "Under maintenance", tone: "bg-warning/20 text-warning-foreground" },
-  offline: { icon: WifiOff, title: "Offline — can’t verify deposits right now", tone: "bg-destructive/10 text-destructive" },
+  offline: { icon: WifiOff, title: "Offline, can’t verify deposits right now", tone: "bg-destructive/10 text-destructive" },
 };
 
 function BinLanding() {
@@ -102,7 +102,7 @@ function BinLanding() {
       <div className="mt-4 rounded-2xl border p-5">
         <p className="font-display text-lg font-semibold">How to deposit</p>
         <ol className="mt-3 space-y-2 text-sm text-muted-foreground">
-          {["Tap Recycle & Earn below and sign in if asked.", "Identify yourself with the on-screen session code or phone + PIN.", "Choose your material and insert items one at a time.", "Wait for verification — points appear instantly."].map((s, i) => (
+          {["Tap Recycle & Earn below and sign in if asked.", "Identify yourself with the on-screen session code or phone + PIN.", "Choose your material and insert items one at a time.", "Wait for verification, points appear instantly."].map((s, i) => (
             <li key={s} className="flex gap-3">
               <span className="flex h-6 w-6 shrink-0 items-center justify-center rounded-full bg-secondary text-xs font-bold text-forest">{i + 1}</span>
               {s}
@@ -129,7 +129,7 @@ function BinLanding() {
             <Link to="/login" search={{ redirect: depositPath }} className="font-semibold text-primary">
               Sign in
             </Link>{" "}
-            — no Marketplace verification needed.
+           , no Marketplace verification needed.
           </p>
         )}
       </div>

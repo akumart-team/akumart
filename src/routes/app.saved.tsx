@@ -14,7 +14,7 @@ function Saved() {
   const articles = useDB((d) => d.articles.filter((a) => me.savedArticles.includes(a.id)));
   return (
     <div>
-      <PageTitle eyebrow="Marketplace" title="Saved" intro="Saving is always free — no verification needed." />
+      <PageTitle eyebrow="Marketplace" title="Saved" intro="Saving is always free, no verification needed." />
       {listings.length === 0 && articles.length === 0 ? (
         <Empty title="Nothing saved yet" body="Tap the bookmark on any listing or article.">
           <Button asChild>

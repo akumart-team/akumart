@@ -9,9 +9,9 @@ import { img, yard, kiosk, plastic, materials, truck } from "@/lib/images";
 export const Route = createFileRoute("/")({
   head: () => ({
     meta: [
-      { title: "AkuMart — Turning Waste into Opportunity" },
+      { title: "AkuMart, Turning Waste into Opportunity" },
       { name: "description", content: "Trade recyclable materials with verified Nigerian buyers and sellers, or recycle at an AkuBin and earn rewards." },
-      { property: "og:title", content: "AkuMart — Turning Waste into Opportunity" },
+      { property: "og:title", content: "AkuMart, Turning Waste into Opportunity" },
       { property: "og:description", content: "Nigeria’s recyclable-waste marketplace and AkuBin smart-bin rewards. Waste Today. Resource Tomorrow." },
     ],
   }),
@@ -34,7 +34,7 @@ function Home() {
               into <span className="text-lime">Opportunity.</span>
             </h1>
             <p className="mt-6 max-w-xl text-lg leading-relaxed text-forest-foreground/75">
-              A marketplace where verified businesses and individuals trade recyclable materials — and AkuBin, smart bins that reward everyday recycling. One account, two ways to turn waste into value.
+              A marketplace where verified businesses and individuals trade recyclable materials, and AkuBin, smart bins that reward everyday recycling. One account, two ways to turn waste into value.
             </p>
             <div className="mt-9 flex flex-wrap gap-3">
               <Button asChild size="lg" variant="lime">
@@ -69,7 +69,7 @@ function Home() {
           <p className="eyebrow text-primary">About AkuMart</p>
           <h2 className="text-display mt-3 text-4xl md:text-5xl">Recyclables are resources hiding in plain sight.</h2>
           <p className="mt-5 text-lg leading-relaxed text-muted-foreground">
-            Too much valuable plastic, metal and paper ends up in drains and dumpsites because sellers can’t find trusted buyers, and households have no reason to sort. AkuMart connects the whole chain — from a single bottle to a truckload of bales.
+            Too much valuable plastic, metal and paper ends up in drains and dumpsites because sellers can’t find trusted buyers, and households have no reason to sort. AkuMart connects the whole chain, from a single bottle to a truckload of bales.
           </p>
           <Button asChild variant="link" className="mt-4 px-0 text-base">
             <Link to="/about">
@@ -127,7 +127,7 @@ function Home() {
           <dl className="grid gap-x-10 gap-y-8 sm:grid-cols-2">
             {[
               { i: ShieldCheck, t: "Verified trading", d: "Identity or CAC checks before anyone makes an offer or gets paid." },
-              { i: Handshake, t: "Structured offers", d: "Clear price, quantity and conditions — no messy back-and-forth chat." },
+              { i: Handshake, t: "Structured offers", d: "Clear price, quantity and conditions, no messy back-and-forth chat." },
               { i: Truck, t: "Specialised logistics", d: "Every eligible partner on your route can quote. You choose." },
               { i: Sparkles, t: "Smarter discovery", d: "A For You feed shaped by your materials and activity." },
               { i: Gift, t: "Recycling rewards", d: "AkuBin points for verified deposits, no paperwork required." },
@@ -173,7 +173,7 @@ function Home() {
           <div className="relative max-w-xl p-8 md:p-14">
             <p className="eyebrow text-lime">Logistics partners</p>
             <h2 className="text-display mt-3 text-4xl md:text-5xl">Get jobs that match your trucks.</h2>
-            <p className="mt-4 text-forest-foreground/80">Approved partners are notified of every delivery on their routes, materials and capacity — then quote their own price.</p>
+            <p className="mt-4 text-forest-foreground/80">Approved partners are notified of every delivery on their routes, materials and capacity, then quote their own price.</p>
             <Button asChild variant="lime" size="lg" className="mt-8">
               <Link to="/contact" search={{ interest: "logistics" }}>
                 Become a logistics partner <ArrowRight />
@@ -205,7 +205,7 @@ function Home() {
       {/* CTA */}
       <section className="bg-mist">
         <div className="container-page flex flex-col items-start justify-between gap-6 py-16 md:flex-row md:items-center">
-          <h2 className="text-display max-w-xl text-3xl md:text-4xl">Start trading or recycling today — it’s one account.</h2>
+          <h2 className="text-display max-w-xl text-3xl md:text-4xl">Start trading or recycling today, it’s one account.</h2>
           <div className="flex flex-wrap gap-3">
             <Button asChild size="lg">
               <Link to="/signup">Get Started</Link>

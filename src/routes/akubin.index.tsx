@@ -14,7 +14,7 @@ import type { Material } from "@/lib/types";
 export const Route = createFileRoute("/akubin/")({
   head: () => ({
     meta: [
-      { title: "AkuBin — Recycle at smart bins and earn rewards | AkuMart" },
+      { title: "AkuBin, Recycle at smart bins and earn rewards | AkuMart" },
       { name: "description", content: "Find an AkuBin near you, deposit verified recyclables and earn points for airtime, cash or reward items. No business verification required." },
       { property: "og:title", content: "AkuBin by AkuMart" },
       { property: "og:description", content: "Smart bins that reward everyday recycling." },
@@ -44,7 +44,7 @@ function AkuBin() {
 
   const findClosest = () => {
     setGeoMsg("Requesting your location…");
-    if (!navigator.geolocation) return setGeoMsg("Location isn’t available in this browser — search by city, area or landmark instead.");
+    if (!navigator.geolocation) return setGeoMsg("Location isn’t available in this browser, search by city, area or landmark instead.");
     navigator.geolocation.getCurrentPosition(
       (p) => {
         setLoc({ lat: p.coords.latitude, lng: p.coords.longitude });
@@ -66,7 +66,7 @@ function AkuBin() {
               <br />
               <span className="text-lime">Get rewarded.</span>
             </h1>
-            <p className="mt-5 max-w-lg text-lg text-forest-foreground/75">Smart bins that check your recyclables and credit points you can redeem. Just a basic account — no ID or business paperwork.</p>
+            <p className="mt-5 max-w-lg text-lg text-forest-foreground/75">Smart bins that check your recyclables and credit points you can redeem. Just a basic account, no ID or business paperwork.</p>
             <div className="mt-8 flex flex-wrap gap-3">
               <Button asChild size="lg" variant="lime">
                 <a href="#locator">
@@ -108,7 +108,7 @@ function AkuBin() {
           <div className="flex flex-col gap-3 md:flex-row">
             <div className="relative flex-1">
               <Search className="absolute left-4 top-1/2 size-4 -translate-y-1/2 text-muted-foreground" />
-              <input aria-label="Search bins" value={q} onChange={(e) => setQ(e.target.value)} placeholder="City, area or landmark — e.g. Yaba, Wuse, stadium" className="h-12 w-full rounded-full border bg-background pl-11 pr-4 outline-none focus:border-primary" />
+              <input aria-label="Search bins" value={q} onChange={(e) => setQ(e.target.value)} placeholder="City, area or landmark, e.g. Yaba, Wuse, stadium" className="h-12 w-full rounded-full border bg-background pl-11 pr-4 outline-none focus:border-primary" />
             </div>
             <Button size="lg" variant="forest" onClick={findClosest}>
               <LocateFixed /> Find the closest bin to me

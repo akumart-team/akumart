@@ -10,7 +10,7 @@ import { Button } from "@/components/ui/button";
 export const Route = createFileRoute("/articles/$slug")({
   head: () => ({
     meta: [
-      { title: "Article — AkuMart" },
+      { title: "Article | AkuMart" },
       { name: "description", content: "An AkuMart guide on recycling and trading recyclable materials." },
       { property: "og:title", content: "AkuMart article" },
       { property: "og:description", content: "Read this guide on AkuMart." },

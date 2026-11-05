@@ -29,7 +29,7 @@ function Offers() {
   const list = offers.filter((o) => (tab === "received" ? o.sellerId === me.id : o.buyerId === me.id));
   return (
     <div className="max-w-4xl">
-      <PageTitle eyebrow="Negotiation" title="Offers" intro="Structured offers only — price, quantity and predefined conditions. No free-form chat." />
+      <PageTitle eyebrow="Negotiation" title="Offers" intro="Structured offers only, price, quantity and predefined conditions. No free-form chat." />
       <div className="mb-6 inline-flex rounded-full border bg-card p-1">
         {(["received", "sent"] as const).map((t) => (
           <button key={t} onClick={() => setTab(t)} className={cn("rounded-full px-5 py-2 text-sm font-semibold capitalize", tab === t ? "bg-forest text-forest-foreground" : "text-muted-foreground")}>
@@ -69,7 +69,7 @@ function OfferCard({ o, role, title, unit }: { o: Offer; role: "buyer" | "seller
     gate(intent, () => {
       const orderId = respondOffer(o.id, by, a, a === "counter" ? { price: +p, qty: +q, conditions: c } : undefined);
       setCounter(false);
-      toast.success(a === "accept" ? "Offer accepted — order created" : a === "reject" ? "Offer rejected" : "Counteroffer sent");
+      toast.success(a === "accept" ? "Offer accepted, order created" : a === "reject" ? "Offer rejected" : "Counteroffer sent");
       if (orderId) router.navigate({ to: "/app/orders/$id", params: { id: orderId } });
     });
   const simulate = (a: "accept" | "reject" | "counter") => {
@@ -98,7 +98,7 @@ function OfferCard({ o, role, title, unit }: { o: Offer; role: "buyer" | "seller
         {o.steps.map((s, i) => (
           <li key={i} className="relative text-sm">
             <span className="absolute -left-[21px] top-1.5 h-2.5 w-2.5 rounded-full bg-primary" />
-            <span className="font-medium capitalize">{s.by}</span> {s.action === "offer" ? "offered" : s.action === "counter" ? "countered" : s.action + "ed"} — {naira(s.price)}/{unit} × {s.qty.toLocaleString()} {unit}
+            <span className="font-medium capitalize">{s.by}</span> {s.action === "offer" ? "offered" : s.action === "counter" ? "countered" : s.action + "ed"}, {naira(s.price)}/{unit} × {s.qty.toLocaleString()} {unit}
             {s.conditions.length > 0 && <span className="text-muted-foreground"> · {s.conditions.join(", ")}</span>}
             <span className="block text-xs text-muted-foreground">{dt(s.at)}</span>
           </li>

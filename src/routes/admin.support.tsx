@@ -83,7 +83,7 @@ function Support() {
                   ))}
                 </select>
               </td>
-              <td className={td}>{t.assignee ?? "—"}</td>
+              <td className={td}>{t.assignee ?? ", "}</td>
               <td className={td}>
                 <StatusChip status={t.status} />
               </td>

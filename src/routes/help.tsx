@@ -13,7 +13,7 @@ export const Route = createFileRoute("/help")({
   validateSearch: (s: Record<string, unknown>): { report?: string } => ({ report: s.report ? String(s.report) : undefined }),
   head: () => ({
     meta: [
-      { title: "Help Centre — AkuMart" },
+      { title: "Help Centre | AkuMart" },
       { name: "description", content: "Search help topics, browse guides and report an issue with AkuMart." },
       { property: "og:title", content: "AkuMart Help Centre" },
       { property: "og:description", content: "Get help with trading, recycling, verification and payments." },
@@ -72,7 +72,7 @@ function Help() {
             <AlertTriangle className="size-8 text-primary" />
             <h2 className="text-display mt-3 text-3xl">Report an issue</h2>
             <p className="mt-2 text-muted-foreground">Problems with a listing, bin, order or account. This creates a support ticket (simulated).</p>
-            {report && <p className="mt-3 text-sm font-medium text-primary">You came here to report an issue — fill in the form.</p>}
+            {report && <p className="mt-3 text-sm font-medium text-primary">You came here to report an issue, fill in the form.</p>}
           </div>
           {done ? (
             <div className="flex items-center gap-3">

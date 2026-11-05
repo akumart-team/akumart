@@ -56,7 +56,7 @@ function Requests() {
                     {x.responses.map((s) => (
                       <li key={s.id} className="flex flex-wrap items-center justify-between gap-2 rounded-xl bg-muted p-3 text-sm">
                         <span>
-                          <strong>{s.sellerName}</strong>: {naira(s.price)} × {s.qty} — {s.note}
+                          <strong>{s.sellerName}</strong>: {naira(s.price)} × {s.qty}, {s.note}
                         </span>
                         <span className="flex items-center gap-2">
                           <StatusChip status={s.status} />

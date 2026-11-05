@@ -106,7 +106,7 @@ export function SiteFooter() {
           <Logo variant="white" />
           <Tagline className="text-lime" />
           <p className="text-sm leading-relaxed text-forest-foreground/70">
-            A Nigerian marketplace for recyclable materials and AkuBin, the smart-bin rewards service — one account for both.
+            A Nigerian marketplace for recyclable materials and AkuBin, the smart-bin rewards service, one account for both.
           </p>
           <p className="text-xs text-forest-foreground/50">Official social channels will be listed here once confirmed.</p>
         </div>
@@ -130,7 +130,7 @@ export function SiteFooter() {
       <div className="border-t border-forest-foreground/10">
         <div className="container-page flex flex-col gap-2 py-6 text-xs text-forest-foreground/55 sm:flex-row sm:justify-between">
           <span>© 2026 AkuMart. All rights reserved.</span>
-          <span>Prototype — all data, payments, verification and bin events are simulated.</span>
+          <span>Prototype, all data, payments, verification and bin events are simulated.</span>
         </div>
       </div>
     </footer>

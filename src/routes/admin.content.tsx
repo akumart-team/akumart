@@ -23,7 +23,7 @@ function Content() {
   return (
     <div className="space-y-8">
       <h1 className="text-display text-3xl">Content & editorial</h1>
-      <Panel title="News candidates (AI-proposed, simulated) — editor approval required">
+      <Panel title="News candidates (AI-proposed, simulated), editor approval required">
         <Table head={["Headline", "Source", "Proposed", "Status", ""]}>
           {news.map((n) => (
             <tr key={n.id}>

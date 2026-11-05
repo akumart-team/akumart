@@ -22,7 +22,7 @@ export const Route = createFileRoute("/app/verification")({
 const OUTCOMES: { id: DemoOutcome; label: string }[] = [
   { id: "approved", label: "Automatic check passes" },
   { id: "pending_review", label: "Needs manual review" },
-  { id: "rejected", label: "Rejected — resubmission needed" },
+  { id: "rejected", label: "Rejected, resubmission needed" },
   { id: "provider_unavailable", label: "Provider unavailable" },
 ];
 
@@ -234,7 +234,7 @@ function Verification() {
                     <option>Other</option>
                   </select>
                 </Field>
-                <Field label="Registered business address" error={err.registeredAddress} hint="Kept private — not shown on listings.">
+                <Field label="Registered business address" error={err.registeredAddress} hint="Kept private, not shown on listings.">
                   <input className={inputCls} value={f.registeredAddress ?? ""} onChange={set("registeredAddress")} />
                 </Field>
                 <Field label="Contact person" error={err.contactPerson}>

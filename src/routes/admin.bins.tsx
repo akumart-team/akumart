@@ -86,7 +86,7 @@ function Bins() {
           </Panel>
           <Panel title="Collections & maintenance">
             <div className="flex flex-wrap gap-2">
-              <Button size="sm" onClick={() => mut(b.id, (x) => { x.capacity = 5; if (x.status === "full") x.status = "online"; x.nextCollection = new Date(Date.now() + 3 * 86400_000).toISOString(); }, "Collection completed — emptied")}>
+              <Button size="sm" onClick={() => mut(b.id, (x) => { x.capacity = 5; if (x.status === "full") x.status = "online"; x.nextCollection = new Date(Date.now() + 3 * 86400_000).toISOString(); }, "Collection completed, emptied")}>
                 Mark collected
               </Button>
               <Button size="sm" variant="outline" onClick={() => mut(b.id, (x) => (x.collector = x.collector ? undefined : "Mainland Collect Co."), "Collector assignment changed")}>

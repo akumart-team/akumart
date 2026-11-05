@@ -16,7 +16,7 @@ export const Route = createFileRoute("/signup")({
   }),
   head: () => ({
     meta: [
-      { title: "Create your account — AkuMart" },
+      { title: "Create your account | AkuMart" },
       { name: "description", content: "Join AkuMart with basic details. One account for the Marketplace and AkuBin." },
       { property: "og:title", content: "Join AkuMart" },
       { property: "og:description", content: "Create a free shared account for trading and recycling." },
