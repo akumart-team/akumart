@@ -159,7 +159,7 @@ const articles: Article[] = [
 
 export function createSeed(): DB {
   return {
-    version: 3,
+    version: 4,
     sessionUserId: null,
     devRole: null,
     intent: null,
@@ -208,6 +208,12 @@ export function createSeed(): DB {
       cashMin: 5000,
       pointValueNaira: 0.5,
       inspectionHours: 48,
+      fareBase: 15000,
+      farePerKg: 8,
+      fareStep: 500,
+      fareMinPct: 20,
+      fareMaxPct: 30,
+      quoteDeadlineHours: 24,
     },
     audit: [{ at: ago(1), actor: "system", action: "Seeded demo data" }],
     binSessions: [],

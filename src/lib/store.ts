@@ -20,7 +20,7 @@ export function hydrateStore() {
     const raw = localStorage.getItem(KEY);
     if (raw) {
       const parsed = JSON.parse(raw) as DB;
-      if (parsed.version === 3) db = parsed;
+      if (parsed.version === 4) db = parsed;
     }
   } catch {
     /* ignore corrupt state */
