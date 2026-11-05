@@ -1,3 +1,4 @@
+import { validateBinCode } from "./rules";
 import { update, getDB, notify } from "./store";
 import { nowIso, uid } from "./format";
 import { checkoutSplit, depositPoints, eligiblePartners, orderKg, rewardEligibility } from "./rules";
@@ -312,28 +313,48 @@ export function respondRequest(reqId: string, price: number, qty: number, note: 
 }
 
 /* ---------------- AkuBin ---------------- */
-export function createBinSession(binId: string) {
-  const code = "AKB-" + Math.random().toString(36).slice(2, 8).toUpperCase();
+/** Short-lived, single-use 6-digit numeric code for the signed-in account. Usable at any connected bin. */
+export function createBinSession(_binId?: string) {
+  const code = String(Math.floor(100000 + Math.random() * 900000));
   update((d) => {
-    d.binSessions.unshift({ code, binId, userId: d.sessionUserId!, expiresAt: new Date(Date.now() + 120_000).toISOString(), used: false });
+    d.binSessions = d.binSessions.filter((x) => !(x.userId === d.sessionUserId && !x.used));
+    d.binSessions.unshift({ code, binId: "", userId: d.sessionUserId!, expiresAt: new Date(Date.now() + 120_000).toISOString(), used: false });
   });
   return code;
 }
 
-export function checkBinSession(code: string) {
-  const s = getDB().binSessions.find((x) => x.code === code);
-  if (!s) return "invalid";
-  if (s.used) return "used";
-  if (new Date(s.expiresAt).getTime() < Date.now()) return "expired";
-  return "ok";
+export function checkBinSession(code: string, binId?: string) {
+  const d = getDB();
+  return validateBinCode(d.binSessions, code, binId ?? "", d.sessionUserId, Date.now());
+}
+
+/** Bin keypad entry: validates the code, consumes it and opens one multi-deposit session on that bin. */
+export function startBinSession(code: string, binId: string) {
+  const r = checkBinSession(code, binId);
+  if (r !== "ok") return r;
+  update((d) => {
+    d.binSessions.forEach((x) => x.binId === binId && x.used && x.active && (x.active = false));
+    const s = d.binSessions.find((x) => x.code === code)!;
+    s.used = true;
+    s.binId = binId;
+    s.active = true;
+  });
+  return r;
+}
+
+export function endBinSession(code: string) {
+  update((d) => {
+    const s = d.binSessions.find((x) => x.code === code);
+    if (s) s.active = false;
+  });
 }
 
 export function recordDeposit(binId: string, code: string, material: Material, measure: "weight" | "count", amount: number, verified: boolean, reason?: string) {
   let result = { points: 0, kg: 0 };
   update((d) => {
     const u = meIn(d);
-    const s = d.binSessions.find((x) => x.code === code);
-    if (s) s.used = true;
+    const s = d.binSessions.find((x) => x.code === code && x.binId === binId && x.active);
+    if (!s) return;
     result = depositPoints(d.settings, material, measure, amount, verified);
     u.deposits.unshift({ id: uid("D"), binId, material, measure, kg: result.kg, count: measure === "count" ? amount : undefined, points: result.points, status: verified ? "verified" : "rejected", reason, at: nowIso() });
     u.points += result.points;

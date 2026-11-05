@@ -54,3 +54,26 @@ export function rewardEligibility(points: number, cost: number, kind: "airtime" 
 }
 
 export const currentUser = (db: DB) => db.users.find((u) => u.id === db.sessionUserId) ?? null;
+
+type BinSession = { code: string; binId: string; userId: string; expiresAt: string; used: boolean; active?: boolean };
+/** Bin code check: must be 6 digits, issued to this account, unused, unexpired, and the bin must have no other active session. */
+export function validateBinCode(sessions: BinSession[], code: string, binId: string, userId: string | null, now: number) {
+  if (!/^\d{6}$/.test(code)) return "invalid" as const;
+  const s = sessions.find((x) => x.code === code);
+  if (!s || s.userId !== userId) return "invalid" as const;
+  if (s.used) return "used" as const;
+  if (new Date(s.expiresAt).getTime() < now) return "expired" as const;
+  if (binId && sessions.some((x) => x.binId === binId && x.active && x.userId !== userId)) return "busy" as const;
+  return "ok" as const;
+}
+
+/** Fare proposal bounds around the recommended fare (percent band, rounded to step). */
+export function fareBounds(recommended: number, s: Pick<Settings, "fareMinPct" | "fareMaxPct" | "fareStep">) {
+  const r = (n: number) => Math.round(n / s.fareStep) * s.fareStep;
+  return { min: r((recommended * (100 - s.fareMinPct)) / 100), max: r((recommended * (100 + s.fareMaxPct)) / 100), step: s.fareStep };
+}
+
+/** Recommended fare: base plus per-kg rate, rounded to step. */
+export function recommendedFare(kg: number, s: Pick<Settings, "fareBase" | "farePerKg" | "fareStep">) {
+  return Math.round((s.fareBase + kg * s.farePerKg) / s.fareStep) * s.fareStep;
+}

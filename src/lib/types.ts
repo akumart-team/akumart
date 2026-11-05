@@ -371,6 +371,6 @@ export interface DB {
   enquiries: Enquiry[];
   settings: Settings;
   audit: AuditEntry[];
-  binSessions: { code: string; binId: string; userId: string; expiresAt: string; used: boolean }[];
+  binSessions: { code: string; binId: string; userId: string; expiresAt: string; used: boolean; active?: boolean }[];
   leaderboard: { name: string; city: string; week: number; month: number; all: number }[];
 }
