@@ -13,6 +13,7 @@ import { useTradeGate } from "@/components/gate";
 import { img } from "@/lib/images";
 import { naira } from "@/lib/format";
 import { CONDITIONS } from "@/lib/seed";
+import { sellerRating } from "@/lib/rules";
 
 export const Route = createFileRoute("/marketplace/$id")({
   validateSearch: (s: Record<string, unknown>): { action?: "offer" | "buy" } => ({ action: s.action === "offer" || s.action === "buy" ? s.action : undefined }),
@@ -128,6 +129,7 @@ function ListingPage() {
                 <div>
                   <p className="text-xs text-muted-foreground">Seller</p>
                   <p className="font-medium">{l.sellerName}</p>
+                  <SellerStars sellerId={l.sellerId} />
                 </div>
                 <VerifiedBadge type={l.sellerBadge} />
               </div>
@@ -267,4 +269,9 @@ function ListingPage() {
       </Dialog>
     </PublicShell>
   );
+}
+
+function SellerStars({ sellerId }: { sellerId: string }) {
+  const r = useDB((d) => sellerRating(d.orders, sellerId));
+  return <p className="text-xs text-muted-foreground">{r ? `${r.avg} of 5 from ${r.count} verified review${r.count > 1 ? "s" : ""}` : "New seller"}</p>;
 }
