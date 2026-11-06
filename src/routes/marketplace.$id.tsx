@@ -13,6 +13,7 @@ import { useTradeGate } from "@/components/gate";
 import { img } from "@/lib/images";
 import { naira } from "@/lib/format";
 import { CONDITIONS } from "@/lib/seed";
+import { sellerRating } from "@/lib/rules";
 
 export const Route = createFileRoute("/marketplace/$id")({
   validateSearch: (s: Record<string, unknown>): { action?: "offer" | "buy" } => ({ action: s.action === "offer" || s.action === "buy" ? s.action : undefined }),
@@ -97,7 +98,7 @@ function ListingPage() {
                 { i: Package, k: "Condition", v: l.condition },
                 { i: Scale, k: "Available", v: `${l.qty.toLocaleString()} ${l.unit}` },
                 { i: MapPin, k: "Pickup area", v: `${l.area}, ${l.city}` },
-                { i: Truck, k: "Fulfilment", v: l.fulfilment.map((f) => (f === "pickup" ? "Pickup" : "Delivery")).join(" · ") },
+                { i: Truck, k: "Fulfilment", v: "AkuMart logistics partner delivery" },
               ].map((x) => (
                 <div key={x.k} className="rounded-2xl bg-muted p-4">
                   <x.i className="size-5 text-primary" />
@@ -109,7 +110,7 @@ function ListingPage() {
             <div className="mt-8">
               <h2 className="font-display text-xl font-semibold">About this material</h2>
               <p className="mt-2 leading-relaxed text-muted-foreground">{l.description || `${l.grade}. Contact through structured offers only.`}</p>
-              <p className="mt-4 text-sm text-muted-foreground">Exact pickup address is shared only with the buyer and assigned logistics partner after payment.</p>
+              <p className="mt-4 text-sm text-muted-foreground">Exact pickup address is shared only with the assigned logistics partner, never with the buyer.</p>
             </div>
           </div>
           <aside className="lg:sticky lg:top-24 lg:self-start">
@@ -128,6 +129,7 @@ function ListingPage() {
                 <div>
                   <p className="text-xs text-muted-foreground">Seller</p>
                   <p className="font-medium">{l.sellerName}</p>
+                  <SellerStars sellerId={l.sellerId} />
                 </div>
                 <VerifiedBadge type={l.sellerBadge} />
               </div>
@@ -240,7 +242,7 @@ function ListingPage() {
         <DialogContent>
           <DialogHeader>
             <DialogTitle className="font-display text-2xl">Buy at asking price</DialogTitle>
-            <DialogDescription>Creates an order at {naira(l.price)}/{l.unit}. You’ll choose pickup or delivery next.</DialogDescription>
+            <DialogDescription>Creates an order at {naira(l.price)}/{l.unit}. You’ll propose a delivery fare to approved logistics partners next.</DialogDescription>
           </DialogHeader>
           <Field label={`Quantity (${l.unit})`} error={err}>
             <input type="number" className={inputCls} value={qty} onChange={(e) => setQty(e.target.value)} />
@@ -267,4 +269,9 @@ function ListingPage() {
       </Dialog>
     </PublicShell>
   );
+}
+
+function SellerStars({ sellerId }: { sellerId: string }) {
+  const r = useDB((d) => sellerRating(d.orders, sellerId));
+  return <p className="text-xs text-muted-foreground">{r ? `${r.avg} of 5 from ${r.count} verified review${r.count > 1 ? "s" : ""}` : "New seller"}</p>;
 }

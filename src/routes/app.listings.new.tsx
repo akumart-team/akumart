@@ -168,17 +168,7 @@ function NewListing() {
             </Field>
             <Field label="Fulfilment options you accept" error={err.fulfilment}>
               <div className="flex gap-2">
-                {(["pickup", "delivery"] as const).map((o) => (
-                  <button
-                    type="button"
-                    key={o}
-                    aria-pressed={f.fulfilment.includes(o)}
-                    onClick={() => set("fulfilment", f.fulfilment.includes(o) ? f.fulfilment.filter((x) => x !== o) : [...f.fulfilment, o])}
-                    className={`flex-1 rounded-xl border p-3 text-sm font-medium ${f.fulfilment.includes(o) ? "border-primary bg-secondary" : ""}`}
-                  >
-                    {o === "pickup" ? "Buyer pickup" : "Logistics delivery"}
-                  </button>
-                ))}
+                <p className="text-sm text-muted-foreground">All deliveries are handled by approved AkuMart logistics partners.</p>
               </div>
             </Field>
             <label className="flex items-center justify-between rounded-xl border p-4 text-sm">

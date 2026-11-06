@@ -8,6 +8,7 @@ import { Switch } from "@/components/ui/switch";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { updateMe, useMe, useHydratedFlag, getDB } from "@/lib/store";
 import { MATERIALS } from "@/lib/seed";
+import { safeTarget } from "@/lib/after-auth";
 import type { MarketRole, Material } from "@/lib/types";
 
 export const Route = createFileRoute("/onboarding")({
@@ -42,7 +43,7 @@ function Onboarding() {
       u.prefs = { marketRole: (role || "none") as MarketRole, akubin, onboarded: true, interests };
     });
     const intent = getDB().intent;
-    const target = redirect ?? intent?.path;
+    const target = safeTarget(redirect) ?? safeTarget(intent?.path);
     if (target) return router.history.push(target);
     router.history.push(role && role !== "none" ? "/app/marketplace" : "/app/akubin");
   };
@@ -70,9 +71,9 @@ function Onboarding() {
                 <SelectValue placeholder="Select a role" />
               </SelectTrigger>
               <SelectContent>
-                <SelectItem value="buyer">Buy waste (Buyer)</SelectItem>
-                <SelectItem value="seller">Sell waste (Seller)</SelectItem>
-                <SelectItem value="both">Both buy and sell</SelectItem>
+                <SelectItem value="buyer">Buy Waste</SelectItem>
+                <SelectItem value="seller">Sell Waste</SelectItem>
+                <SelectItem value="both">Buy & Sell Waste</SelectItem>
                 <SelectItem value="none">Not now</SelectItem>
               </SelectContent>
             </Select>
