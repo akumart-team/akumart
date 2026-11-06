@@ -71,9 +71,9 @@ function Onboarding() {
                 <SelectValue placeholder="Select a role" />
               </SelectTrigger>
               <SelectContent>
-                <SelectItem value="buyer">Buy waste (Buyer)</SelectItem>
-                <SelectItem value="seller">Sell waste (Seller)</SelectItem>
-                <SelectItem value="both">Both buy and sell</SelectItem>
+                <SelectItem value="buyer">Buy Waste</SelectItem>
+                <SelectItem value="seller">Sell Waste</SelectItem>
+                <SelectItem value="both">Buy & Sell Waste</SelectItem>
                 <SelectItem value="none">Not now</SelectItem>
               </SelectContent>
             </Select>

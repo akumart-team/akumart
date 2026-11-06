@@ -5,7 +5,7 @@ import {
   Sparkles, Package, HandCoins, Receipt, Megaphone, ClipboardList, Bookmark, LayoutDashboard, Gift, Trophy, MapPin, ShieldCheck, Bell, Truck, LifeBuoy, Settings, LogOut, Menu, X, Loader2, Store, Recycle,
 } from "lucide-react";
 import { Logo } from "@/components/brand";
-import { useMe, useHydratedFlag, useDB, signOut } from "@/lib/store";
+import { useMe, useHydratedFlag, useDB, signOut, updateMe } from "@/lib/store";
 import { cn } from "@/lib/utils";
 import { StatusChip } from "@/components/status-chip";
 
@@ -22,13 +22,18 @@ export const Route = createFileRoute("/app")({
   component: AppLayout,
 });
 
-const MARKET = [
+const BUYER_NAV = [
   { to: "/app/marketplace", label: "For You", icon: Sparkles },
-  { to: "/app/listings", label: "My listings", icon: Package },
-  { to: "/app/offers", label: "Offers", icon: HandCoins },
-  { to: "/app/orders", label: "Orders", icon: Receipt },
-  { to: "/app/requests", label: "Buyer requests", icon: ClipboardList },
+  { to: "/app/offers", label: "My offers", icon: HandCoins },
+  { to: "/app/orders", label: "Purchases", icon: Receipt },
+  { to: "/app/requests", label: "My buyer requests", icon: ClipboardList },
   { to: "/app/saved", label: "Saved", icon: Bookmark },
+] as const;
+const SELLER_NAV = [
+  { to: "/app/listings", label: "My listings", icon: Package },
+  { to: "/app/offers", label: "Offers received", icon: HandCoins },
+  { to: "/app/orders", label: "Sales", icon: Receipt },
+  { to: "/app/requests", label: "Buyer requests", icon: ClipboardList },
 ] as const;
 const AKUBIN = [
   { to: "/app/akubin", label: "Dashboard", icon: LayoutDashboard },
@@ -66,6 +71,9 @@ function AppLayout() {
 
   const service = loc.pathname.startsWith("/app/akubin") ? "akubin" : "marketplace";
   const v = me.verification;
+  const role = me.prefs.marketRole;
+  const mode: "buyer" | "seller" = role === "seller" ? "seller" : role === "both" ? (me.prefs.activeMode ?? "buyer") : "buyer";
+  const MARKET = mode === "seller" ? SELLER_NAV : BUYER_NAV;
 
   const nav = (
     <div className="flex h-full flex-col gap-6 overflow-y-auto p-5">
@@ -83,7 +91,19 @@ function AppLayout() {
           <Recycle className="size-3.5" /> AkuBin
         </Link>
       </div>
-      <NavGroup title={service === "akubin" ? "AkuBin" : "Marketplace"} items={service === "akubin" ? AKUBIN : MARKET} path={loc.pathname} />
+      {service === "marketplace" && role === "both" && (
+        <div className="grid grid-cols-2 gap-1 rounded-xl border border-sidebar-border p-1" role="tablist" aria-label="Buyer or seller mode">
+          {(["buyer", "seller"] as const).map((m) => (
+            <button key={m} role="tab" aria-selected={mode === m} onClick={() => { updateMe((u) => { u.prefs.activeMode = m; }); router.navigate({ to: m === "seller" ? "/app/listings" : "/app/marketplace" }); }} className={cn("rounded-lg py-1.5 text-xs font-semibold capitalize", mode === m ? "bg-sidebar-accent text-sidebar-accent-foreground" : "text-sidebar-foreground/70")}>
+              {m}
+            </button>
+          ))}
+        </div>
+      )}
+      {service === "marketplace" && (role === "none" || !role) && (
+        <Link to="/app/settings" className="rounded-xl bg-sidebar-accent p-3 text-xs text-sidebar-foreground/80">Choose Buy, Sell or Buy &amp; Sell in Settings to unlock trading tools.</Link>
+      )}
+      <NavGroup title={service === "akubin" ? "AkuBin" : mode === "seller" ? "Selling" : "Buying"} items={service === "akubin" ? AKUBIN : MARKET} path={loc.pathname} />
       <NavGroup title="Account" items={ACCOUNT} path={loc.pathname} badge={{ "/app/notifications": unread }} />
       <div className="mt-auto space-y-3 rounded-2xl bg-sidebar-accent p-4 text-sm">
         <p className="font-semibold text-sidebar-accent-foreground">{me.name}</p>

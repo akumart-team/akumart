@@ -58,7 +58,7 @@ export interface User {
   createdAt: string;
   provider: "email" | "google";
   consent: { terms: string; privacy: string; at: string };
-  prefs: { marketRole: MarketRole; akubin: boolean; onboarded: boolean; interests: Material[] };
+  prefs: { marketRole: MarketRole; akubin: boolean; onboarded: boolean; interests: Material[]; activeMode?: "buyer" | "seller" };
   verification: Verification;
   points: number;
   deposits: Deposit[];

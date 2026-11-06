@@ -49,7 +49,7 @@ function SettingsPage() {
             <select className={inputCls} value={role} onChange={(e) => setRole(e.target.value as MarketRole)}>
               <option value="buyer">Buyer</option>
               <option value="seller">Seller</option>
-              <option value="both">Both</option>
+              <option value="both">Buy &amp; Sell Waste</option>
               <option value="none">Not now</option>
             </select>
           </Field>
