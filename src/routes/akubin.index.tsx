@@ -138,7 +138,7 @@ function AkuBin() {
         <div>
           <p className="eyebrow text-primary">Rewards</p>
           <h2 className="text-display mt-3 text-3xl md:text-4xl">Save points, or spend them.</h2>
-          <p className="mt-4 text-muted-foreground">Points never expire under current rules. Airtime is sent automatically; cash and items are reviewed first.</p>
+          <p className="mt-4 text-muted-foreground">Earning rates, redemption options, thresholds and any expiry are set by AkuMart and may change. Points are separate from Marketplace money.</p>
           <ul className="mt-8 space-y-4">
             {[
               { i: Scale, t: "Verified deposits only", d: "The bin checks material and weight or count. No verification, no points." },

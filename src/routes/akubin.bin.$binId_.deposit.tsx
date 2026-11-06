@@ -5,7 +5,7 @@ import { Logo, DemoTag } from "@/components/brand";
 import { Button } from "@/components/ui/button";
 import { inputCls, Field } from "@/components/field";
 import { useDB, useMe, useHydratedFlag } from "@/lib/store";
-import { createBinSession, checkBinSession, recordDeposit, setPin } from "@/lib/actions";
+import { createBinSession, startBinSession, endBinSession, recordDeposit } from "@/lib/actions";
 import { cn } from "@/lib/utils";
 import type { Material } from "@/lib/types";
 
@@ -102,17 +102,9 @@ function Deposit() {
   };
 
   const confirmId = () => {
-    if (mode === "qr") {
-      if (!code) return setIdErr("Generate a session code first.");
-      const s = left <= 0 ? "expired" : checkBinSession(code);
-      if (s !== "ok") return setIdErr(s === "used" ? "This session was already used. Generate a new one." : s === "expired" ? "Session expired. Generate a new code." : "Invalid session.");
-    } else {
-      if (!/^\+?[\d\s-]{10,18}$/.test(phone)) return setIdErr("Enter your phone number.");
-      if (!/^\d{4}$/.test(pin)) return setIdErr("Enter a 4-digit PIN.");
-      if (me.pin && me.pin !== pin) return setIdErr("Incorrect PIN.");
-      if (!me.pin) setPin(pin);
-      setCode(createBinSession(bin.id));
-    }
+    if (!code) return setIdErr("Generate a code first.");
+    const s = left <= 0 ? "expired" : startBinSession(code, bin.id);
+    if (s !== "ok") return setIdErr(s === "used" ? "This code was already used. Generate a new one." : s === "expired" ? "Code expired. Generate a new code." : s === "busy" ? "Another person has an active session on this bin. Please wait." : "Invalid code.");
     setIdErr("");
     setStep(1);
   };
@@ -131,7 +123,13 @@ function Deposit() {
     }, 1800);
   };
 
+  const another = () => {
+    setStep(1);
+    setResult(null);
+    setMaterial(null);
+  };
   const restart = () => {
+    if (code) endBinSession(code);
     setStep(0);
     setCode("");
     setResult(null);
@@ -150,49 +148,25 @@ function Deposit() {
         <section>
           <h1 className="text-display text-3xl">Identify at the bin</h1>
           <p className="mt-1 text-muted-foreground">Link this deposit to your account. Recycling needs no Marketplace verification.</p>
-          <div className="mt-5 grid grid-cols-2 gap-2">
-            {([
-              ["qr", QrCode, "Session code"],
-              ["pin", Smartphone, "Phone + PIN"],
-            ] as const).map(([k, I, l]) => (
-              <button key={k} onClick={() => setMode(k)} className={cn("flex items-center justify-center gap-2 rounded-2xl border p-4 font-medium", mode === k && "border-primary bg-secondary text-forest")}>
-                <I className="size-5" /> {l}
-              </button>
-            ))}
+          <div className="mt-5 rounded-3xl border bg-background p-6 text-center">
+            {code ? (
+              <>
+                <p className="text-sm text-muted-foreground">Type this code on the bin keypad</p>
+                <p className="mt-2 font-mono text-4xl font-bold tracking-widest text-forest">{code}</p>
+                <p className={cn("mt-2 text-sm", left < 20 ? "text-destructive" : "text-muted-foreground")}>{left > 0 ? `Single use, expires in ${left}s` : "Expired"}</p>
+                <div className="mt-4 flex justify-center gap-2">
+                  <Button variant="ghost" size="sm" onClick={newSession}><RefreshCw /> New code</Button>
+                  <Button variant="ghost" size="sm" onClick={() => setLeft(0)}>Simulate expiry</Button>
+                </div>
+              </>
+            ) : (
+              <Button onClick={newSession}><QrCode /> Generate my numeric code</Button>
+            )}
           </div>
-          {mode === "qr" ? (
-            <div className="mt-5 rounded-3xl border bg-background p-6 text-center">
-              {code ? (
-                <>
-                  <p className="text-sm text-muted-foreground">Enter this code on the bin screen</p>
-                  <p className="mt-2 font-mono text-4xl font-bold tracking-widest text-forest">{code}</p>
-                  <p className={cn("mt-2 text-sm", left < 20 ? "text-destructive" : "text-muted-foreground")}>{left > 0 ? `Expires in ${left}s` : "Expired"}</p>
-                  <div className="mt-4 flex justify-center gap-2">
-                    <Button variant="ghost" size="sm" onClick={newSession}>
-                      <RefreshCw /> New code
-                    </Button>
-                    <Button variant="ghost" size="sm" onClick={() => setLeft(0)}>
-                      Simulate expiry
-                    </Button>
-                  </div>
-                </>
-              ) : (
-                <Button onClick={newSession}>Generate one-time session code</Button>
-              )}
-            </div>
-          ) : (
-            <div className="mt-5 grid gap-4">
-              <Field label="Phone number">
-                <input className={inputCls} value={phone} onChange={(e) => setPhone(e.target.value)} placeholder="+234 803 000 0000" />
-              </Field>
-              <Field label={me.pin ? "Your 4-digit PIN" : "Create a 4-digit PIN"} hint={me.pin ? undefined : "You’ll use this PIN at any AkuBin."}>
-                <input className={inputCls} inputMode="numeric" maxLength={4} type="password" value={pin} onChange={(e) => setPinV(e.target.value.replace(/\D/g, ""))} />
-              </Field>
-            </div>
-          )}
+          <p className="mt-3 text-xs text-muted-foreground">Works at any connected AkuBin. The bin QR only shows bin information and never identifies you.</p>
           {idErr && <p role="alert" className="mt-3 text-sm font-medium text-destructive">{idErr}</p>}
           <Button size="lg" className="mt-6 w-full" onClick={confirmId}>
-            Continue
+            Simulate entering code on bin
           </Button>
         </section>
       )}
