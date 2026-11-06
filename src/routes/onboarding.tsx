@@ -8,6 +8,7 @@ import { Switch } from "@/components/ui/switch";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { updateMe, useMe, useHydratedFlag, getDB } from "@/lib/store";
 import { MATERIALS } from "@/lib/seed";
+import { safeTarget } from "@/lib/after-auth";
 import type { MarketRole, Material } from "@/lib/types";
 
 export const Route = createFileRoute("/onboarding")({
@@ -42,7 +43,7 @@ function Onboarding() {
       u.prefs = { marketRole: (role || "none") as MarketRole, akubin, onboarded: true, interests };
     });
     const intent = getDB().intent;
-    const target = redirect ?? intent?.path;
+    const target = safeTarget(redirect) ?? safeTarget(intent?.path);
     if (target) return router.history.push(target);
     router.history.push(role && role !== "none" ? "/app/marketplace" : "/app/akubin");
   };

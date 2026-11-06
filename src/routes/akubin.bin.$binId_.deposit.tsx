@@ -1,6 +1,6 @@
 import { createFileRoute, Link, useRouter } from "@tanstack/react-router";
 import { useEffect, useState } from "react";
-import { QrCode, Smartphone, Loader2, CheckCircle2, XCircle, ArrowLeft, Coins, RefreshCw, Store } from "lucide-react";
+import { QrCode, Loader2, CheckCircle2, XCircle, ArrowLeft, Coins, RefreshCw, Store } from "lucide-react";
 import { Logo, DemoTag } from "@/components/brand";
 import { Button } from "@/components/ui/button";
 import { inputCls, Field } from "@/components/field";
@@ -266,11 +266,11 @@ function Deposit() {
             </>
           )}
           <div className="mt-8 grid gap-2">
-            <Button size="lg" onClick={() => router.navigate({ to: "/app/akubin" })}>
-              <CheckCircle2 /> Go to my AkuBin dashboard
+            <Button size="lg" onClick={another}>
+              Deposit another item (same session)
             </Button>
-            <Button size="lg" variant="outline" onClick={restart}>
-              {result.ok ? "Deposit more" : "Try again"}
+            <Button size="lg" variant="outline" onClick={() => { restart(); router.navigate({ to: "/app/akubin" }); }}>
+              <CheckCircle2 /> End session and view dashboard
             </Button>
             {!result.ok && (
               <Button asChild variant="ghost">

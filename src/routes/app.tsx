@@ -1,3 +1,4 @@
+import { safeTarget } from "@/lib/after-auth";
 import { createFileRoute, Link, Outlet, useLocation, useRouter } from "@tanstack/react-router";
 import { useEffect, useState } from "react";
 import {
@@ -52,7 +53,7 @@ function AppLayout() {
   const [open, setOpen] = useState(false);
   const unread = useDB((d) => d.notifications.filter((n) => n.userId === d.sessionUserId && !n.read).length);
   useEffect(() => {
-    if (hydrated && !me) router.navigate({ to: "/login", search: { redirect: loc.href } });
+    if (hydrated && !me) router.navigate({ to: "/login", search: { redirect: safeTarget(loc.href) } });
   }, [hydrated, me, router, loc.href]);
   useEffect(() => setOpen(false), [loc.pathname]);
 
