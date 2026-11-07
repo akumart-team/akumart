@@ -262,7 +262,7 @@ function ListingPage() {
                 if (orderId) router.navigate({ to: "/app/orders/$id", params: { id: orderId } });
               }}
             >
-              Continue to fulfilment
+              Continue to logistics
             </Button>
           </DialogFooter>
         </DialogContent>
