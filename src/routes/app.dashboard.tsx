@@ -1,12 +1,12 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
 import { Plus, Search, Star } from "lucide-react";
-import { PageTitle, Panel, Stat, Empty } from "@/components/app-ui";
+import { PageTitle, Panel, Stat } from "@/components/app-ui";
 import { StatusChip } from "@/components/status-chip";
 import { Button } from "@/components/ui/button";
 import { AkuBinPromo } from "@/components/promo-cards";
 import { useDB, useMe } from "@/lib/store";
 import { sellerRating, checkoutSplit } from "@/lib/rules";
-import { naira, dt } from "@/lib/format";
+import { naira } from "@/lib/format";
 import { activeMode } from "@/lib/after-auth";
 
 export const Route = createFileRoute("/app/dashboard")({
@@ -45,7 +45,7 @@ function BuyerDash() {
   const me = useMe()!;
   const orders = useDB((d) => d.orders.filter((o) => o.buyerId === me.id));
   const offers = useDB((d) => d.offers.filter((o) => o.buyerId === me.id));
-  const saved = useDB((d) => (d as unknown as { saved?: { userId: string }[] }).saved?.filter((s) => s.userId === me.id).length ?? me.saved?.length ?? 0);
+  const saved = me.saved.length;
   const done = orders.filter((o) => o.status === "completed");
   const inTransit = orders.filter((o) => ["assigned", "picked_up", "in_transit", "proof_uploaded", "delivered"].includes(o.status));
   const spent = done.reduce((s, o) => s + o.qty * o.unitPrice, 0);
@@ -104,7 +104,7 @@ function SellerDash() {
   const offers = useDB((d) => d.offers.filter((o) => o.sellerId === me.id));
   const rating = sellerRating(allOrders, me.id);
   const done = orders.filter((o) => o.status === "completed");
-  const earnings = done.reduce((s, o) => s + checkoutSplit(o.qty * o.unitPrice, 0, settings).sellerNet, 0);
+  const earnings = done.reduce((s, o) => s + checkoutSplit(o.qty * o.unitPrice, 0, settings).sellerPayout, 0);
   const incoming = offers.filter((o) => o.status === "awaiting_seller");
   return (
     <div>
@@ -173,6 +173,3 @@ function SellerDash() {
     </div>
   );
 }
-
-void Empty;
-void dt;

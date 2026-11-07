@@ -1,10 +1,11 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
-import { MapPin, Gift, Trophy, Store, Recycle } from "lucide-react";
+import { MapPin, Gift, Trophy, Recycle } from "lucide-react";
 import { PageTitle, Panel, Stat, Empty } from "@/components/app-ui";
 import { StatusChip } from "@/components/status-chip";
 import { Button } from "@/components/ui/button";
 import { Progress } from "@/components/ui/progress";
 import { BinRow } from "@/components/bin-map";
+import { MarketplacePromo } from "@/components/promo-cards";
 import { useDB, useMe } from "@/lib/store";
 import { dt } from "@/lib/format";
 
@@ -28,7 +29,7 @@ function AkuBinDash() {
         intro="No Marketplace verification needed here."
         actions={
           <Button asChild variant="forest">
-            <Link to="/akubin">
+            <Link to="/app/akubin/map">
               <MapPin /> Find a bin
             </Link>
           </Button>
@@ -82,7 +83,7 @@ function AkuBinDash() {
               </p>
             </Panel>
           )}
-          <Panel title="Nearby bins">
+          <Panel title="Nearby bins" action={<Link to="/app/akubin/map" className="text-sm font-semibold text-primary">View map →</Link>}>
             <div className="space-y-2">
               {bins.map((b) => (
                 <BinRow key={b.id} b={b} />
@@ -101,15 +102,7 @@ function AkuBinDash() {
               </Link>
             </Button>
           </div>
-          <Panel className="bg-secondary">
-            <p className="font-semibold">Also on AkuMart</p>
-            <p className="mt-1 text-sm text-muted-foreground">Browse recyclable materials on the Marketplace, buying or selling needs verification later, recycling never does.</p>
-            <Button asChild size="sm" className="mt-3">
-              <Link to="/app/marketplace">
-                <Store /> Open Marketplace
-              </Link>
-            </Button>
-          </Panel>
+          <MarketplacePromo />
         </div>
       </div>
     </div>

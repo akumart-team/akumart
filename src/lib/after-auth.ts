@@ -1,5 +1,20 @@
 import { getDB, setIntent } from "./store";
 import { canTrade, currentUser } from "./rules";
+import type { User } from "./types";
+
+/** Active Marketplace dashboard: seller-only → seller, buyer-only → buyer, both → last used (buyer first). */
+export function activeMode(u: Pick<User, "prefs">): "buyer" | "seller" {
+  const r = u.prefs.marketRole;
+  if (r === "seller") return "seller";
+  if (r === "both") return u.prefs.activeMode ?? "buyer";
+  return "buyer";
+}
+
+/** Signed-in home: Recycle & Earn users land on AkuBin, traders on their For You feed. */
+export function homePath(u: Pick<User, "prefs">) {
+  const r = u.prefs.marketRole;
+  return !r || r === "none" ? "/app/akubin" : "/app/marketplace";
+}
 
 /** Where to go after sign-in/sign-up: explicit redirect → saved intent → onboarding → dashboard. */
 /** Drops auth pages (and nested redirects) so a return target can never loop back into sign-in. */
@@ -26,5 +41,5 @@ export function nextPath(redirect?: string, fromSignup = false) {
     return target;
   }
   if (u && !u.prefs.onboarded) return "/onboarding";
-  return "/app";
+  return u ? homePath(u) : "/app";
 }
