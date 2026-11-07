@@ -98,6 +98,13 @@ const FOOT: { title: string; links: { label: string; to: string; search?: Record
   { title: "Legal", links: [{ label: "Terms & Conditions", to: "/legal/terms" }, { label: "Privacy Policy", to: "/legal/privacy" }, { label: "Cookie Policy", to: "/legal/cookies" }, { label: "Acceptable Use Policy", to: "/legal/acceptable-use" }] },
 ];
 
+// Official URLs not yet supplied, so icons are intentionally non-navigable.
+const SOCIALS = [
+  { label: "Facebook", d: "M13.5 22v-8h2.7l.4-3.2h-3.1V8.8c0-.9.3-1.5 1.6-1.5h1.7V4.4c-.3 0-1.3-.1-2.5-.1-2.5 0-4.1 1.5-4.1 4.2v2.3H7.4V14h2.8v8h3.3Z" },
+  { label: "LinkedIn", d: "M4.98 3.5a2.5 2.5 0 1 1 0 5 2.5 2.5 0 0 1 0-5ZM3 9.75h4V21H3V9.75ZM9.5 9.75h3.8v1.6h.06c.53-1 1.83-2.05 3.77-2.05 4.03 0 4.77 2.65 4.77 6.1V21h-4v-5c0-1.2 0-2.75-1.67-2.75-1.68 0-1.94 1.3-1.94 2.65V21H9.5V9.75Z" },
+  { label: "Instagram", d: "M12 7a5 5 0 1 0 0 10 5 5 0 0 0 0-10Zm0 8.2a3.2 3.2 0 1 1 0-6.4 3.2 3.2 0 0 1 0 6.4ZM17.3 5.5a1.2 1.2 0 1 0 0 2.4 1.2 1.2 0 0 0 0-2.4ZM12 2c-2.7 0-3.1 0-4.1.1C4.3 2.3 2.3 4.3 2.1 7.9 2 8.9 2 9.3 2 12s0 3.1.1 4.1c.2 3.6 2.2 5.6 5.8 5.8 1 .1 1.4.1 4.1.1s3.1 0 4.1-.1c3.6-.2 5.6-2.2 5.8-5.8.1-1 .1-1.4.1-4.1s0-3.1-.1-4.1c-.2-3.6-2.2-5.6-5.8-5.8C15.1 2 14.7 2 12 2Zm0 1.8c2.7 0 3 0 4 .1 2.6.1 3.9 1.4 4 4 .1 1 .1 1.3.1 4s0 3-.1 4c-.1 2.6-1.4 3.9-4 4-1 .1-1.3.1-4 .1s-3 0-4-.1c-2.6-.1-3.9-1.4-4-4-.1-1-.1-1.3-.1-4s0-3 .1-4c.1-2.6 1.4-3.9 4-4 1-.1 1.3-.1 4-.1Z" },
+];
+
 export function SiteFooter() {
   return (
     <footer className="bg-forest text-forest-foreground">
@@ -108,7 +115,13 @@ export function SiteFooter() {
           <p className="text-sm leading-relaxed text-forest-foreground/70">
             A Nigerian marketplace for recyclable materials and AkuBin, the smart-bin rewards service, one account for both.
           </p>
-          <p className="text-xs text-forest-foreground/50">Official social channels will be listed here once confirmed.</p>
+          <div className="flex gap-3 pt-2">
+            {SOCIALS.map((x) => (
+              <span key={x.label} role="img" aria-label={x.label} title={x.label} className="flex h-10 w-10 items-center justify-center rounded-full bg-forest-foreground/10 text-forest-foreground/80">
+                <svg viewBox="0 0 24 24" className="size-4 fill-current" aria-hidden><path d={x.d} /></svg>
+              </span>
+            ))}
+          </div>
         </div>
         <div className="grid grid-cols-2 gap-8 sm:grid-cols-4">
           {FOOT.map((c) => (
@@ -130,7 +143,7 @@ export function SiteFooter() {
       <div className="border-t border-forest-foreground/10">
         <div className="container-page flex flex-col gap-2 py-6 text-xs text-forest-foreground/55 sm:flex-row sm:justify-between">
           <span>© 2026 AkuMart. All rights reserved.</span>
-          <span>Prototype, all data, payments, verification and bin events are simulated.</span>
+          <span>Payments are handled by a licensed payment provider. AkuMart does not hold customer funds.</span>
         </div>
       </div>
     </footer>

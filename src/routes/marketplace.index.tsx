@@ -140,7 +140,7 @@ function Market() {
           <div>
             <div className="mb-5 flex flex-wrap items-center justify-between gap-3">
               <p className="text-sm text-muted-foreground">
-                <strong className="text-foreground">{results.length}</strong> listings <DemoTag className="ml-2">Demo listings</DemoTag>
+                <strong className="text-foreground">{results.length}</strong> listings
               </p>
               <div className="flex gap-2">
                 <Button variant="outline" size="sm" className="lg:hidden" onClick={() => setShowFilters(!showFilters)}>

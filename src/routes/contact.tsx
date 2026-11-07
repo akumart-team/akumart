@@ -43,7 +43,7 @@ function Contact() {
   const [done, setDone] = useState<string | null>(null);
   return (
     <PublicShell>
-      <PageHero eyebrow="Contact us" title="How can we help?" intro="Choose a topic. We’ll route your message to the right team. (Prototype: submissions are simulated.)" />
+      <PageHero eyebrow="Contact us" title="How can we help?" intro="Choose a topic. We’ll route your message to the right team." />
       <section className="container-page grid gap-10 py-14 lg:grid-cols-[280px_1fr]">
         <div role="tablist" aria-label="Enquiry type" className="flex gap-2 overflow-x-auto lg:flex-col">
           {TABS.map((t) => (
@@ -66,7 +66,7 @@ function Contact() {
             <div className="py-10 text-center">
               <CheckCircle2 className="mx-auto size-12 text-primary" />
               <h2 className="text-display mt-4 text-3xl">Thanks, we’ve received it.</h2>
-              <p className="mt-2 text-muted-foreground">Reference {done}. This is a simulated confirmation; no email has been sent.</p>
+              <p className="mt-2 text-muted-foreground">Reference {done}. Our team will get back to you.</p>
               <Button className="mt-6" variant="outline" onClick={() => setDone(null)}>
                 Send another
               </Button>

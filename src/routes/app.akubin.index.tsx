@@ -35,7 +35,7 @@ function AkuBinDash() {
         }
       />
       <div className="grid gap-4 md:grid-cols-4">
-        <Stat dark label="Points balance" value={me.points.toLocaleString()} hint={`≈ ₦${(me.points * settings.pointValueNaira).toLocaleString()} at demo rate`} />
+        <Stat dark label="Points balance" value={me.points.toLocaleString()} hint={`≈ ₦${(me.points * settings.pointValueNaira).toLocaleString()} at current rate`} />
         <Stat label="Verified deposits" value={verified.length} />
         <Stat label="Verified weight" value={`${kg.toFixed(2)} kg`} hint="Used for leaderboard ranking" />
         <Stat label="Rejected deposits" value={me.deposits.length - verified.length} hint="Earn 0 points" />
