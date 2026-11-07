@@ -4,18 +4,18 @@ import { cn } from "@/lib/utils";
 
 const FLOWS = {
   marketplace: [
-    { icon: UserPlus, t: "Join", d: "Create one free account with basic details." },
-    { icon: Search, t: "Discover or list", d: "Browse graded materials or publish your own listing." },
-    { icon: Handshake, t: "Agree on trade", d: "Structured offers and counteroffers, verified traders only." },
-    { icon: Truck, t: "Arrange fulfilment", d: "Pick up yourself or compare quotes from approved partners." },
-    { icon: CheckCircle2, t: "Complete", d: "Provider-handled payment, confirmation, then settlement." },
+    { icon: UserPlus, t: "Join", d: "Create your free AkuMart account." },
+    { icon: Search, t: "Discover or List", d: "Find recyclable materials or publish your own listings." },
+    { icon: Handshake, t: "Agree on Trade", d: "Negotiate and agree on quantity, pricing and terms with verified traders." },
+    { icon: Truck, t: "Arrange Logistics", d: "Receive and compare delivery quotations from approved AkuMart logistics partners." },
+    { icon: CheckCircle2, t: "Complete", d: "Make secure payment, track delivery, confirm receipt and complete settlement." },
   ],
   akubin: [
     { icon: MapPin, t: "Find a bin", d: "Search by area or landmark, or use your location." },
-    { icon: QrCode, t: "Scan & identify", d: "Scan the bin’s QR, or use your phone and PIN." },
+    { icon: QrCode, t: "Scan & identify", d: "Scan the bin’s QR and enter your one-time code." },
     { icon: Recycle, t: "Deposit", d: "The bin checks your material and its weight or count." },
     { icon: Coins, t: "Earn", d: "Points are credited only for verified deposits." },
-    { icon: Gift, t: "Redeem", d: "Airtime, cash above a minimum, or reward items." },
+    { icon: Gift, t: "Redeem", d: "Airtime, data, gift items and more." },
   ],
 };
 

@@ -2,12 +2,13 @@ import { safeTarget } from "@/lib/after-auth";
 import { createFileRoute, Link, Outlet, useLocation, useRouter } from "@tanstack/react-router";
 import { useEffect, useState } from "react";
 import {
-  Sparkles, Package, HandCoins, Receipt, Megaphone, ClipboardList, Bookmark, LayoutDashboard, Gift, Trophy, MapPin, ShieldCheck, Bell, Truck, LifeBuoy, Settings, LogOut, Menu, X, Loader2, Store, Recycle,
+  Sparkles, Package, HandCoins, Receipt, Megaphone, ClipboardList, Bookmark, LayoutDashboard, Gift, Trophy, MapPin, ShieldCheck, Bell, Truck, LifeBuoy, Settings, LogOut, Menu, X, Loader2, Store, Recycle, Plus,
 } from "lucide-react";
 import { Logo } from "@/components/brand";
 import { useMe, useHydratedFlag, useDB, signOut, updateMe } from "@/lib/store";
 import { cn } from "@/lib/utils";
 import { StatusChip } from "@/components/status-chip";
+import { activeMode } from "@/lib/after-auth";
 
 export const Route = createFileRoute("/app")({
   head: () => ({
@@ -24,22 +25,26 @@ export const Route = createFileRoute("/app")({
 
 const BUYER_NAV = [
   { to: "/app/marketplace", label: "For You", icon: Sparkles },
+  { to: "/app/dashboard", label: "Dashboard", icon: LayoutDashboard },
   { to: "/app/offers", label: "My offers", icon: HandCoins },
   { to: "/app/orders", label: "Purchases", icon: Receipt },
   { to: "/app/requests", label: "My buyer requests", icon: ClipboardList },
   { to: "/app/saved", label: "Saved", icon: Bookmark },
 ] as const;
 const SELLER_NAV = [
+  { to: "/app/marketplace", label: "For You", icon: Sparkles },
+  { to: "/app/dashboard", label: "Dashboard", icon: LayoutDashboard },
   { to: "/app/listings", label: "My listings", icon: Package },
-  { to: "/app/offers", label: "Offers received", icon: HandCoins },
-  { to: "/app/orders", label: "Sales", icon: Receipt },
+  { to: "/app/listings/new", label: "Create listing", icon: Plus },
+  { to: "/app/offers", label: "Incoming offers & negotiations", icon: HandCoins },
+  { to: "/app/orders", label: "Sales & orders", icon: Receipt },
   { to: "/app/requests", label: "Buyer requests", icon: ClipboardList },
 ] as const;
 const AKUBIN = [
   { to: "/app/akubin", label: "Dashboard", icon: LayoutDashboard },
   { to: "/app/akubin/rewards", label: "Rewards", icon: Gift },
   { to: "/app/akubin/leaderboard", label: "Leaderboard", icon: Trophy },
-  { to: "/akubin", label: "Find a bin", icon: MapPin },
+  { to: "/app/akubin/map", label: "Find a bin", icon: MapPin },
 ] as const;
 const ACCOUNT = [
   { to: "/app/verification", label: "Verification", icon: ShieldCheck },
@@ -72,7 +77,15 @@ function AppLayout() {
   const service = loc.pathname.startsWith("/app/akubin") ? "akubin" : "marketplace";
   const v = me.verification;
   const role = me.prefs.marketRole;
-  const mode: "buyer" | "seller" = role === "seller" ? "seller" : role === "both" ? (me.prefs.activeMode ?? "buyer") : "buyer";
+  const mode = activeMode(me);
+  const switchMode = (m: "buyer" | "seller") => {
+    // Activating the other trading role upgrades to Buy & Sell; restricted actions stay behind verification gates.
+    updateMe((u) => {
+      if (u.prefs.marketRole !== "both" && u.prefs.marketRole !== m) u.prefs.marketRole = "both";
+      u.prefs.activeMode = m;
+    });
+    router.navigate({ to: "/app/dashboard" });
+  };
   const MARKET = mode === "seller" ? SELLER_NAV : BUYER_NAV;
 
   const nav = (
@@ -91,17 +104,17 @@ function AppLayout() {
           <Recycle className="size-3.5" /> AkuBin
         </Link>
       </div>
-      {service === "marketplace" && role === "both" && (
+      {service === "marketplace" && role !== "none" && (
         <div className="grid grid-cols-2 gap-1 rounded-xl border border-sidebar-border p-1" role="tablist" aria-label="Buyer or seller mode">
           {(["buyer", "seller"] as const).map((m) => (
-            <button key={m} role="tab" aria-selected={mode === m} onClick={() => { updateMe((u) => { u.prefs.activeMode = m; }); router.navigate({ to: m === "seller" ? "/app/listings" : "/app/marketplace" }); }} className={cn("rounded-lg py-1.5 text-xs font-semibold capitalize", mode === m ? "bg-sidebar-accent text-sidebar-accent-foreground" : "text-sidebar-foreground/70")}>
+            <button key={m} role="tab" aria-selected={mode === m} onClick={() => switchMode(m)} className={cn("rounded-lg py-1.5 text-xs font-semibold capitalize", mode === m ? "bg-sidebar-primary text-sidebar-primary-foreground" : "text-sidebar-foreground/70")}>
               {m}
             </button>
           ))}
         </div>
       )}
       {service === "marketplace" && (role === "none" || !role) && (
-        <Link to="/app/settings" className="rounded-xl bg-sidebar-accent p-3 text-xs text-sidebar-foreground/80">Choose Buy, Sell or Buy &amp; Sell in Settings to unlock trading tools.</Link>
+        <Link to="/app/settings" className="rounded-xl bg-sidebar-accent p-3 text-xs text-sidebar-foreground/80">Choose Buyer, Seller or Both in Settings to unlock trading tools.</Link>
       )}
       <NavGroup title={service === "akubin" ? "AkuBin" : mode === "seller" ? "Selling" : "Buying"} items={service === "akubin" ? AKUBIN : MARKET} path={loc.pathname} />
       <NavGroup title="Account" items={ACCOUNT} path={loc.pathname} badge={{ "/app/notifications": unread }} />
@@ -167,7 +180,7 @@ function NavGroup({ title, items, path, badge = {} }: { title: string; items: re
       <p className="eyebrow mb-2 px-3 text-sidebar-foreground/45">{title}</p>
       <ul className="space-y-0.5">
         {items.map((i) => {
-          const active = path === i.to || (i.to !== "/app/akubin" && path.startsWith(i.to + "/"));
+          const active = path === i.to || (i.to !== "/app/akubin" && i.to !== "/app/listings" && path.startsWith(i.to + "/"));
           return (
             <li key={i.to}>
               <Link to={i.to as "/app"} className={cn("flex items-center gap-3 rounded-xl px-3 py-2.5 text-sm transition-colors", active ? "bg-sidebar-accent font-semibold text-sidebar-accent-foreground" : "hover:bg-sidebar-accent/60")}>

@@ -35,6 +35,7 @@ import { Route as AdminVerificationRouteImport } from './routes/admin.verificati
 import { Route as AkubinIndexRouteImport } from './routes/akubin.index'
 import { Route as AppIndexRouteImport } from './routes/app.index'
 import { Route as AppAdvertiseRouteImport } from './routes/app.advertise'
+import { Route as AppDashboardRouteImport } from './routes/app.dashboard'
 import { Route as AppMarketplaceRouteImport } from './routes/app.marketplace'
 import { Route as AppNotificationsRouteImport } from './routes/app.notifications'
 import { Route as AppOffersRouteImport } from './routes/app.offers'
@@ -55,6 +56,7 @@ import { Route as AkubinBinBinIdRouteImport } from './routes/akubin.bin.$binId'
 import { Route as AkubinBinsBinIdRouteImport } from './routes/akubin.bins.$binId'
 import { Route as AppAkubinIndexRouteImport } from './routes/app.akubin.index'
 import { Route as AppAkubinLeaderboardRouteImport } from './routes/app.akubin.leaderboard'
+import { Route as AppAkubinMapRouteImport } from './routes/app.akubin.map'
 import { Route as AppAkubinRewardsRouteImport } from './routes/app.akubin.rewards'
 import { Route as AppListingsIndexRouteImport } from './routes/app.listings.index'
 import { Route as AppListingsNewRouteImport } from './routes/app.listings.new'
@@ -192,6 +194,11 @@ const AppAdvertiseRoute = AppAdvertiseRouteImport.update({
   path: '/advertise',
   getParentRoute: () => AppRoute,
 } as any)
+const AppDashboardRoute = AppDashboardRouteImport.update({
+  id: '/dashboard',
+  path: '/dashboard',
+  getParentRoute: () => AppRoute,
+} as any)
 const AppMarketplaceRoute = AppMarketplaceRouteImport.update({
   id: '/marketplace',
   path: '/marketplace',
@@ -292,6 +299,11 @@ const AppAkubinLeaderboardRoute = AppAkubinLeaderboardRouteImport.update({
   path: '/akubin/leaderboard',
   getParentRoute: () => AppRoute,
 } as any)
+const AppAkubinMapRoute = AppAkubinMapRouteImport.update({
+  id: '/akubin/map',
+  path: '/akubin/map',
+  getParentRoute: () => AppRoute,
+} as any)
 const AppAkubinRewardsRoute = AppAkubinRewardsRouteImport.update({
   id: '/akubin/rewards',
   path: '/akubin/rewards',
@@ -347,6 +359,7 @@ export interface FileRoutesByFullPath {
   '/admin/support': typeof AdminSupportRoute
   '/admin/verification': typeof AdminVerificationRoute
   '/app/advertise': typeof AppAdvertiseRoute
+  '/app/dashboard': typeof AppDashboardRoute
   '/app/marketplace': typeof AppMarketplaceRoute
   '/app/notifications': typeof AppNotificationsRoute
   '/app/offers': typeof AppOffersRoute
@@ -369,6 +382,7 @@ export interface FileRoutesByFullPath {
   '/akubin/bin/$binId': typeof AkubinBinBinIdRoute
   '/akubin/bins/$binId': typeof AkubinBinsBinIdRoute
   '/app/akubin/leaderboard': typeof AppAkubinLeaderboardRoute
+  '/app/akubin/map': typeof AppAkubinMapRoute
   '/app/akubin/rewards': typeof AppAkubinRewardsRoute
   '/app/listings/new': typeof AppListingsNewRoute
   '/app/orders/$id': typeof AppOrdersIdRoute
@@ -399,6 +413,7 @@ export interface FileRoutesByTo {
   '/admin/support': typeof AdminSupportRoute
   '/admin/verification': typeof AdminVerificationRoute
   '/app/advertise': typeof AppAdvertiseRoute
+  '/app/dashboard': typeof AppDashboardRoute
   '/app/marketplace': typeof AppMarketplaceRoute
   '/app/notifications': typeof AppNotificationsRoute
   '/app/offers': typeof AppOffersRoute
@@ -421,6 +436,7 @@ export interface FileRoutesByTo {
   '/akubin/bin/$binId': typeof AkubinBinBinIdRoute
   '/akubin/bins/$binId': typeof AkubinBinsBinIdRoute
   '/app/akubin/leaderboard': typeof AppAkubinLeaderboardRoute
+  '/app/akubin/map': typeof AppAkubinMapRoute
   '/app/akubin/rewards': typeof AppAkubinRewardsRoute
   '/app/listings/new': typeof AppListingsNewRoute
   '/app/orders/$id': typeof AppOrdersIdRoute
@@ -454,6 +470,7 @@ export interface FileRoutesById {
   '/admin/support': typeof AdminSupportRoute
   '/admin/verification': typeof AdminVerificationRoute
   '/app/advertise': typeof AppAdvertiseRoute
+  '/app/dashboard': typeof AppDashboardRoute
   '/app/marketplace': typeof AppMarketplaceRoute
   '/app/notifications': typeof AppNotificationsRoute
   '/app/offers': typeof AppOffersRoute
@@ -476,6 +493,7 @@ export interface FileRoutesById {
   '/akubin/bin/$binId': typeof AkubinBinBinIdRoute
   '/akubin/bins/$binId': typeof AkubinBinsBinIdRoute
   '/app/akubin/leaderboard': typeof AppAkubinLeaderboardRoute
+  '/app/akubin/map': typeof AppAkubinMapRoute
   '/app/akubin/rewards': typeof AppAkubinRewardsRoute
   '/app/listings/new': typeof AppListingsNewRoute
   '/app/orders/$id': typeof AppOrdersIdRoute
@@ -510,6 +528,7 @@ export interface FileRouteTypes {
     | '/admin/support'
     | '/admin/verification'
     | '/app/advertise'
+    | '/app/dashboard'
     | '/app/marketplace'
     | '/app/notifications'
     | '/app/offers'
@@ -532,6 +551,7 @@ export interface FileRouteTypes {
     | '/akubin/bin/$binId'
     | '/akubin/bins/$binId'
     | '/app/akubin/leaderboard'
+    | '/app/akubin/map'
     | '/app/akubin/rewards'
     | '/app/listings/new'
     | '/app/orders/$id'
@@ -562,6 +582,7 @@ export interface FileRouteTypes {
     | '/admin/support'
     | '/admin/verification'
     | '/app/advertise'
+    | '/app/dashboard'
     | '/app/marketplace'
     | '/app/notifications'
     | '/app/offers'
@@ -584,6 +605,7 @@ export interface FileRouteTypes {
     | '/akubin/bin/$binId'
     | '/akubin/bins/$binId'
     | '/app/akubin/leaderboard'
+    | '/app/akubin/map'
     | '/app/akubin/rewards'
     | '/app/listings/new'
     | '/app/orders/$id'
@@ -616,6 +638,7 @@ export interface FileRouteTypes {
     | '/admin/support'
     | '/admin/verification'
     | '/app/advertise'
+    | '/app/dashboard'
     | '/app/marketplace'
     | '/app/notifications'
     | '/app/offers'
@@ -638,6 +661,7 @@ export interface FileRouteTypes {
     | '/akubin/bin/$binId'
     | '/akubin/bins/$binId'
     | '/app/akubin/leaderboard'
+    | '/app/akubin/map'
     | '/app/akubin/rewards'
     | '/app/listings/new'
     | '/app/orders/$id'
@@ -858,6 +882,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AppAdvertiseRouteImport
       parentRoute: typeof AppRoute
     }
+    '/app/dashboard': {
+      id: '/app/dashboard'
+      path: '/dashboard'
+      fullPath: '/app/dashboard'
+      preLoaderRoute: typeof AppDashboardRouteImport
+      parentRoute: typeof AppRoute
+    }
     '/app/marketplace': {
       id: '/app/marketplace'
       path: '/marketplace'
@@ -998,6 +1029,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AppAkubinLeaderboardRouteImport
       parentRoute: typeof AppRoute
     }
+    '/app/akubin/map': {
+      id: '/app/akubin/map'
+      path: '/akubin/map'
+      fullPath: '/app/akubin/map'
+      preLoaderRoute: typeof AppAkubinMapRouteImport
+      parentRoute: typeof AppRoute
+    }
     '/app/akubin/rewards': {
       id: '/app/akubin/rewards'
       path: '/akubin/rewards'
@@ -1073,6 +1111,7 @@ const AdminRouteWithChildren = AdminRoute._addFileChildren(AdminRouteChildren)
 
 interface AppRouteChildren {
   AppAdvertiseRoute: typeof AppAdvertiseRoute
+  AppDashboardRoute: typeof AppDashboardRoute
   AppMarketplaceRoute: typeof AppMarketplaceRoute
   AppNotificationsRoute: typeof AppNotificationsRoute
   AppOffersRoute: typeof AppOffersRoute
@@ -1084,6 +1123,7 @@ interface AppRouteChildren {
   AppVerificationRoute: typeof AppVerificationRoute
   AppIndexRoute: typeof AppIndexRoute
   AppAkubinLeaderboardRoute: typeof AppAkubinLeaderboardRoute
+  AppAkubinMapRoute: typeof AppAkubinMapRoute
   AppAkubinRewardsRoute: typeof AppAkubinRewardsRoute
   AppListingsNewRoute: typeof AppListingsNewRoute
   AppOrdersIdRoute: typeof AppOrdersIdRoute
@@ -1094,6 +1134,7 @@ interface AppRouteChildren {
 
 const AppRouteChildren: AppRouteChildren = {
   AppAdvertiseRoute: AppAdvertiseRoute,
+  AppDashboardRoute: AppDashboardRoute,
   AppMarketplaceRoute: AppMarketplaceRoute,
   AppNotificationsRoute: AppNotificationsRoute,
   AppOffersRoute: AppOffersRoute,
@@ -1105,6 +1146,7 @@ const AppRouteChildren: AppRouteChildren = {
   AppVerificationRoute: AppVerificationRoute,
   AppIndexRoute: AppIndexRoute,
   AppAkubinLeaderboardRoute: AppAkubinLeaderboardRoute,
+  AppAkubinMapRoute: AppAkubinMapRoute,
   AppAkubinRewardsRoute: AppAkubinRewardsRoute,
   AppListingsNewRoute: AppListingsNewRoute,
   AppOrdersIdRoute: AppOrdersIdRoute,

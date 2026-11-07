@@ -35,7 +35,7 @@ function ForYou() {
       <PageTitle
         eyebrow="Marketplace"
         title={`Hello, ${me.name.split(" ")[0]}`}
-        intro={interests.length ? `Personalised for ${interests.join(", ")} (simulated ranking).` : "Add material interests in Settings to personalise this feed."}
+        intro={interests.length ? `Personalised for ${interests.join(", ")} .` : "Add material interests in Settings to personalise this feed."}
         actions={
           <Button asChild>
             <Link to="/app/listings/new">

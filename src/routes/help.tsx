@@ -71,7 +71,7 @@ function Help() {
           <div>
             <AlertTriangle className="size-8 text-primary" />
             <h2 className="text-display mt-3 text-3xl">Report an issue</h2>
-            <p className="mt-2 text-muted-foreground">Problems with a listing, bin, order or account. This creates a support ticket (simulated).</p>
+            <p className="mt-2 text-muted-foreground">Problems with a listing, bin, order or account. This creates a support ticket.</p>
             {report && <p className="mt-3 text-sm font-medium text-primary">You came here to report an issue, fill in the form.</p>}
           </div>
           {done ? (

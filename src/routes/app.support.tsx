@@ -20,7 +20,7 @@ function Support() {
   const [f, setF] = useState({ subject: "", message: "" });
   return (
     <div className="max-w-4xl">
-      <PageTitle title="Support" intro="Your tickets, including those created from the assistant. Human support is simulated in this prototype." />
+      <PageTitle title="Support" intro="Your tickets, including those created from the assistant." />
       <Panel title="New ticket" className="mb-6">
         <div className="grid gap-4">
           <Field label="Subject">

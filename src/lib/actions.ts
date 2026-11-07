@@ -260,7 +260,7 @@ export function pay(orderId: string, outcome: "success" | "failed") {
     o.payment = "held";
     o.status = "paid";
     o.timeline.push({ at: nowIso(), actor: "payment-provider (simulated)", action: "Payment collected and held by provider for conditional settlement" });
-    notify(d, o.sellerId, "Order paid", `${o.title}, prepare for ${o.fulfilment}`, `/app/orders/${o.id}`);
+    notify(d, o.sellerId, "Order paid", `${o.title}, prepare for pickup by the assigned logistics partner`, `/app/orders/${o.id}`);
   });
 }
 

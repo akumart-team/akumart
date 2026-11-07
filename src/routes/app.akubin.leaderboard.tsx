@@ -4,7 +4,6 @@ import { Trophy } from "lucide-react";
 import { PageTitle, Panel } from "@/components/app-ui";
 import { useDB, useMe } from "@/lib/store";
 import { cn } from "@/lib/utils";
-import { DemoTag } from "@/components/brand";
 
 export const Route = createFileRoute("/app/akubin/leaderboard")({
   component: Leaderboard,
@@ -29,7 +28,7 @@ function Leaderboard() {
           </button>
         ))}
       </div>
-      <Panel action={<DemoTag>Demo participants</DemoTag>} title={PERIODS[p]}>
+      <Panel title={PERIODS[p]}>
         <ol className="divide-y">
           {rows.map((r, i) => (
             <li key={r.name} className={cn("flex items-center gap-4 py-3", r.me && "-mx-3 rounded-xl bg-secondary px-3")}>

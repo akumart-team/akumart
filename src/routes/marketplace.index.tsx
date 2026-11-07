@@ -9,7 +9,6 @@ import { useDB } from "@/lib/store";
 import { MATERIALS, CITIES } from "@/lib/seed";
 import { plastic } from "@/lib/images";
 import { cn } from "@/lib/utils";
-import { DemoTag } from "@/components/brand";
 import type { Material } from "@/lib/types";
 
 export const Route = createFileRoute("/marketplace/")({
@@ -140,7 +139,7 @@ function Market() {
           <div>
             <div className="mb-5 flex flex-wrap items-center justify-between gap-3">
               <p className="text-sm text-muted-foreground">
-                <strong className="text-foreground">{results.length}</strong> listings <DemoTag className="ml-2">Demo listings</DemoTag>
+                <strong className="text-foreground">{results.length}</strong> listings
               </p>
               <div className="flex gap-2">
                 <Button variant="outline" size="sm" className="lg:hidden" onClick={() => setShowFilters(!showFilters)}>

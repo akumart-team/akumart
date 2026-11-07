@@ -3,6 +3,7 @@ import { useMemo, useState } from "react";
 import { LocateFixed, Search, ArrowRight, QrCode, Scale, Coins, Gift, Smartphone } from "lucide-react";
 import { PublicShell } from "@/components/site-chrome";
 import { Button } from "@/components/ui/button";
+import { RewardsShowcase } from "@/components/rewards-showcase";
 import { BinMap, BinRow, distanceKm } from "@/components/bin-map";
 import { HowItWorks } from "@/components/how-it-works";
 import { useDB } from "@/lib/store";
@@ -25,8 +26,6 @@ export const Route = createFileRoute("/akubin/")({
 
 function AkuBin() {
   const bins = useDB((d) => d.bins);
-  const rewards = useDB((d) => d.rewards);
-  const settings = useDB((d) => d.settings);
   const [q, setQ] = useState("");
   const [mat, setMat] = useState<Material | "all">("all");
   const [view, setView] = useState<"map" | "list">("map");
@@ -48,7 +47,7 @@ function AkuBin() {
     navigator.geolocation.getCurrentPosition(
       (p) => {
         setLoc({ lat: p.coords.latitude, lng: p.coords.longitude });
-        setGeoMsg("Sorted by distance from you. Distances to demo bins are approximate.");
+        setGeoMsg("Sorted by distance from you. Distances are approximate.");
       },
       () => setGeoMsg("Location permission denied. You can still search by city, area or landmark."),
       { timeout: 8000 },
@@ -95,7 +94,7 @@ function AkuBin() {
           <div className="mb-6 flex flex-wrap items-end justify-between gap-4">
             <div>
               <h2 className="text-display text-3xl md:text-4xl">Bin locator</h2>
-              <p className="mt-1 text-muted-foreground">All bins shown are demonstration locations, not live deployments.</p>
+              <p className="mt-1 text-muted-foreground">Bin locations shown are proposed sites and not yet live.</p>
             </div>
             <div className="inline-flex rounded-full border bg-background p-1">
               {(["map", "list"] as const).map((v) => (
@@ -134,39 +133,7 @@ function AkuBin() {
         </div>
       </section>
 
-      <section className="container-page grid gap-10 py-20 lg:grid-cols-2">
-        <div>
-          <p className="eyebrow text-primary">Rewards</p>
-          <h2 className="text-display mt-3 text-3xl md:text-4xl">Save points, or spend them.</h2>
-          <p className="mt-4 text-muted-foreground">Earning rates, redemption options, thresholds and any expiry are set by AkuMart and may change. Points are separate from Marketplace money.</p>
-          <ul className="mt-8 space-y-4">
-            {[
-              { i: Scale, t: "Verified deposits only", d: "The bin checks material and weight or count. No verification, no points." },
-              { i: Coins, t: "Points by material", d: `e.g. plastic ${settings.pointsPerKg.plastic} pts/kg, metal ${settings.pointsPerKg.metal} pts/kg, glass ${settings.pointsPerKg.glass} pts/kg (demo rates).` },
-              { i: Smartphone, t: "QR or phone + PIN", d: "Identify yourself at the bin by scanning or entering your phone and PIN." },
-            ].map((x) => (
-              <li key={x.t} className="flex gap-4">
-                <x.i className="mt-1 size-5 shrink-0 text-primary" />
-                <div>
-                  <p className="font-semibold">{x.t}</p>
-                  <p className="text-sm text-muted-foreground">{x.d}</p>
-                </div>
-              </li>
-            ))}
-          </ul>
-        </div>
-        <div className="grid gap-3 sm:grid-cols-2">
-          {rewards.map((r) => (
-            <div key={r.id} className="rounded-2xl border p-5">
-              <Gift className="size-5 text-primary" />
-              <p className="mt-3 font-semibold">{r.name}</p>
-              <p className="text-sm text-muted-foreground">
-                {r.cost.toLocaleString()} pts · {r.automated ? "Instant" : "Reviewed"}
-              </p>
-            </div>
-          ))}
-        </div>
-      </section>
+      <RewardsShowcase />
     </PublicShell>
   );
 }

@@ -33,7 +33,7 @@ function answer(q: string): Msg {
     if (u) return { from: "bot", text: `Your Marketplace verification: basic, ${u.verification.basic.replace(/_/g, " ")}, full, ${u.verification.full.replace(/_/g, " ")}.`, link: { to: "/app/verification", label: "Verification centre" } };
     return { from: "bot", text: "Marketplace verification is only requested when you first make an offer, publish a listing or check out. Recycling with AkuBin never requires it." };
   }
-  if (/(bin|recycl|deposit|qr)/.test(t)) return { from: "bot", text: "Use the AkuBin locator to search by city, area or landmark, or allow location to find the closest demo bin. Scanning a bin’s QR opens its own page.", link: { to: "/akubin", label: "Find a bin" } };
+  if (/(bin|recycl|deposit|qr)/.test(t)) return { from: "bot", text: "Use the AkuBin locator to search by city, area or landmark, or allow location to find the closest bin. Scanning a bin’s QR opens its own page.", link: { to: "/akubin", label: "Find a bin" } };
   if (/(fee|commission|charge|cost)/.test(t)) return { from: "bot", text: `Buyers pay the agreed waste price plus the chosen delivery quote, no extra buyer surcharge. Provisional fees: ${db.settings.sellerFee}% from seller proceeds and ${db.settings.partnerFee}% from the logistics fee.` };
   if (/(escrow|payment|pay|refund)/.test(t)) return { from: "bot", text: "Payments are handled by a licensed third-party provider under conditional settlement. AkuMart never holds your funds. In this prototype payments are simulated." };
   if (/(sell|list)/.test(t)) return { from: "bot", text: "To sell, create a listing with photos, grade, quantity, price and pickup area. Basic verification is required before publishing.", link: { to: "/app/listings/new", label: "Create a listing" } };
