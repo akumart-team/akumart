@@ -89,20 +89,20 @@ function SettingsPage() {
           <Link to="/app/verification">Open verification centre</Link>
         </Button>
       </Panel>
-      <Panel title="Demo data">
-        <p className="text-sm text-muted-foreground">Reset all simulated data in this browser (signs you out).</p>
+      <Panel title="Reset local data">
+        <p className="text-sm text-muted-foreground">Clear all data stored in this browser (signs you out).</p>
         <Button
           variant="destructive"
           size="sm"
           className="mt-3"
           onClick={() => {
-            if (confirm("Reset all demo data?")) {
+            if (confirm("Reset all data in this browser?")) {
               resetDemo();
               window.location.href = "/";
             }
           }}
         >
-          Reset demo
+          Reset data
         </Button>
       </Panel>
     </div>

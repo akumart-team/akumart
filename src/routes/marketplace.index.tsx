@@ -9,7 +9,6 @@ import { useDB } from "@/lib/store";
 import { MATERIALS, CITIES } from "@/lib/seed";
 import { plastic } from "@/lib/images";
 import { cn } from "@/lib/utils";
-import { DemoTag } from "@/components/brand";
 import type { Material } from "@/lib/types";
 
 export const Route = createFileRoute("/marketplace/")({

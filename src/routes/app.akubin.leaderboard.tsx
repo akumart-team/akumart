@@ -4,7 +4,6 @@ import { Trophy } from "lucide-react";
 import { PageTitle, Panel } from "@/components/app-ui";
 import { useDB, useMe } from "@/lib/store";
 import { cn } from "@/lib/utils";
-import { DemoTag } from "@/components/brand";
 
 export const Route = createFileRoute("/app/akubin/leaderboard")({
   component: Leaderboard,
