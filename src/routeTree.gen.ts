@@ -35,6 +35,7 @@ import { Route as AdminVerificationRouteImport } from './routes/admin.verificati
 import { Route as AkubinIndexRouteImport } from './routes/akubin.index'
 import { Route as AppIndexRouteImport } from './routes/app.index'
 import { Route as AppAdvertiseRouteImport } from './routes/app.advertise'
+import { Route as AppDashboardRouteImport } from './routes/app.dashboard'
 import { Route as AppMarketplaceRouteImport } from './routes/app.marketplace'
 import { Route as AppNotificationsRouteImport } from './routes/app.notifications'
 import { Route as AppOffersRouteImport } from './routes/app.offers'
@@ -192,6 +193,11 @@ const AppAdvertiseRoute = AppAdvertiseRouteImport.update({
   path: '/advertise',
   getParentRoute: () => AppRoute,
 } as any)
+const AppDashboardRoute = AppDashboardRouteImport.update({
+  id: '/dashboard',
+  path: '/dashboard',
+  getParentRoute: () => AppRoute,
+} as any)
 const AppMarketplaceRoute = AppMarketplaceRouteImport.update({
   id: '/marketplace',
   path: '/marketplace',
@@ -347,6 +353,7 @@ export interface FileRoutesByFullPath {
   '/admin/support': typeof AdminSupportRoute
   '/admin/verification': typeof AdminVerificationRoute
   '/app/advertise': typeof AppAdvertiseRoute
+  '/app/dashboard': typeof AppDashboardRoute
   '/app/marketplace': typeof AppMarketplaceRoute
   '/app/notifications': typeof AppNotificationsRoute
   '/app/offers': typeof AppOffersRoute
@@ -399,6 +406,7 @@ export interface FileRoutesByTo {
   '/admin/support': typeof AdminSupportRoute
   '/admin/verification': typeof AdminVerificationRoute
   '/app/advertise': typeof AppAdvertiseRoute
+  '/app/dashboard': typeof AppDashboardRoute
   '/app/marketplace': typeof AppMarketplaceRoute
   '/app/notifications': typeof AppNotificationsRoute
   '/app/offers': typeof AppOffersRoute
@@ -454,6 +462,7 @@ export interface FileRoutesById {
   '/admin/support': typeof AdminSupportRoute
   '/admin/verification': typeof AdminVerificationRoute
   '/app/advertise': typeof AppAdvertiseRoute
+  '/app/dashboard': typeof AppDashboardRoute
   '/app/marketplace': typeof AppMarketplaceRoute
   '/app/notifications': typeof AppNotificationsRoute
   '/app/offers': typeof AppOffersRoute
@@ -510,6 +519,7 @@ export interface FileRouteTypes {
     | '/admin/support'
     | '/admin/verification'
     | '/app/advertise'
+    | '/app/dashboard'
     | '/app/marketplace'
     | '/app/notifications'
     | '/app/offers'
@@ -562,6 +572,7 @@ export interface FileRouteTypes {
     | '/admin/support'
     | '/admin/verification'
     | '/app/advertise'
+    | '/app/dashboard'
     | '/app/marketplace'
     | '/app/notifications'
     | '/app/offers'
@@ -616,6 +627,7 @@ export interface FileRouteTypes {
     | '/admin/support'
     | '/admin/verification'
     | '/app/advertise'
+    | '/app/dashboard'
     | '/app/marketplace'
     | '/app/notifications'
     | '/app/offers'
@@ -858,6 +870,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AppAdvertiseRouteImport
       parentRoute: typeof AppRoute
     }
+    '/app/dashboard': {
+      id: '/app/dashboard'
+      path: '/dashboard'
+      fullPath: '/app/dashboard'
+      preLoaderRoute: typeof AppDashboardRouteImport
+      parentRoute: typeof AppRoute
+    }
     '/app/marketplace': {
       id: '/app/marketplace'
       path: '/marketplace'
@@ -1073,6 +1092,7 @@ const AdminRouteWithChildren = AdminRoute._addFileChildren(AdminRouteChildren)
 
 interface AppRouteChildren {
   AppAdvertiseRoute: typeof AppAdvertiseRoute
+  AppDashboardRoute: typeof AppDashboardRoute
   AppMarketplaceRoute: typeof AppMarketplaceRoute
   AppNotificationsRoute: typeof AppNotificationsRoute
   AppOffersRoute: typeof AppOffersRoute
@@ -1094,6 +1114,7 @@ interface AppRouteChildren {
 
 const AppRouteChildren: AppRouteChildren = {
   AppAdvertiseRoute: AppAdvertiseRoute,
+  AppDashboardRoute: AppDashboardRoute,
   AppMarketplaceRoute: AppMarketplaceRoute,
   AppNotificationsRoute: AppNotificationsRoute,
   AppOffersRoute: AppOffersRoute,
