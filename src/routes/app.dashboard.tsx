@@ -46,8 +46,8 @@ function BuyerDash() {
   const orders = useDB((d) => d.orders.filter((o) => o.buyerId === me.id));
   const offers = useDB((d) => d.offers.filter((o) => o.buyerId === me.id));
   const saved = me.saved.length;
-  const done = orders.filter((o) => o.status === "completed");
-  const inTransit = orders.filter((o) => ["assigned", "picked_up", "in_transit", "proof_uploaded", "delivered"].includes(o.status));
+  const done = orders.filter((o) => ["confirmed", "settled"].includes(o.status));
+  const inTransit = orders.filter((o) => ["paid", "picked_up", "in_transit", "proof_uploaded", "delivered"].includes(o.status));
   const spent = done.reduce((s, o) => s + o.qty * o.unitPrice, 0);
   return (
     <div>
@@ -103,7 +103,7 @@ function SellerDash() {
   const listings = useDB((d) => d.listings.filter((l) => l.sellerId === me.id));
   const offers = useDB((d) => d.offers.filter((o) => o.sellerId === me.id));
   const rating = sellerRating(allOrders, me.id);
-  const done = orders.filter((o) => o.status === "completed");
+  const done = orders.filter((o) => ["confirmed", "settled"].includes(o.status));
   const earnings = done.reduce((s, o) => s + checkoutSplit(o.qty * o.unitPrice, 0, settings).sellerPayout, 0);
   const incoming = offers.filter((o) => o.status === "awaiting_seller");
   return (
