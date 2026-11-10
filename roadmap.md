@@ -1,5 +1,12 @@
 # AkuMart corrections
 
+## Additional corrections
+- [ ] Correct all onboarding destinations and restore last active account dashboard on login.
+- [ ] Remove the public footer payment statement without changing payment rules.
+- [ ] Reduce unrelated repeated images across public and account pages.
+- [ ] Use the newly supplied official AkuBin picture everywhere, preserving its product design.
+- [ ] Verify all four onboarding flows, role switching, return-to-action, and mobile navigation.
+
 - [x] 1 About Us Mission/Vision
 - [x] 2 Em dashes removed from app text
 - [x] 5/6/7 Sign-in redirect loop fixed; Buy Waste / Sell Waste / Buy & Sell Waste; Buyer/Seller switch in sidebar
