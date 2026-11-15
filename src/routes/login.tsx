@@ -6,7 +6,6 @@ import { Field, inputCls } from "@/components/field";
 import { Button } from "@/components/ui/button";
 import { useClientReady, useLogin } from "@/lib/api/hooks/use-api";
 import { errorMessage } from "@/lib/api/client";
-import { safeTarget } from "@/lib/after-auth";
 
 export const Route = createFileRoute("/login")({
   validateSearch: (s: Record<string, unknown>): { redirect?: string } => ({
@@ -35,16 +34,13 @@ function Login() {
   const [err, setErr] = useState("");
   const login = useLogin();
   const ready = useClientReady();
-  const isBin = redirect?.includes("/akubin/bin/");
 
-  const go = () => router.history.push(safeTarget(redirect) || "/app");
+  const go = () => router.history.replace("/app");
 
   return (
-    <AuthLayout akubin={isBin}>
+    <AuthLayout>
       <h1 className="text-display text-4xl">Welcome back</h1>
-      <p className="mt-2 text-muted-foreground">
-        {isBin ? "Sign in to continue to your bin deposit." : "Sign in to your AkuMart account."}
-      </p>
+      <p className="mt-2 text-muted-foreground">Sign in to your AkuMart account.</p>
       <form
         noValidate
         onSubmit={async (e) => {

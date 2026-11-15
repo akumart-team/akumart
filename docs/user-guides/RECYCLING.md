@@ -4,8 +4,8 @@ Marketplace verification is not required to use AkuBin. Sign in to associate you
 PIN, deposits and points with your account. Points are separate from Marketplace money.
 
 Buyers, sellers, Buyer & Seller accounts and logistics partners can all use AkuBin.
-Choose the independent **Use AkuBin / Recycle & Earn** option during signup or
-**Enable AkuBin** in Settings. It does not change your account role or approvals.
+AkuBin always appears in every account. There is no signup or Settings toggle.
+Choose Recycle & Earn at signup to make AkuBin your main workspace.
 
 | Page | Purpose |
 |---|---|
@@ -36,3 +36,14 @@ Use Support for an unrecorded deposit or reward problem. Include the bin code,
 approximate time and session/deposit ID if available. Do not submit repeated fake
 deposits from the browser. Hardware integration and AI availability are separate
 from frontend page validation.
+# Join for recycling only
+
+Choose **Recycle & Earn — use AkuBin** during signup, confirm your email and finish
+account setup. Your home is **My AkuBin**. You can set a PIN, see deposits and points,
+find bins and request rewards without choosing Buyer, Seller or Logistics and without
+Marketplace verification. AkuBin is included automatically for this account choice.
+
+Marketplace browsing remains available. To focus on buying, selling or delivery,
+change your account role in Settings and complete the relevant verification or
+partner approval. Your recycling PIN and points remain tied to the same account.
+

@@ -62,13 +62,13 @@ beforeEach(() => {
 });
 describe("Account workspaces", () => {
   it.each(["buyer", "seller", "both"])(
-    "%s workspace shows and hides recycling without changing role",
+    "%s workspace always shows recycling regardless of the legacy flag",
     (role) => {
       state.role = role;
       const view = render(<Dashboard />);
       expect(
         screen.queryByRole("region", { name: "AkuBin in your workspace" }),
-      ).not.toBeInTheDocument();
+      ).toBeInTheDocument();
       state.akubin = true;
       view.rerender(<Dashboard />);
       expect(screen.getByRole("region", { name: "AkuBin in your workspace" })).toBeInTheDocument();
@@ -77,7 +77,7 @@ describe("Account workspaces", () => {
       view.rerender(<Dashboard />);
       expect(
         screen.queryByRole("region", { name: "AkuBin in your workspace" }),
-      ).not.toBeInTheDocument();
+      ).toBeInTheDocument();
       expect(
         screen.getByRole("heading", {
           name: role === "seller" ? "Seller dashboard" : "Buyer dashboard",
@@ -85,16 +85,14 @@ describe("Account workspaces", () => {
       ).toBeInTheDocument();
     },
   );
-  it("logistics workspace has the same independent recycling visibility", () => {
+  it("logistics workspace always includes recycling", () => {
     state.role = "logistics";
     state.akubin = true;
     const view = render(<Partner />);
     expect(screen.getByRole("region", { name: "AkuBin in your workspace" })).toBeInTheDocument();
     state.akubin = false;
     view.rerender(<Partner />);
-    expect(
-      screen.queryByRole("region", { name: "AkuBin in your workspace" }),
-    ).not.toBeInTheDocument();
+    expect(screen.queryByRole("region", { name: "AkuBin in your workspace" })).toBeInTheDocument();
   });
   it("buyers see purchases, outgoing activity and buying actions", () => {
     render(<Dashboard />);
@@ -140,12 +138,19 @@ describe("Account workspaces", () => {
   });
   it.each([
     ["logistics", "/app/partner"],
-    ["recycler", "/onboarding"],
-    ["none", "/onboarding"],
+    ["recycler", "/app/akubin"],
   ])("routes %s accounts to the right workspace", (role, destination) => {
     state.role = role;
     render(<Dashboard />);
     expect(screen.getByText("Workspace destination: " + destination)).toBeInTheDocument();
+    expect(screen.queryByRole("link", { name: "Create listing" })).not.toBeInTheDocument();
+  });
+  it("legacy accounts open a real dashboard without inventing a buyer role", () => {
+    state.role = "none";
+    render(<Dashboard />);
+    expect(screen.getByRole("heading", { name: "Dashboard" })).toBeInTheDocument();
+    expect(screen.getByRole("region", { name: "AkuBin in your workspace" })).toBeInTheDocument();
+    expect(screen.queryByText(/Workspace destination/)).not.toBeInTheDocument();
     expect(screen.queryByRole("link", { name: "Create listing" })).not.toBeInTheDocument();
   });
 });

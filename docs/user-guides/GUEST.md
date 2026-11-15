@@ -22,17 +22,17 @@
 
 1. Open **Get started** or `/signup`.
 2. Enter first name, last name, display name, email, phone and city. Choose Buyer, Seller,
-   Buyer & Seller or Logistics Partner. Enter and confirm your password, then accept
+   Buyer & Seller or Recycle & Earn. Enter and confirm your password, then accept
    the account terms. All these fields are required.
-3. Optionally tick **Show AkuBin in my workspace**, regardless of your chosen role.
-   This controls workspace shortcuts and activity cards. Leaving it unchecked does
-   not disable your PIN or prevent you from earning points at a bin.
-   Submit registration and check your email for the confirmation code.
-4. Enter the code. Use Resend code if needed; repeated requests may be rate limited.
-5. Review onboarding (`/onboarding`): your chosen role and contact details are saved.
-   Material interests and AkuBin are optional. Finish setup to open your workspace.
-   Older incomplete accounts must supply the missing details and choose a role.
-   You can change preferences later in Settings.
+3. AkuBin is included automatically with every account. Submit registration and
+   check your email for the confirmation code.
+4. Enter the 6?8 digit code. Use Resend code if needed; requests may be rate limited.
+5. Signup details are saved to your profile before you enter the account.
+   Recycle & Earn opens My AkuBin; Buyer, Seller and Buyer & Seller open their
+   dashboard. There is no second onboarding screen after sign-in or confirmation.
+   Older incomplete accounts also enter a dashboard and can update missing details
+   in Settings. Old `/onboarding` bookmarks redirect to the account dashboard.
+   Material interests remain optional.
 
 Passwords must contain 8–72 characters and cannot be all spaces. Confirmation must
 match. Phone numbers use 10–15 digits with an optional leading `+`; supplying a phone
@@ -46,13 +46,16 @@ Joining does not automatically approve Marketplace verification. Use the separat
 ## Sign in and account recovery
 
 `/login` signs you into the existing backend account. On a normal reload, the refresh
-cookie restores the session. If it expires or is revoked, sign in again; protected
-account pages return you to login and preserve the destination.
+cookie restores the session. If it expires or is revoked, sign in again. Sign-in
+and email confirmation always open your account dashboard, including when an old
+login link contains a redirect parameter. Staff keep their staff console landing.
 
 `/forgot-password` requests a recovery code and accepts the code plus a new password.
 A provider error means the request did not complete; the UI must not claim an email
 was delivered. Email recovery was not repeated in the frontend page audit. Google
 provider sign-in is not currently available.
 
-Signing out clears the frontend session after backend logout. Staff pages remain
-restricted regardless of the URL you enter.
+Choose Sign out, then **Yes, sign out** to confirm. **Stay signed in** cancels without
+ending the session. Confirmed logout clears the frontend session after backend
+logout and opens Sign in. A failure stays visible in the dialog so you can retry.
+Staff pages remain restricted regardless of the URL you enter.

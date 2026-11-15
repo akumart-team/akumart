@@ -19,8 +19,9 @@ every request. Roles are not inferred from account email or local browser state.
 
 The header on every admin page includes **Switch to my account** and **Sign out**
 (on mobile, the account link reads **My account**). Switching keeps you signed in.
-Signing out calls the backend logout endpoint, clears the frontend session and
-returns you to Sign in; admin pages are restricted again.
+Sign out first opens a confirmation dialog. **Stay signed in** cancels; **Yes, sign
+out** calls the backend logout endpoint, clears the frontend session and returns
+you to Sign in. Admin pages are then restricted again. The same dialog works on mobile.
 
 | Page | Actions and workflow |
 |---|---|

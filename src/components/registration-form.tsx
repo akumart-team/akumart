@@ -7,6 +7,8 @@ import { errorMessage } from "@/lib/api/client";
 import { Button } from "./ui/button";
 import { Field, inputCls } from "./field";
 
+const signupRoleOptions = accountRoleOptions.filter((option) => option.value !== "logistics");
+
 const schema = z
   .object({
     firstName: z.string().trim().min(1, "Enter your first name.").max(50),
@@ -21,7 +23,12 @@ const schema = z
         "Enter a phone number with 10–15 digits, optionally starting with +.",
       ),
     city: z.string().trim().min(2, "Enter your city (at least two characters).").max(100),
-    marketRole: z.string().refine(isAccountRole, "Choose how you will use AkuMart."),
+    marketRole: z
+      .string()
+      .refine(
+        (value) => signupRoleOptions.some((option) => option.value === value),
+        "Choose how you will use AkuMart.",
+      ),
     akubin: z.boolean(),
     password: z
       .string()
@@ -46,6 +53,7 @@ export function RegistrationForm({
 }) {
   const [busy, setBusy] = useState(false);
   const [error, setError] = useState("");
+  const [role, setRole] = useState("");
   return (
     <form
       aria-label="Create account"
@@ -57,7 +65,7 @@ export function RegistrationForm({
         const parsed = schema.safeParse({
           ...Object.fromEntries(form),
           acceptedTerms: form.get("acceptedTerms") === "on",
-          akubin: form.get("akubin") === "on",
+          akubin: true,
         });
         if (!parsed.success) {
           setError(parsed.error.issues[0].message);
@@ -76,9 +84,7 @@ export function RegistrationForm({
         }
       }}
     >
-      <p className="text-xs text-muted-foreground">
-        All fields are required except the AkuBin option.
-      </p>
+      <p className="text-xs text-muted-foreground">All fields are required.</p>
       <fieldset disabled={disabled || busy} className="space-y-4">
         <div className="grid gap-4 sm:grid-cols-2">
           <Field label="First name" htmlFor="firstName">
@@ -154,31 +160,32 @@ export function RegistrationForm({
           />
         </Field>
         <Field label="How will you use AkuMart?" htmlFor="signup-role">
-          <select id="signup-role" name="marketRole" className={inputCls} defaultValue="" required>
+          <select
+            id="signup-role"
+            name="marketRole"
+            className={inputCls}
+            value={role}
+            onChange={(event) => setRole(event.target.value)}
+            required
+          >
             <option value="" disabled>
               Choose your role
             </option>
-            {accountRoleOptions.map((option) => (
+            {signupRoleOptions.map((option) => (
               <option key={option.value} value={option.value}>
                 {option.label}
               </option>
             ))}
           </select>
           <p className="mt-1 text-xs text-muted-foreground">
-            You can change this preference later. Logistics partners must be approved before
-            accepting delivery jobs. Marketplace trading requires separate verification.
+            You can change this preference later. Marketplace trading requires separate
+            verification. To deliver materials, apply for logistics partnership after signing in.
           </p>
         </Field>
-        <label className="flex items-start gap-3 rounded-xl border bg-muted/20 p-4 text-sm">
-          <input type="checkbox" name="akubin" className="mt-1" />
-          <span>
-            <strong className="block">Show AkuBin in my workspace (optional)</strong>
-            <span className="mt-1 block text-xs text-muted-foreground">
-              Show recycling shortcuts, points and activity alongside your role. Turning this off
-              does not deactivate your PIN or stop you earning points.
-            </span>
-          </span>
-        </label>
+        <p className="rounded-xl border bg-primary/5 p-4 text-sm">
+          AkuBin is included with every account. Set your PIN, recycle materials and earn points
+          without Marketplace verification.
+        </p>
         <Field label="Password" htmlFor="signup-password">
           <input
             id="signup-password"

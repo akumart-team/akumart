@@ -50,6 +50,8 @@ export interface Profile {
   city?: string | null;
   partner?: { id: string; status: string } | null;
   termsAcceptedAt: string | null;
+  profileCompleted?: boolean;
+  onboardedAt?: string | null;
   staff: { role: StaffRole; active: boolean } | null;
   preferences: {
     marketRole: "buyer" | "seller" | "both" | "logistics" | "recycler" | "none";
