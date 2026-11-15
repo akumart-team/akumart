@@ -1,25 +1,44 @@
+import {CampaignPlacements} from "@/components/api/discovery";
 import { createFileRoute, Link } from "@tanstack/react-router";
-import { ArrowRight, ShieldCheck, Handshake, Truck, Sparkles, Gift, Leaf, Coins, Factory, Users } from "lucide-react";
+import {
+  ArrowRight,
+  ShieldCheck,
+  Handshake,
+  Truck,
+  Sparkles,
+  Gift,
+  Leaf,
+  Coins,
+  Factory,
+  Users,
+} from "lucide-react";
 import { PublicShell } from "@/components/site-chrome";
 import { Button } from "@/components/ui/button";
 import { HowItWorks } from "@/components/how-it-works";
-import { useDB } from "@/lib/store";
+import { ArticlePreview } from "@/components/api/public-pages";
 import { img, yard, kiosk, plastic, materials, truck } from "@/lib/images";
 
 export const Route = createFileRoute("/")({
   head: () => ({
     meta: [
       { title: "AkuMart, Turning Waste into Opportunity" },
-      { name: "description", content: "Trade recyclable materials with verified Nigerian buyers and sellers, or recycle at an AkuBin and earn rewards." },
+      {
+        name: "description",
+        content:
+          "Trade recyclable materials with verified Nigerian buyers and sellers, or recycle at an AkuBin and earn rewards.",
+      },
       { property: "og:title", content: "AkuMart, Turning Waste into Opportunity" },
-      { property: "og:description", content: "Nigeria’s recyclable-waste marketplace and AkuBin smart-bin rewards. Waste Today. Resource Tomorrow." },
+      {
+        property: "og:description",
+        content:
+          "Nigeria’s recyclable-waste marketplace and AkuBin smart-bin rewards. Waste Today. Resource Tomorrow.",
+      },
     ],
   }),
   component: Home,
 });
 
 function Home() {
-  const articles = useDB((d) => d.articles.filter((a) => a.status === "published").slice(0, 3));
   return (
     <PublicShell>
       {/* HERO */}
@@ -34,7 +53,9 @@ function Home() {
               into <span className="text-lime">Opportunity.</span>
             </h1>
             <p className="mt-6 max-w-xl text-lg leading-relaxed text-forest-foreground/75">
-              A marketplace where verified businesses and individuals trade recyclable materials, and AkuBin, smart bins that reward everyday recycling. One account, two ways to turn waste into value.
+              A marketplace where verified businesses and individuals trade recyclable materials,
+              and AkuBin, smart bins that reward everyday recycling. One account, two ways to turn
+              waste into value.
             </p>
             <div className="mt-9 flex flex-wrap gap-3">
               <Button asChild size="lg" variant="lime">
@@ -49,10 +70,21 @@ function Home() {
           </div>
           <div className="relative mx-auto w-full max-w-xl">
             <div className="overflow-hidden rounded-[2rem] shadow-lift">
-              <img src={yard} alt="Sorted plastic bales at a Nigerian recycling yard" width={1600} height={1104} className="aspect-[4/3.4] w-full object-cover" />
+              <img
+                src={yard}
+                alt="Sorted plastic bales at a Nigerian recycling yard"
+                width={1600}
+                height={1104}
+                className="aspect-[4/3.4] w-full object-cover"
+              />
             </div>
             <div className="absolute -bottom-8 -left-6 hidden w-44 overflow-hidden rounded-3xl border-4 border-forest shadow-lift sm:block md:w-52">
-              <img src={kiosk} alt="Person recycling a bottle at an AkuBin smart bin" loading="lazy" className="aspect-[3/4] w-full object-cover" />
+              <img
+                src={kiosk}
+                alt="Person recycling a bottle at an AkuBin smart bin"
+                loading="lazy"
+                className="aspect-[3/4] w-full object-cover"
+              />
             </div>
             <div className="absolute -right-3 top-6 hidden rounded-2xl bg-lime px-4 py-3 text-lime-foreground shadow-lift md:block">
               <p className="eyebrow">Two services</p>
@@ -64,12 +96,23 @@ function Home() {
 
       {/* ABOUT */}
       <section className="container-page grid items-center gap-12 py-20 md:py-28 lg:grid-cols-2">
-        <img src={materials} alt="Sorted plastic, metal, glass, cardboard and paper" loading="lazy" width={1600} height={1008} className="aspect-[16/11] w-full rounded-[2rem] object-cover" />
+        <img
+          src={materials}
+          alt="Sorted plastic, metal, glass, cardboard and paper"
+          loading="lazy"
+          width={1600}
+          height={1008}
+          className="aspect-[16/11] w-full rounded-[2rem] object-cover"
+        />
         <div>
           <p className="eyebrow text-primary">About AkuMart</p>
-          <h2 className="text-display mt-3 text-4xl md:text-5xl">Recyclables are resources hiding in plain sight.</h2>
+          <h2 className="text-display mt-3 text-4xl md:text-5xl">
+            Recyclables are resources hiding in plain sight.
+          </h2>
           <p className="mt-5 text-lg leading-relaxed text-muted-foreground">
-            Too much valuable plastic, metal and paper ends up in drains and dumpsites because sellers can’t find trusted buyers, and households have no reason to sort. AkuMart connects the whole chain, from a single bottle to a truckload of bales.
+            Too much valuable plastic, metal and paper ends up in drains and dumpsites because
+            sellers can’t find trusted buyers, and households have no reason to sort. AkuMart
+            connects the whole chain, from a single bottle to a truckload of bales.
           </p>
           <Button asChild variant="link" className="mt-4 px-0 text-base">
             <Link to="/about">
@@ -122,15 +165,37 @@ function Home() {
         <div className="grid gap-12 lg:grid-cols-[1fr_1.4fr]">
           <div>
             <p className="eyebrow text-primary">Why AkuMart</p>
-            <h2 className="text-display mt-3 text-4xl md:text-5xl">Built for trust at every step.</h2>
+            <h2 className="text-display mt-3 text-4xl md:text-5xl">
+              Built for trust at every step.
+            </h2>
           </div>
           <dl className="grid gap-x-10 gap-y-8 sm:grid-cols-2">
             {[
-              { i: ShieldCheck, t: "Verified trading", d: "Identity or CAC checks before anyone makes an offer or gets paid." },
-              { i: Handshake, t: "Structured offers", d: "Clear price, quantity and conditions, no messy back-and-forth chat." },
-              { i: Truck, t: "Specialised logistics", d: "Every eligible partner on your route can quote. You choose." },
-              { i: Sparkles, t: "Smarter discovery", d: "A For You feed shaped by your materials and activity." },
-              { i: Gift, t: "Recycling rewards", d: "AkuBin points for verified deposits, no paperwork required." },
+              {
+                i: ShieldCheck,
+                t: "Verified trading",
+                d: "Identity or CAC checks before anyone makes an offer or gets paid.",
+              },
+              {
+                i: Handshake,
+                t: "Structured offers",
+                d: "Clear price, quantity and conditions, no messy back-and-forth chat.",
+              },
+              {
+                i: Truck,
+                t: "Specialised logistics",
+                d: "Every eligible partner on your route can quote. You choose.",
+              },
+              {
+                i: Sparkles,
+                t: "Smarter discovery",
+                d: "A For You feed shaped by your materials and activity.",
+              },
+              {
+                i: Gift,
+                t: "Recycling rewards",
+                d: "AkuBin points for verified deposits, no paperwork required.",
+              },
             ].map((r) => (
               <div key={r.t} className="flex gap-4">
                 <r.i className="mt-1 size-6 shrink-0 text-primary" />
@@ -152,9 +217,21 @@ function Home() {
             <h2 className="text-display mt-3 text-4xl">Cleaner streets. Fairer value.</h2>
           </div>
           {[
-            { i: Leaf, t: "Environmental", d: "More materials recovered before they reach drains, landfills and waterways." },
-            { i: Coins, t: "Economic", d: "Better price discovery and new income for collectors, aggregators and households." },
-            { i: Factory, t: "Industrial", d: "A steadier, graded supply of feedstock for Nigerian recyclers and manufacturers." },
+            {
+              i: Leaf,
+              t: "Environmental",
+              d: "More materials recovered before they reach drains, landfills and waterways.",
+            },
+            {
+              i: Coins,
+              t: "Economic",
+              d: "Better price discovery and new income for collectors, aggregators and households.",
+            },
+            {
+              i: Factory,
+              t: "Industrial",
+              d: "A steadier, graded supply of feedstock for Nigerian recyclers and manufacturers.",
+            },
             { i: Users, t: "Community", d: "Everyday recycling habits, rewarded at the bin." },
           ].map((x) => (
             <div key={x.t} className="border-t border-lime-foreground/20 pt-5">
@@ -169,11 +246,21 @@ function Home() {
       {/* LOGISTICS */}
       <section className="container-page py-20 md:py-28">
         <div className="relative overflow-hidden rounded-[2rem] bg-forest text-forest-foreground">
-          <img src={truck} alt="Logistics truck loaded with recyclable bales" loading="lazy" className="absolute inset-0 h-full w-full object-cover opacity-40" />
+          <img
+            src={truck}
+            alt="Logistics truck loaded with recyclable bales"
+            loading="lazy"
+            className="absolute inset-0 h-full w-full object-cover opacity-40"
+          />
           <div className="relative max-w-xl p-8 md:p-14">
             <p className="eyebrow text-lime">Logistics partners</p>
-            <h2 className="text-display mt-3 text-4xl md:text-5xl">Get jobs that match your trucks.</h2>
-            <p className="mt-4 text-forest-foreground/80">Approved partners are notified of every delivery on their routes, materials and capacity, then quote their own price.</p>
+            <h2 className="text-display mt-3 text-4xl md:text-5xl">
+              Get jobs that match your trucks.
+            </h2>
+            <p className="mt-4 text-forest-foreground/80">
+              Approved partners are notified of every delivery on their routes, materials and
+              capacity, then quote their own price.
+            </p>
             <Button asChild variant="lime" size="lg" className="mt-8">
               <Link to="/contact" search={{ interest: "logistics" }}>
                 Become a logistics partner <ArrowRight />
@@ -183,6 +270,7 @@ function Home() {
         </div>
       </section>
 
+      <section className="container-page pb-10"><CampaignPlacements placement="home"/></section>
       {/* ARTICLES */}
       <section className="container-page pb-20">
         <div className="mb-8 flex items-end justify-between">
@@ -191,21 +279,17 @@ function Home() {
             All articles →
           </Link>
         </div>
-        <div className="grid gap-6 md:grid-cols-3">
-          {articles.map((a) => (
-            <Link key={a.id} to="/articles/$slug" params={{ slug: a.slug }} className="group">
-              <img src={img(a.image)} alt="" loading="lazy" className="aspect-[16/10] w-full rounded-2xl object-cover transition-opacity group-hover:opacity-90" />
-              <p className="eyebrow mt-4 text-primary">{a.category}</p>
-              <h3 className="mt-2 font-display text-xl font-semibold leading-snug group-hover:text-primary">{a.title}</h3>
-            </Link>
-          ))}
+        <div>
+          <ArticlePreview />
         </div>
       </section>
 
       {/* CTA */}
       <section className="bg-mist">
         <div className="container-page flex flex-col items-start justify-between gap-6 py-16 md:flex-row md:items-center">
-          <h2 className="text-display max-w-xl text-3xl md:text-4xl">Start trading or recycling today, it’s one account.</h2>
+          <h2 className="text-display max-w-xl text-3xl md:text-4xl">
+            Start trading or recycling today, it’s one account.
+          </h2>
           <div className="flex flex-wrap gap-3">
             <Button asChild size="lg">
               <Link to="/signup">Get Started</Link>
@@ -220,22 +304,56 @@ function Home() {
   );
 }
 
-function ServicePanel({ tone, eyebrow, title, verbs, image, to, cta }: { tone: "light" | "dark"; eyebrow: string; title: string; verbs: string[]; image: string; to: "/marketplace" | "/akubin"; cta: string }) {
+function ServicePanel({
+  tone,
+  eyebrow,
+  title,
+  verbs,
+  image,
+  to,
+  cta,
+}: {
+  tone: "light" | "dark";
+  eyebrow: string;
+  title: string;
+  verbs: string[];
+  image: string;
+  to: "/marketplace" | "/akubin";
+  cta: string;
+}) {
   const dark = tone === "dark";
   return (
-    <div className={dark ? "overflow-hidden rounded-[2rem] bg-forest text-forest-foreground" : "overflow-hidden rounded-[2rem] bg-secondary text-forest"}>
+    <div
+      className={
+        dark
+          ? "overflow-hidden rounded-[2rem] bg-forest text-forest-foreground"
+          : "overflow-hidden rounded-[2rem] bg-secondary text-forest"
+      }
+    >
       <div className="grid h-full sm:grid-cols-[1.1fr_1fr]">
         <div className="flex flex-col p-8 md:p-10">
           <p className={dark ? "eyebrow text-lime" : "eyebrow text-primary"}>{eyebrow}</p>
           <h3 className="text-display mt-3 text-3xl">{title}</h3>
           <ul className="mt-6 flex flex-wrap gap-2">
             {verbs.map((v) => (
-              <li key={v} className={dark ? "rounded-full border border-forest-foreground/20 px-3 py-1 text-sm" : "rounded-full border border-forest/15 bg-background px-3 py-1 text-sm"}>
+              <li
+                key={v}
+                className={
+                  dark
+                    ? "rounded-full border border-forest-foreground/20 px-3 py-1 text-sm"
+                    : "rounded-full border border-forest/15 bg-background px-3 py-1 text-sm"
+                }
+              >
                 {v}
               </li>
             ))}
           </ul>
-          <Button asChild variant={dark ? "lime" : "default"} className="mt-auto self-start" style={{ marginTop: "2rem" }}>
+          <Button
+            asChild
+            variant={dark ? "lime" : "default"}
+            className="mt-auto self-start"
+            style={{ marginTop: "2rem" }}
+          >
             <Link to={to}>
               {cta} <ArrowRight />
             </Link>

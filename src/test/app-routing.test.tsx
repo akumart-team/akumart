@@ -14,4 +14,10 @@ describe("App routing", () => {
 
     expect(matches.at(-1)?.routeId).not.toBe(rootRouteId);
   });
+  it("does not expose the retired development role route", () => {
+    const router = createRouter({ routeTree, context: { queryClient: new QueryClient() } });
+    expect(
+      router.matchRoutes("/dev/roles").some((match) => String(match.routeId) === "/dev/roles"),
+    ).toBe(false);
+  });
 });

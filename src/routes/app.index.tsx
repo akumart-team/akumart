@@ -1,14 +1,14 @@
 import { createFileRoute, Navigate } from "@tanstack/react-router";
-import { useMe } from "@/lib/store";
-import { homePath } from "@/lib/after-auth";
-
+import { useProfile } from "@/lib/api/hooks/use-api";
+import { signInHome } from "@/lib/api/account-roles";
 export const Route = createFileRoute("/app/")({
-  component: AppHome,
+  component: AccountEntry,
 });
-
-function AppHome() {
-  const me = useMe();
-  if (!me) return null;
-  if (!me.prefs.onboarded) return <Navigate to="/onboarding" />;
-  return <Navigate to={homePath(me) as "/app"} />;
+function AccountEntry() {
+  const profile = useProfile();
+  return profile.data ? (
+    <Navigate to={signInHome(profile.data)} />
+  ) : (
+    <p role="status">Opening your workspace…</p>
+  );
 }
