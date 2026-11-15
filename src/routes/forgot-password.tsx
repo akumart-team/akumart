@@ -1,60 +1,60 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
 import { useState } from "react";
-import { MailCheck } from "lucide-react";
 import { AuthLayout } from "@/components/auth-layout";
-import { Field, inputCls } from "@/components/field";
+import { ActionForm } from "@/components/api/data-view";
 import { Button } from "@/components/ui/button";
-
-export const Route = createFileRoute("/forgot-password")({
-  head: () => ({
-    meta: [
-      { title: "Reset your password | AkuMart" },
-      { name: "description", content: "Request a password reset link for your AkuMart account." },
-      { property: "og:title", content: "Reset password | AkuMart" },
-      { property: "og:description", content: "Recover access to your AkuMart account." },
-    ],
-  }),
-  component: Forgot,
-});
-
-function Forgot() {
-  const [email, setEmail] = useState("");
-  const [sent, setSent] = useState(false);
-  const [err, setErr] = useState("");
+export const Route = createFileRoute("/forgot-password")({ component: Recovery });
+function Recovery() {
+  const [code, setCode] = useState(false);
+  const [done, setDone] = useState(false);
   return (
     <AuthLayout>
-      {sent ? (
-        <div>
-          <MailCheck className="size-10 text-primary" />
-          <h1 className="text-display mt-4 text-3xl">Check your inbox</h1>
-          <p className="mt-2 text-muted-foreground">If an account exists for {email}, a reset link will be sent.</p>
-          <Button asChild className="mt-6">
-            <Link to="/login">Back to sign in</Link>
-          </Button>
-        </div>
+      <h1 className="text-display mb-5 text-4xl">
+        {done ? "Password reset" : code ? "Reset password" : "Forgot password?"}
+      </h1>
+      {done ? (
+        <p>Your password reset request succeeded. Sign in with your new password.</p>
+      ) : code ? (
+        <ActionForm
+          title="Use your recovery code"
+          button="Reset password"
+          access="public"
+          path="/auth/reset-password"
+          fields={[
+            { name: "email", label: "Email", type: "email", required: true },
+            { name: "code", label: "Recovery code", required: true, min: 6, max: 8 },
+            {
+              name: "newPassword",
+              label: "New password",
+              type: "password",
+              required: true,
+              min: 8,
+              max: 72,
+            },
+          ]}
+          onSuccess={() => setDone(true)}
+        />
       ) : (
-        <form
-          noValidate
-          onSubmit={(e) => {
-            e.preventDefault();
-            if (!/^\S+@\S+\.\S+$/.test(email)) return setErr("Enter a valid email");
-            setSent(true);
-          }}
-          className="space-y-5"
-        >
-          <h1 className="text-display text-4xl">Forgot password?</h1>
-          <p className="text-muted-foreground">Enter your email and we’ll send a reset link.</p>
-          <Field label="Email" error={err}>
-            <input className={inputCls} type="email" value={email} onChange={(e) => setEmail(e.target.value)} />
-          </Field>
-          <Button type="submit" size="lg" className="w-full">
-            Send reset link
+        <>
+          <p className="mb-5 text-muted-foreground">
+            Request a recovery code. Delivery depends on the email provider being available.
+          </p>
+          <ActionForm
+            title="Request recovery code"
+            button="Send recovery code"
+            access="public"
+            path="/auth/forgot-password"
+            fields={[{ name: "email", label: "Email", type: "email", required: true }]}
+            onSuccess={() => setCode(true)}
+          />
+          <Button className="mt-4" variant="outline" onClick={() => setCode(true)}>
+            I already have a recovery code
           </Button>
-          <Link to="/login" className="block text-center text-sm text-primary">
-            Back to sign in
-          </Link>
-        </form>
+        </>
       )}
+      <Link to="/login" className="mt-6 block text-primary">
+        Back to sign in
+      </Link>
     </AuthLayout>
   );
 }

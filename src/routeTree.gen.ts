@@ -48,7 +48,6 @@ import { Route as AppVerificationRouteImport } from './routes/app.verification'
 import { Route as ArticlesIndexRouteImport } from './routes/articles.index'
 import { Route as ArticlesSlugRouteImport } from './routes/articles.$slug'
 import { Route as BinBinIdRouteImport } from './routes/bin.$binId'
-import { Route as DevRolesRouteImport } from './routes/dev.roles'
 import { Route as LegalDocRouteImport } from './routes/legal.$doc'
 import { Route as MarketplaceIndexRouteImport } from './routes/marketplace.index'
 import { Route as MarketplaceIdRouteImport } from './routes/marketplace.$id'
@@ -259,11 +258,6 @@ const BinBinIdRoute = BinBinIdRouteImport.update({
   path: '/bin/$binId',
   getParentRoute: () => rootRouteImport,
 } as any)
-const DevRolesRoute = DevRolesRouteImport.update({
-  id: '/dev/roles',
-  path: '/dev/roles',
-  getParentRoute: () => rootRouteImport,
-} as any)
 const LegalDocRoute = LegalDocRouteImport.update({
   id: '/legal/$doc',
   path: '/legal/$doc',
@@ -371,7 +365,6 @@ export interface FileRoutesByFullPath {
   '/app/verification': typeof AppVerificationRoute
   '/articles/$slug': typeof ArticlesSlugRoute
   '/bin/$binId': typeof BinBinIdRoute
-  '/dev/roles': typeof DevRolesRoute
   '/legal/$doc': typeof LegalDocRoute
   '/marketplace/$id': typeof MarketplaceIdRoute
   '/admin/': typeof AdminIndexRoute
@@ -425,7 +418,6 @@ export interface FileRoutesByTo {
   '/app/verification': typeof AppVerificationRoute
   '/articles/$slug': typeof ArticlesSlugRoute
   '/bin/$binId': typeof BinBinIdRoute
-  '/dev/roles': typeof DevRolesRoute
   '/legal/$doc': typeof LegalDocRoute
   '/marketplace/$id': typeof MarketplaceIdRoute
   '/admin': typeof AdminIndexRoute
@@ -482,7 +474,6 @@ export interface FileRoutesById {
   '/app/verification': typeof AppVerificationRoute
   '/articles/$slug': typeof ArticlesSlugRoute
   '/bin/$binId': typeof BinBinIdRoute
-  '/dev/roles': typeof DevRolesRoute
   '/legal/$doc': typeof LegalDocRoute
   '/marketplace/$id': typeof MarketplaceIdRoute
   '/admin/': typeof AdminIndexRoute
@@ -540,7 +531,6 @@ export interface FileRouteTypes {
     | '/app/verification'
     | '/articles/$slug'
     | '/bin/$binId'
-    | '/dev/roles'
     | '/legal/$doc'
     | '/marketplace/$id'
     | '/admin/'
@@ -594,7 +584,6 @@ export interface FileRouteTypes {
     | '/app/verification'
     | '/articles/$slug'
     | '/bin/$binId'
-    | '/dev/roles'
     | '/legal/$doc'
     | '/marketplace/$id'
     | '/admin'
@@ -650,7 +639,6 @@ export interface FileRouteTypes {
     | '/app/verification'
     | '/articles/$slug'
     | '/bin/$binId'
-    | '/dev/roles'
     | '/legal/$doc'
     | '/marketplace/$id'
     | '/admin/'
@@ -687,7 +675,6 @@ export interface RootRouteChildren {
   SignupRoute: typeof SignupRoute
   ArticlesSlugRoute: typeof ArticlesSlugRoute
   BinBinIdRoute: typeof BinBinIdRoute
-  DevRolesRoute: typeof DevRolesRoute
   LegalDocRoute: typeof LegalDocRoute
   MarketplaceIdRoute: typeof MarketplaceIdRoute
   AkubinIndexRoute: typeof AkubinIndexRoute
@@ -973,13 +960,6 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof BinBinIdRouteImport
       parentRoute: typeof rootRouteImport
     }
-    '/dev/roles': {
-      id: '/dev/roles'
-      path: '/dev/roles'
-      fullPath: '/dev/roles'
-      preLoaderRoute: typeof DevRolesRouteImport
-      parentRoute: typeof rootRouteImport
-    }
     '/legal/$doc': {
       id: '/legal/$doc'
       path: '/legal/$doc'
@@ -1173,7 +1153,6 @@ const rootRouteChildren: RootRouteChildren = {
   SignupRoute: SignupRoute,
   ArticlesSlugRoute: ArticlesSlugRoute,
   BinBinIdRoute: BinBinIdRoute,
-  DevRolesRoute: DevRolesRoute,
   LegalDocRoute: LegalDocRoute,
   MarketplaceIdRoute: MarketplaceIdRoute,
   AkubinIndexRoute: AkubinIndexRoute,

@@ -1,8 +1,6 @@
-import { createFileRoute, redirect } from "@tanstack/react-router";
-
-// Alias: /akubin/bins/BIN-001 → /akubin/bin/BIN-001
-export const Route = createFileRoute("/akubin/bins/$binId")({
-  beforeLoad: ({ params }) => {
-    throw redirect({ to: "/akubin/bin/$binId", params: { binId: params.binId } });
-  },
-});
+import { createFileRoute } from "@tanstack/react-router";
+import { BinDetails } from "@/components/api/other-pages";
+export const Route = createFileRoute("/akubin/bins/$binId")({ component: Detail });
+function Detail() {
+  return <BinDetails code={Route.useParams().binId} deposit={false} />;
+}
