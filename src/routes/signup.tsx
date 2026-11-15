@@ -63,7 +63,7 @@ function Signup() {
               }
             }}
           >
-            <Field label="Email verification code" htmlFor="email-code">
+            <Field label="Email verification code (6–8 digits)" htmlFor="email-code">
               <input
                 id="email-code"
                 className={inputCls}
@@ -72,13 +72,14 @@ function Signup() {
                 pattern="[0-9]{6,8}"
                 minLength={6}
                 maxLength={8}
+                title="Enter the 6–8 digit code from your email."
                 required
                 value={code}
                 onChange={(event) => setCode(event.target.value)}
               />
             </Field>
             <Button type="submit" disabled={busy}>
-              {verify.isPending ? "Verifying?" : "Verify email"}
+              {verify.isPending ? "Verifying…" : "Verify email"}
             </Button>
             <Button
               type="button"

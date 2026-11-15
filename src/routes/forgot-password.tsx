@@ -22,7 +22,16 @@ function Recovery() {
           path="/auth/reset-password"
           fields={[
             { name: "email", label: "Email", type: "email", required: true },
-            { name: "code", label: "Recovery code", required: true, min: 6, max: 8 },
+            {
+              name: "code",
+              label: "Recovery code (6–8 digits)",
+              required: true,
+              min: 6,
+              max: 8,
+              inputMode: "numeric",
+              pattern: "[0-9]{6,8}",
+              placeholder: "Enter the code from your email",
+            },
             {
               name: "newPassword",
               label: "New password",
