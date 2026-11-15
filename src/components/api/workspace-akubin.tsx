@@ -4,8 +4,8 @@ import { Panel } from "@/components/app-ui";
 import { rows, text, field } from "@/lib/api/services/resources";
 import { QueryState, Summary, useResource } from "./data-view";
 
-export function WorkspaceAkuBin({ enabled }: { enabled: boolean }) {
-  return enabled ? <RecyclingOverview /> : null;
+export function WorkspaceAkuBin() {
+  return <RecyclingOverview />;
 }
 function RecyclingOverview() {
   const deposits = useResource("/akubin/me/deposits?limit=5");

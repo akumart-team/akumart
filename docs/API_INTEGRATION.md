@@ -1,17 +1,24 @@
 # Backend integration
 
-Signup now requires `firstName`, `lastName`, `email`, `phone`, `city`, `marketRole`,
-`password`, `acceptedTerms: true` and an explicit `akubin` boolean. The four selectable
-roles are buyer, seller, both and logistics. Password confirmation is checked in the
-frontend and is not sent to the API. AkuBin is independent of role; unchecked sends
-`false`. Its signup preference is saved by the backend before email verification
-returns the authenticated session. Later login never resets the chosen preference.
+Signup requires `firstName`, `lastName`, `displayName`, `email`, `phone`, `city`,
+`marketRole`, `password` and `acceptedTerms: true`. The frontend sends `akubin: true`
+for API compatibility. AkuBin always appears; no visibility toggle remains.
+Signup offers buyer, seller, both and recycler. Logistics applications remain
+available after signing in; existing logistics accounts keep their workspace.
 
-Role-specific orders and offers use `?mode=buyer|seller`; the backend filters before
-pagination and computes the matching total. Omitting mode retains the combined own
-history for older API consumers. Logistics signup grants no staff or partner approval.
-Legacy `none`/`recycler` database values are compatibility states, not signup choices.
-The `/dev/roles` route has been removed.
+Verified signup metadata fills missing profile fields and an unconfigured role.
+Existing saved values, selected roles, consent, staff and partner permissions are
+preserved. Sign-in and confirmation route directly to the account workspace,
+regardless of legacy profile completeness. `/onboarding` is a compatibility redirect
+to `/app`; there is no separate setup page. Legacy unassigned roles get a neutral
+account dashboard without silently becoming buyers. Settings reads the application profile,
+not stale browser registration state. Older accounts can recover available missing
+metadata when signing in or loading their own profile. Information that was never
+saved by an old registration backend must be entered by the account holder.
+
+Role-specific orders/offers use `?mode=buyer|seller`; ownership is filtered before
+pagination. The `/dev/roles` route remains removed. Existing `none` accounts must
+choose a role; no staff/partner approval is granted from signup preferences.
 
 User-facing page and workflow explanations start at [Workflow guides](user-guides/README.md).
 Validation results and remaining gaps are recorded in [Frontend validation](VALIDATION.md).

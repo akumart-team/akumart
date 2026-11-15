@@ -106,3 +106,67 @@ Validation for this change:
 Guides: [Seller](user-guides/SELLER.md), [Buyer](user-guides/BUYER.md).
 No additional database migration is needed for these response rules.
 
+# Recycling-first signup
+
+Recycle & Earn is now a supported account choice (`marketRole: recycler`). Signup
+automatically includes AkuBin. Preferences keep AkuBin enabled for recyclers and
+clear the trading mode. Account home and the generic dashboard route to My AkuBin;
+the navigation omits buyer/seller tools. Existing trading and logistics accounts
+retain their independent AkuBin visibility preference. Staff landing and permissions
+remain separate. The existing database enum and signup trigger support this choice;
+no migration is required.
+
+Validated with frontend signup/workspace tests, TypeScript, backend signup metadata
+tests and the isolated platform API suite. No real signup email was sent.
+Four browser checks passed: recycler signup payload, backend preference
+normalization, AkuBin landing/navigation and Settings. The browser's normal proxy
+currently targets an older deployment; this check temporarily read the profile
+from the updated running backend on port 3000. That test routing was removed and
+the account's original preferences restored. Deploy backend and frontend together.
+The production build also passed.
+
+# Signup persistence, account setup and always-visible AkuBin
+
+Current behaviour supersedes the earlier optional-visibility notes below. AkuBin
+is included in every signup and dashboard, with no signup or Settings checkbox.
+The frontend always sends `akubin: true` and legacy false flags do not hide it.
+
+Sign-in and confirmation open the account workspace directly. Recycler accounts
+open `/app/akubin`; trading accounts open `/app/dashboard`; active staff keep their
+staff console. Legacy unassigned accounts get a neutral dashboard and AkuBin.
+There is no completeness gate or separate onboarding screen. `/onboarding` is only
+a compatibility redirect to `/app`. Required profile information is collected at
+signup; older missing details remain editable in Settings.
+
+The backend atomically fills missing profile fields and an unconfigured role from
+verified signup metadata during confirmation, login or own-profile loading. It
+preserves later edits, consent and permissions. Complete profiles are marked
+onboarded. Information discarded by an older registration backend cannot be
+recovered from absent metadata and must be supplied once by the account holder.
+
+Validation: 48 targeted frontend tests, 26 signup validation tests and 18 isolated
+platform API tests passed. TypeScript, changed-file frontend lint and the production
+build passed. Nine visible browser checks used isolated API fixtures to verify
+confirmation landing, Settings prefill/edit/reload, dashboard redirects for complete and incomplete accounts,
+always-visible AkuBin on buyer/seller dashboards and mobile navigation. No real
+emails were sent and these browser fixtures did not change account records.
+
+Live inspection of `codynlabs@gmail.com` found its older profile missing display
+name, phone and city with role `none`. Recovery through its authenticated profile
+load depends on the original signup metadata being present; this account has not
+been claimed as fully repaired by the isolated tests.
+
+# Dashboard landing and sign-out confirmation
+
+Sign-in and email confirmation now always open `/app`, which resolves the account's
+dashboard or staff console. Old redirect query parameters do not override that landing.
+Account and admin layouts share `SignOutButton`. Opening or cancelling its dialog
+does not call logout; confirmation sends one request. Pending state disables actions,
+and a failed logout keeps an inline error visible without navigating.
+
+Four sign-out component tests passed, along with TypeScript and changed-file lint.
+Fourteen browser checks with isolated API fixtures covered dashboard landing,
+confirmation/cancellation in both layouts, mobile dialog sizing and the existing
+signup/Settings/AkuBin regression checks. No real accounts were logged out by these
+fixture checks.
+

@@ -8,7 +8,6 @@ import { resendCode, verifyEmail } from "@/lib/api/services/auth";
 import { RegistrationForm } from "@/components/registration-form";
 import { apiKeys, useClientReady } from "@/lib/api/hooks/use-api";
 import { errorMessage } from "@/lib/api/client";
-import { safeTarget } from "@/lib/after-auth";
 export const Route = createFileRoute("/signup")({
   validateSearch: (s: Record<string, unknown>): { redirect?: string; google?: string } => ({
     redirect: typeof s.redirect === "string" ? s.redirect : undefined,
@@ -57,7 +56,7 @@ function Signup() {
                 const session = await verify.mutateAsync({ email, code });
                 qc.clear();
                 qc.setQueryData(apiKeys.session, session);
-                router.history.push(safeTarget(redirect) || "/onboarding");
+                router.history.replace("/app");
               } catch (cause) {
                 setError(errorMessage(cause));
               }

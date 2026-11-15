@@ -1,18 +1,20 @@
 # AkuMart workflow guides
 
 One account can buy, sell, recycle and apply to deliver materials. Signup requires
-one account role: **Buyer, Seller, Buyer & Seller, or Logistics Partner**. There is no
+one account role: **Buyer, Seller, Buyer & Seller, or Recycle & Earn**. There is no
 "None" choice. Roles organize your workspace; they do not grant staff permissions
 or replace verification and logistics approval.
 
-**AkuBin / Recycle & Earn is a separate optional checkbox, available with every
-role.** It is not an exclusive account role. You can change that preference in
-Settings, and every account can open the AkuBin service.
+**Recycle & Earn** is a recycling-first signup choice. It opens My AkuBin without
+requiring a buying, selling or logistics role. AkuBin is always visible for every account, with no on/off checkbox. Every account
+can use its PIN and earn points, and account roles can be changed in Settings.
 
 With Buyer & Seller selected, use the Buyer/Seller switch in the sidebar. It changes
 the dashboard, purchases versus sales, outgoing versus incoming offers and buyer
 request actions. Logistics opens the partner application/jobs/deliveries workspace.
-Account roles and AkuBin preferences can be changed in Settings.
+Account roles can be changed in Settings. Logistics
+partnership applications are available after signing in; Logistics Partner is not
+offered in the signup selector.
 
 ## Choose your guide
 

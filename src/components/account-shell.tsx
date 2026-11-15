@@ -1,3 +1,4 @@
+import { SignOutButton } from "@/components/sign-out-button";
 import { safeTarget } from "@/lib/after-auth";
 import {
   isAccountRole,
@@ -24,7 +25,6 @@ import {
   Truck,
   LifeBuoy,
   Settings,
-  LogOut,
   Menu,
   X,
   Loader2,
@@ -34,13 +34,7 @@ import {
 } from "lucide-react";
 import { Logo } from "@/components/brand";
 import { useResource } from "@/components/api/data-view";
-import {
-  useApiSession,
-  useProfile,
-  useLogout,
-  useVerification,
-  apiKeys,
-} from "@/lib/api/hooks/use-api";
+import { useApiSession, useProfile, useVerification, apiKeys } from "@/lib/api/hooks/use-api";
 import { errorMessage } from "@/lib/api/client";
 import { approvedBasic, levelState } from "@/lib/api/verification-policy";
 import { updatePreferences } from "@/lib/api/services/auth";
@@ -87,7 +81,6 @@ export function AccountShell({ children }: { children?: React.ReactNode }) {
   const session = useApiSession();
   const profile = useProfile();
   const verification = useVerification();
-  const logout = useLogout();
   const qc = useQueryClient();
   const preferences = useMutation({
     mutationFn: updatePreferences,
@@ -153,11 +146,16 @@ export function AccountShell({ children }: { children?: React.ReactNode }) {
     );
   };
   const tradingRole = ["buyer", "seller", "both"].includes(role);
-  const showAkuBin = me.preferences?.akubin === true || service === "akubin";
+  const showAkuBin = true;
   const showLogistics = hasLogisticsWorkspace(me);
   const serviceCount = 1 + Number(showAkuBin) + Number(showLogistics);
   const MARKET = !tradingRole
-    ? BUYER_NAV.filter((item) => item.to === "/app/marketplace" || item.to === "/marketplace")
+    ? BUYER_NAV.filter(
+        (item) =>
+          item.to === "/app/marketplace" ||
+          item.to === "/marketplace" ||
+          item.to === "/app/dashboard",
+      )
     : mode === "seller"
       ? SELLER_NAV
       : BUYER_NAV;
@@ -258,7 +256,7 @@ export function AccountShell({ children }: { children?: React.ReactNode }) {
         >
           {isAccountRole(role)
             ? "Want to buy or sell? Update your account role in Settings."
-            : "Complete account setup and choose your role."}
+            : "Choose how you use AkuMart in Settings."}
         </Link>
       )}
       <NavGroup
@@ -325,18 +323,7 @@ export function AccountShell({ children }: { children?: React.ReactNode }) {
               : v.basic.replace(/_/g, " ")}
           </StatusChip>
         </div>
-        <button
-          onClick={() => {
-            logout.mutate(undefined, {
-              onSuccess: () => router.navigate({ to: "/" }),
-              onError: (error) => toast.error(errorMessage(error)),
-            });
-          }}
-          disabled={logout.isPending}
-          className="flex items-center gap-2 pt-1 text-xs text-sidebar-foreground/70 hover:text-sidebar-accent-foreground"
-        >
-          <LogOut className="size-3.5" /> Sign out
-        </button>
+        <SignOutButton className="h-auto justify-start px-0 pt-1 text-xs text-sidebar-foreground/70 hover:bg-transparent hover:text-sidebar-accent-foreground" />
       </div>
     </div>
   );

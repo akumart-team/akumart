@@ -4,17 +4,22 @@ export const accountRoleOptions = [
   { value: "seller", label: "Seller — list and sell materials" },
   { value: "both", label: "Buyer & Seller" },
   { value: "logistics", label: "Logistics Partner — deliver materials" },
+  { value: "recycler", label: "Recycle & Earn — use AkuBin" },
 ] as const;
 export type AccountRole = (typeof accountRoleOptions)[number]["value"];
 export const isAccountRole = (value: unknown): value is AccountRole =>
   accountRoleOptions.some((option) => option.value === value);
+export function afterConfirmation(profile: Profile) {
+  return signInHome(profile);
+}
 export function hasLogisticsWorkspace(profile: Pick<Profile, "preferences" | "partner">) {
   return profile.preferences?.marketRole === "logistics" || profile.partner?.status === "approved";
 }
 export function accountHome(role: unknown) {
+  if (role === "recycler") return "/app/akubin";
   if (role === "logistics") return "/app/partner";
   if (role === "buyer" || role === "seller" || role === "both") return "/app/dashboard";
-  return "/onboarding";
+  return "/app/dashboard";
 }
 const staffHomes = {
   super: "/admin",

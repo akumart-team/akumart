@@ -38,8 +38,24 @@ export function Dashboard() {
   const profile = useProfile();
   const role = profile.data?.preferences?.marketRole;
   const mode = tradingMode(profile.data?.preferences);
-  if (profile.data && !isAccountRole(role)) return <Navigate to="/onboarding" />;
-  if (role === "logistics") return <Navigate to={accountHome(role)} />;
+  if (profile.data && !isAccountRole(role))
+    return (
+      <ResourcePage title="Dashboard" intro="Your account and recycling activity.">
+        <div className="flex flex-wrap gap-3">
+          <Button asChild>
+            <Link to="/app/akubin">Open My AkuBin</Link>
+          </Button>
+          <Button asChild variant="outline">
+            <Link to="/app/settings">Account settings</Link>
+          </Button>
+          <Button asChild variant="outline">
+            <Link to="/marketplace">Browse marketplace</Link>
+          </Button>
+        </div>
+        <WorkspaceAkuBin />
+      </ResourcePage>
+    );
+  if (role === "logistics" || role === "recycler") return <Navigate to={accountHome(role)} />;
   if (!mode) return <p role="status">Loading your workspace…</p>;
   return (
     <ResourcePage
@@ -92,7 +108,7 @@ export function Dashboard() {
           )}
         </Button>
       </div>
-      <WorkspaceAkuBin enabled={profile.data?.preferences?.akubin === true} />
+      <WorkspaceAkuBin />
     </ResourcePage>
   );
 }
@@ -345,12 +361,11 @@ export function Support() {
     </ResourcePage>
   );
 }
-export function Settings({ onboarding = false }: { onboarding?: boolean }) {
-  const router = useRouter();
+export function Settings() {
   const me = useProfile();
   const query = useResource("/users/me");
   return (
-    <ResourcePage title={onboarding ? "Set up your account" : "Settings"}>
+    <ResourcePage title="Settings">
       <QueryState query={query}>
         {(data) => {
           const row = record(data);
@@ -401,9 +416,10 @@ export function Settings({ onboarding = false }: { onboarding?: boolean }) {
                 }))}
               />
               <ActionForm
+                key={text(prefs.updatedAt) + text(prefs.marketRole)}
                 title="How you use AkuMart"
-                path={onboarding ? "/users/me/onboarding/complete" : "/users/me/preferences"}
-                method={onboarding ? "POST" : "PATCH"}
+                path="/users/me/preferences"
+                method="PATCH"
                 fields={[
                   {
                     name: "marketRole",
@@ -415,17 +431,11 @@ export function Settings({ onboarding = false }: { onboarding?: boolean }) {
                     value: isAccountRole(prefs.marketRole) ? String(prefs.marketRole) : "",
                   },
                   {
-                    name: "akubin",
-                    label: "Show AkuBin in my workspace",
-                    type: "checkbox",
-                    value: prefs.akubin === true,
-                  },
-                  {
                     name: "interests",
                     label: "Material interests (comma separated)",
                     value: Array.isArray(prefs.interests) ? prefs.interests.join(", ") : "",
                   },
-                  ...(onboarding && !row.termsAcceptedAt
+                  ...(!row.termsAcceptedAt
                     ? [
                         {
                           name: "acceptedTerms",
@@ -439,18 +449,16 @@ export function Settings({ onboarding = false }: { onboarding?: boolean }) {
                 ]}
                 body={(v) => ({
                   ...v,
+                  akubin: true,
                   interests: String(v.interests || "")
                     .split(",")
                     .map((x) => x.trim())
                     .filter(Boolean),
                 })}
-                onSuccess={(result) => {
-                  if (onboarding) router.history.push(accountHome(record(result).marketRole));
-                }}
               />
               <p className="text-sm text-muted-foreground">
-                AkuBin visibility controls workspace shortcuts and summaries. Your PIN, points and
-                earning remain active when it is hidden.
+                AkuBin is included with every account. Your PIN, points and recycling activity are
+                available whatever account role you choose.
               </p>
               {prefs.marketRole !== "logistics" && (
                 <Panel title="Logistics partnership">
@@ -466,7 +474,7 @@ export function Settings({ onboarding = false }: { onboarding?: boolean }) {
                 </Panel>
               )}
               <p className="text-sm text-muted-foreground">
-                {onboarding && !row.termsAcceptedAt && (
+                {!row.termsAcceptedAt && (
                   <>
                     <Link to="/legal/$doc" params={{ doc: "terms" }} className="underline">
                       Read the terms

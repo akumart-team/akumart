@@ -1,9 +1,9 @@
-import { createFileRoute, Link, Outlet, useLocation, useRouter } from "@tanstack/react-router";
-import { Loader2, LogOut, ShieldAlert } from "lucide-react";
+import { SignOutButton } from "@/components/sign-out-button";
+import { createFileRoute, Link, Outlet, useLocation } from "@tanstack/react-router";
+import { Loader2, ShieldAlert } from "lucide-react";
 import { Logo } from "@/components/brand";
 import { Button } from "@/components/ui/button";
-import { useApiSession, useLogout, useProfile } from "@/lib/api/hooks/use-api";
-import { toast } from "sonner";
+import { useApiSession, useProfile } from "@/lib/api/hooks/use-api";
 import { errorMessage } from "@/lib/api/client";
 import { cn } from "@/lib/utils";
 import { ADMIN_TABS, ROLE_LABEL } from "@/lib/admin";
@@ -24,8 +24,6 @@ export const Route = createFileRoute("/admin")({
 function AdminLayout() {
   const session = useApiSession();
   const profile = useProfile();
-  const logout = useLogout();
-  const router = useRouter();
   const role = profile.data?.staff?.active ? profile.data.staff.role : null;
   const loc = useLocation();
   if (session.isPending || (session.data && profile.isPending))
@@ -75,21 +73,7 @@ function AdminLayout() {
               <span className="sm:hidden">My account</span>
               <span className="hidden sm:inline">Switch to my account</span>
             </Link>
-            <Button
-              variant="ghost"
-              size="sm"
-              className="text-forest-foreground hover:bg-forest-soft hover:text-forest-foreground"
-              disabled={logout.isPending}
-              onClick={() =>
-                logout.mutate(undefined, {
-                  onSuccess: () => router.navigate({ to: "/login" }),
-                  onError: (error) => toast.error(errorMessage(error)),
-                })
-              }
-            >
-              <LogOut className="mr-1.5 size-4" />
-              {logout.isPending ? "Signing out…" : "Sign out"}
-            </Button>
+            <SignOutButton className="text-forest-foreground hover:bg-forest-soft hover:text-forest-foreground" />
           </div>
         </div>
         <nav className="sidebar-scroll container-page flex gap-1 overflow-x-auto pb-2">

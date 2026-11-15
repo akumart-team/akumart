@@ -424,7 +424,7 @@ export function Partner() {
           )
         }
       </QueryState>
-      <WorkspaceAkuBin enabled={me.data?.preferences?.akubin === true} />
+      <WorkspaceAkuBin />
     </ResourcePage>
   );
 }
