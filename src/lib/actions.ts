@@ -50,7 +50,7 @@ export function adminDecideVerification(userId: string, level: "basic" | "full",
 
 /* ---------------- Listings ---------------- */
 export function saveListing(l: Omit<Listing, "id" | "sellerId" | "sellerName" | "sellerBadge" | "createdAt" | "views">, id?: string) {
-  let newId = id ?? uid("L");
+  const newId = id ?? uid("L");
   update((d) => {
     const u = meIn(d);
     const badge = u.verification.basic === "approved" ? u.verification.type : null;
