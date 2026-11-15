@@ -151,7 +151,8 @@ function Advertiser() {
                         size="sm"
                         onClick={() => {
                           payCampaign(c.id, !payFail);
-                          payFail ? toast.error("Payment failed (simulated)") : toast.success("Paid via provider (simulated), pending admin review");
+                          if (payFail) toast.error("Payment failed (simulated)");
+                          else toast.success("Paid via provider (simulated), pending admin review");
                         }}
                       >
                         <CreditCard /> Pay {naira(c.price)}

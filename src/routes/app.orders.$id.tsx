@@ -80,7 +80,8 @@ function OrderPage() {
       setTimeout(() => {
         pay(o.id, payOutcome);
         setPaying(false);
-        payOutcome === "success" ? toast.success("Payment collected by provider (simulated)") : toast.error("Payment failed (simulated)");
+        if (payOutcome === "success") toast.success("Payment collected by provider (simulated)");
+        else toast.error("Payment failed (simulated)");
       }, 1800);
     });
 

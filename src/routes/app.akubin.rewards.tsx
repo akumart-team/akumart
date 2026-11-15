@@ -100,7 +100,8 @@ function Rewards() {
             <Button
               onClick={() => {
                 const r = redeem(pick!.id, pick!.kind === "airtime" ? phone || undefined : undefined);
-                r.ok ? toast.success(r.msg) : toast.error(r.msg);
+                if (r.ok) toast.success(r.msg);
+                else toast.error(r.msg);
                 setPick(null);
               }}
             >
