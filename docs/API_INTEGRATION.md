@@ -25,13 +25,23 @@ in session storage. Prototype models/helpers remain as reference and test fixtur
 ## Local setup
 
 Run the existing backend on port 3000 and the frontend with `npm run dev`.
-Vite forwards `/api` to `http://localhost:3000`. The default browser API base is
-`/api/v1`; `.env.example` documents `VITE_API_BASE_URL`.
+Copy `.env.example` to `.env.local`. Vite forwards `/api` to `API_PROXY_TARGET`
+(for example `http://localhost:3000`). The default browser API base is `/api/v1`;
+`VITE_API_BASE_URL` controls that separately. Restart Vite after editing these values.
+`API_PROXY_TARGET` is server-side development configuration and is not exposed to
+the browser. Vite loads mode-specific files such as `.env.development.local` too.
 In production, forward `/api` from the frontend origin to the backend without
 changing its paths. The backend's HttpOnly, SameSite=Lax refresh cookie requires
 an appropriate same-site deployment. An unrelated frontend domain will not work
 just by changing the API URL; review cookie/CORS deployment configuration first.
 Only public configuration belongs in `VITE_*` variables.
+
+Vite's development proxy does not run in a production build. For production, keep
+`VITE_API_BASE_URL=/api/v1` and configure the hosting reverse proxy to forward `/api`
+to the deployed backend. Alternatively, set `VITE_API_BASE_URL` to the full deployed
+API URL before building, with compatible backend CORS and cookie settings. Changing
+`API_PROXY_TARGET` alone does not configure production routing. Changes to `VITE_*`
+values require rebuilding the frontend.
 
 ## Module layout
 
