@@ -17,6 +17,11 @@ a deployment operation, not a public account flow.
 The console hides unavailable navigation, and the backend enforces permissions on
 every request. Roles are not inferred from account email or local browser state.
 
+The header on every admin page includes **Switch to my account** and **Sign out**
+(on mobile, the account link reads **My account**). Switching keeps you signed in.
+Signing out calls the backend logout endpoint, clears the frontend session and
+returns you to Sign in; admin pages are restricted again.
+
 | Page | Actions and workflow |
 |---|---|
 | Overview (`/admin`) | Read authorized summaries, search users and inspect orders, participants, holds and delivery proof. User details are read-only. |

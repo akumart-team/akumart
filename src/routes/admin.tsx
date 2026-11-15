@@ -1,8 +1,9 @@
-import { createFileRoute, Link, Outlet, useLocation } from "@tanstack/react-router";
-import { Loader2, ShieldAlert } from "lucide-react";
+import { createFileRoute, Link, Outlet, useLocation, useRouter } from "@tanstack/react-router";
+import { Loader2, LogOut, ShieldAlert } from "lucide-react";
 import { Logo } from "@/components/brand";
 import { Button } from "@/components/ui/button";
-import { useApiSession, useProfile } from "@/lib/api/hooks/use-api";
+import { useApiSession, useLogout, useProfile } from "@/lib/api/hooks/use-api";
+import { toast } from "sonner";
 import { errorMessage } from "@/lib/api/client";
 import { cn } from "@/lib/utils";
 import { ADMIN_TABS, ROLE_LABEL } from "@/lib/admin";
@@ -23,6 +24,8 @@ export const Route = createFileRoute("/admin")({
 function AdminLayout() {
   const session = useApiSession();
   const profile = useProfile();
+  const logout = useLogout();
+  const router = useRouter();
   const role = profile.data?.staff?.active ? profile.data.staff.role : null;
   const loc = useLocation();
   if (session.isPending || (session.data && profile.isPending))
@@ -60,7 +63,7 @@ function AdminLayout() {
   return (
     <div className="min-h-screen bg-mist">
       <header className="bg-forest text-forest-foreground">
-        <div className="container-page flex h-16 items-center justify-between gap-4">
+        <div className="container-page flex min-h-16 flex-wrap items-center justify-between gap-3 py-3">
           <div className="flex items-center gap-4">
             <Logo variant="white" />
             <span className="hidden rounded-full bg-lime px-3 py-1 text-xs font-bold text-lime-foreground sm:inline">
@@ -68,7 +71,25 @@ function AdminLayout() {
             </span>
           </div>
           <div className="flex items-center gap-3 text-sm">
-            <Link to="/app/dashboard">Switch to my account</Link>
+            <Link to="/app/dashboard">
+              <span className="sm:hidden">My account</span>
+              <span className="hidden sm:inline">Switch to my account</span>
+            </Link>
+            <Button
+              variant="ghost"
+              size="sm"
+              className="text-forest-foreground hover:bg-forest-soft hover:text-forest-foreground"
+              disabled={logout.isPending}
+              onClick={() =>
+                logout.mutate(undefined, {
+                  onSuccess: () => router.navigate({ to: "/login" }),
+                  onError: (error) => toast.error(errorMessage(error)),
+                })
+              }
+            >
+              <LogOut className="mr-1.5 size-4" />
+              {logout.isPending ? "Signing out…" : "Sign out"}
+            </Button>
           </div>
         </div>
         <nav className="sidebar-scroll container-page flex gap-1 overflow-x-auto pb-2">
