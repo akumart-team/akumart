@@ -156,3 +156,10 @@ Saving a listing is available to Buyer accounts and Buyer & Seller accounts whil
 ### Marketplace action visibility and listing access
 
 Marketplace actions follow the backend profile's current trading mode. Buyers see Post a buyer request; sellers see Sell your materials and Find buyer requests; dual-role accounts follow their active mode. Guests see Sign in to trade; recycling/logistics-only accounts have no trading actions. Direct access to My listings or the listing editor is blocked outside seller mode. Listing creation/updates require seller mode and the existing marketplace verification; buyer-request creation requires buyer mode and verification. Backend role checks apply even if the frontend is bypassed.
+
+
+### AkuBin point equivalents
+
+`GET /akubin/me/wallet` and `/akubin/me/summary` include decimal-string `pointValueNaira` and `balanceValueNaira`; summary additionally includes `lifetimeEarnedValueNaira`. The backend multiplies points by the current configured rate using decimal arithmetic, rounding the display value to two decimal places. Missing rate configuration returns null equivalents while preserving point balances.
+
+Dashboard, My AkuBin, and Rewards display the equivalent beneath points. Lifetime equivalent is also valued at the current rate, rather than a historical cash total. These display-only fields do not change points, payment balances, redemption eligibility, or reward fulfillment.

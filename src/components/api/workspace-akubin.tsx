@@ -1,8 +1,9 @@
+import { PointsSummary } from "./points-summary";
 import { Link } from "@tanstack/react-router";
 import { Recycle } from "lucide-react";
 import { Panel } from "@/components/app-ui";
 import { rows, text, field } from "@/lib/api/services/resources";
-import { QueryState, Summary, useResource } from "./data-view";
+import { QueryState, useResource } from "./data-view";
 
 export function WorkspaceAkuBin() {
   return <RecyclingOverview />;
@@ -21,15 +22,7 @@ function RecyclingOverview() {
           <Link to="/app/akubin/rewards">Rewards</Link>
         </div>
       </div>
-      <Summary
-        title="AkuBin points"
-        path="/akubin/me/summary"
-        fields={[
-          { key: "balancePoints", label: "Available points" },
-          { key: "lifetimeEarnedPoints", label: "Lifetime points" },
-          { key: "weightKg", label: "Recycled (kg)" },
-        ]}
-      />
+      <PointsSummary />
       <Panel title="Recent recycling activity">
         <QueryState query={deposits}>
           {(data) =>
