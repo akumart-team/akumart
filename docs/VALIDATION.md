@@ -1,3 +1,12 @@
+## Temporary AI support chat ? 16 November 2026
+
+- Frontend ? existing backend `/assistant/messages` ? AI support service; no direct browser-to-provider calls.
+- Six component tests pass: context/panel lifecycle, idle timer, retry without duplication, expired pending response, logout/account changes/new chat/reload, suggestions and escalation/link filtering.
+- Eighteen backend integration tests pass with isolated PostgreSQL and a stub AI provider, including no chat DB writes, guest/authenticated identity, bounded history, rejected system-role input, retired history retrieval, malformed provider replies.
+- Five visible browser checks pass using isolated chat responses: initial request, follow-up context, escalation, mobile layout, reload clears history. Capture: `course-browser/captures/frontend-visible/ai-chat-mobile.png`.
+- TypeScript, changed-file lint, backend compilation, and frontend production build pass.
+- Live local relay returned 502: Node outbound connection to the AI host was blocked by this execution environment (`EACCES`). A live provider reply remains to be verified from a normal backend process/deployment. No production deployment performed.
+
 # Frontend validation
 
 Development validation date: 15 November 2026. Frontend: `http://localhost:8080`;
@@ -30,7 +39,7 @@ than mocked browser responses.
 |---|---|
 | Member pages | Marketplace, requests, offers, AkuBin, rewards, partner and verification loaded without page errors or failed API responses. |
 | Staff pages | Overview, settings, bins, finance, support, content and advertising loaded under super staff without page errors or failed API responses. |
-| Verification | Approved account opens an update deliberately; Details → Documents flow; missing document blocks continuation. Desktop fills the main area. Mobile at 390px has no horizontal overflow. No additional identity application was submitted in this run. |
+| Verification | Approved account opens an update deliberately; Details â†’ Documents flow; missing document blocks continuation. Desktop fills the main area. Mobile at 390px has no horizontal overflow. No additional identity application was submitted in this run. |
 | Staff management | Edited an existing inactive membership through PUT, then restored the original role and enabled state. |
 | Buyer-request review | Loaded a supplier response; declined it, then restored shortlisted status. |
 | Account/order records | Searched an account and opened its detail; inspected a real order. No money or payment state was changed. |
@@ -80,7 +89,7 @@ One-time controller keys are masked in screenshots and excluded from saved resul
 | Email delivery / recovery | Was tested previously on the backend; email delivery was not repeated in this browser pass. |
 
 The role-specific explanations start at [User guides](user-guides/README.md).
-# Trading response revisions — 15 November 2026
+# Trading response revisions â€” 15 November 2026
 
 Implemented supplier edits while a response is sent, revised resubmission after
 decline, and locked shortlisted terms. Requests must remain open and unexpired.
