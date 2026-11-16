@@ -1,3 +1,4 @@
+import { SellerAccessNotice } from "./marketplace-actions";
 import { WorkspaceAkuBin } from "./workspace-akubin";
 import { MarketplaceFeed } from "./discovery";
 import { Link, Navigate, useRouter } from "@tanstack/react-router";
@@ -116,6 +117,11 @@ export function AccountMarketplace() {
   return <MarketplaceFeed browse={<Marketplace embedded />} />;
 }
 export function OwnListings() {
+  const profile = useProfile();
+  if (profile.isError)
+    return <p role="alert">Could not load your account. Please refresh and try again.</p>;
+  if (!profile.data) return <p role="status">Loading your workspace...</p>;
+  if (tradingMode(profile.data.preferences) !== "seller") return <SellerAccessNotice />;
   return (
     <ResourcePage title="My listings" intro="Drafts, published listings and available stock.">
       <Button asChild>
@@ -146,10 +152,16 @@ export function OwnListings() {
   );
 }
 export function ListingEditor({ id }: { id?: string }) {
-  const query = useResource("/listings/" + id, "private", Boolean(id));
+  const profile = useProfile();
+  const seller = tradingMode(profile.data?.preferences) === "seller";
+  const query = useResource("/listings/" + id, "private", Boolean(id) && seller);
   const router = useRouter();
   const gate = useTradeGate();
   const [allowed, setAllowed] = useState(false);
+  if (profile.isError)
+    return <p role="alert">Could not load your account. Please refresh and try again.</p>;
+  if (!profile.data) return <p role="status">Loading your workspace...</p>;
+  if (!seller) return <SellerAccessNotice />;
   const form = (source: unknown) => {
     const row = record(source);
     const fields: FormField[] = [

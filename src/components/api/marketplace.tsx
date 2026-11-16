@@ -1,3 +1,4 @@
+import { MarketplaceActions } from "./marketplace-actions";
 import { ListingSaveButton } from "./listing-save-button";
 import { MaterialCard } from "./material-card";
 import { RecommendedListings, CampaignPlacements } from "./discovery";
@@ -125,14 +126,7 @@ export function Marketplace({
           <option value="price_desc">Price: high to low</option>
         </select>
       </div>
-      <div className="flex flex-wrap gap-3">
-        <Button asChild>
-          <Link to="/app/listings/new">Sell your materials</Link>
-        </Button>
-        <Button asChild variant="outline">
-          <Link to="/app/requests">Post a buyer request</Link>
-        </Button>
-      </div>
+      <MarketplaceActions />
       <CampaignPlacements placement="marketplace" />
       <QueryState query={query}>
         {(data) =>
