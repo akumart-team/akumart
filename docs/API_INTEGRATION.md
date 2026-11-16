@@ -137,3 +137,12 @@ sessions, preserving role-specific dashboard navigation and the mobile menu.
 Visitors retain the public website header and footer. The `/app` route uses the
 same shell; Marketplace permission checks remain enforced by the backend and trade gate.
 
+
+
+## Temporary AI support chat
+
+The floating assistant calls `POST /api/v1/assistant/messages` on our backend through `src/lib/api/services/assistant.ts`. Only the backend calls the AI service. Optional authentication uses the existing API client; no provider key is shipped to the browser.
+
+Messages and the random chat session ID live only in React memory. Closing the panel preserves them; 30 minutes without bot interaction, refresh, logout/account change, unmount, or Start new chat clears them and aborts outstanding requests. Each request includes up to 12 recent user/assistant messages, with the new message separate. Neither our backend nor browser storage saves conversations. External AI-service retention is independent.
+
+Loading, retry without duplicate messages, quick suggestions, safe internal route links, and human support escalation are supported. Escalation links to Contact support without automatically creating a ticket or persisting a transcript.
