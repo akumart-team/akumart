@@ -53,7 +53,10 @@ export function MaterialCard({ listing }: { listing: RecordValue }) {
               View <ArrowUpRight className="ml-1 size-4" />
             </Link>
           </Button>
-          <ListingSaveButton id={text(listing.id)} />
+          <ListingSaveButton
+            id={text(listing.id)}
+            sellerId={text(listing.sellerId || field(listing, "seller.id"))}
+          />
         </div>
       </div>
     </article>
