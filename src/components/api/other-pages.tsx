@@ -1,3 +1,4 @@
+import { PointsSummary } from "./points-summary";
 import { BinSessionDetails, PointsHistory, RewardRules } from "./bin-account-details";
 import { CampaignStatistics, RecommendedJobs } from "./discovery";
 import { OrderDispute } from "./disputes";
@@ -117,16 +118,7 @@ export function BinDetails({ code, deposit = false }: { code: string; deposit?: 
 export function AkuBinDashboard() {
   return (
     <ResourcePage title="My AkuBin" intro="Your confirmed recycling activity and points.">
-      <Summary
-        title="Recycling summary"
-        path="/akubin/me/summary"
-        fields={[
-          c("balancePoints", "Available points"),
-          c("lifetimeEarnedPoints", "Lifetime points"),
-          c("weightKg", "Recycled (kg)"),
-          c("verifiedDepositCount", "Verified deposits"),
-        ]}
-      />
+      <PointsSummary title="Recycling summary" showVerified />
       <Summary
         title="PIN status"
         path="/akubin/me/pin"
@@ -197,11 +189,7 @@ export function Rewards() {
   return (
     <ResourcePage title="AkuBin rewards">
       <RewardRules />
-      <Summary
-        title="Points wallet"
-        path="/akubin/me/wallet"
-        fields={[c("balancePoints", "Available points")]}
-      />
+      <PointsSummary title="Points wallet" walletOnly />
       <DataTable
         title="Available rewards"
         path="/akubin/rewards"
