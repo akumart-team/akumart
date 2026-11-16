@@ -151,3 +151,8 @@ Loading, retry without duplicate messages, quick suggestions, safe internal rout
 ### Listing bookmark eligibility
 
 Saving a listing is available to Buyer accounts and Buyer & Seller accounts while in buyer mode, and only for another seller's published, eligible listing. The backend enforces ownership and role/mode checks within the save transaction. The frontend hides the bookmark for owners, seller-only accounts, seller mode, recyclers, and logistics accounts. Guests can sign in from the bookmark. Saving is not a trade and does not require buyer verification. Existing bookmarks can still be removed after changing roles or mode; saved-list retrieval excludes your own listings. Article bookmarks are independent.
+
+
+### Marketplace action visibility and listing access
+
+Marketplace actions follow the backend profile's current trading mode. Buyers see Post a buyer request; sellers see Sell your materials and Find buyer requests; dual-role accounts follow their active mode. Guests see Sign in to trade; recycling/logistics-only accounts have no trading actions. Direct access to My listings or the listing editor is blocked outside seller mode. Listing creation/updates require seller mode and the existing marketplace verification; buyer-request creation requires buyer mode and verification. Backend role checks apply even if the frontend is bypassed.
