@@ -146,3 +146,8 @@ The floating assistant calls `POST /api/v1/assistant/messages` on our backend th
 Messages and the random chat session ID live only in React memory. Closing the panel preserves them; 30 minutes without bot interaction, refresh, logout/account change, unmount, or Start new chat clears them and aborts outstanding requests. Each request includes up to 12 recent user/assistant messages, with the new message separate. Neither our backend nor browser storage saves conversations. External AI-service retention is independent.
 
 Loading, retry without duplicate messages, quick suggestions, safe internal route links, and human support escalation are supported. Escalation links to Contact support without automatically creating a ticket or persisting a transcript.
+
+
+### Listing bookmark eligibility
+
+Saving a listing is available to Buyer accounts and Buyer & Seller accounts while in buyer mode, and only for another seller's published, eligible listing. The backend enforces ownership and role/mode checks within the save transaction. The frontend hides the bookmark for owners, seller-only accounts, seller mode, recyclers, and logistics accounts. Guests can sign in from the bookmark. Saving is not a trade and does not require buyer verification. Existing bookmarks can still be removed after changing roles or mode; saved-list retrieval excludes your own listings. Article bookmarks are independent.

@@ -4,6 +4,8 @@ import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 import { ListingSaveButton } from "@/components/api/listing-save-button";
 const state = vi.hoisted(() => ({
   user: "buyer" as string | undefined,
+  role: "buyer",
+  mode: "buyer",
   ids: [] as string[],
   read: vi.fn(),
   write: vi.fn(),
@@ -11,6 +13,11 @@ const state = vi.hoisted(() => ({
   error: vi.fn(),
 }));
 vi.mock("@/lib/api/hooks/use-api", () => ({
+  useProfile: () => ({
+    data: state.user
+      ? { id: state.user, preferences: { marketRole: state.role, activeMode: state.mode } }
+      : undefined,
+  }),
   useApiSession: () => ({
     data: state.user ? { user: { id: state.user } } : null,
     isPending: false,
@@ -32,6 +39,8 @@ vi.mock("@tanstack/react-router", () => ({
 const clients: QueryClient[] = [];
 beforeEach(() => {
   state.user = "buyer";
+  state.role = "buyer";
+  state.mode = "buyer";
   state.ids = [];
   vi.clearAllMocks();
   state.read.mockImplementation(async (path: string) => {
@@ -52,7 +61,7 @@ afterEach(() => {
   clients.forEach((client) => client.clear());
   clients.length = 0;
 });
-function show(children: React.ReactNode = <ListingSaveButton id="listing" />) {
+function show(children: React.ReactNode = <ListingSaveButton id="listing" sellerId="supplier" />) {
   const client = new QueryClient({
     defaultOptions: { queries: { retry: false }, mutations: { retry: false } },
   });
@@ -60,6 +69,30 @@ function show(children: React.ReactNode = <ListingSaveButton id="listing" />) {
   return render(<QueryClientProvider client={client}>{children}</QueryClientProvider>);
 }
 describe("listing bookmarks", () => {
+  it("hides bookmarks for your own listings", () => {
+    show(<ListingSaveButton id="listing" sellerId="buyer" />);
+    expect(screen.queryByRole("button")).not.toBeInTheDocument();
+    expect(state.read).not.toHaveBeenCalled();
+  });
+  it.each(["seller", "recycler", "logistics", "none"])(
+    "hides bookmarks for %s accounts",
+    (role) => {
+      state.role = role;
+      show();
+      expect(screen.queryByRole("button")).not.toBeInTheDocument();
+      expect(state.read).not.toHaveBeenCalled();
+    },
+  );
+  it("requires buyer mode for a Buyer & Seller account", async () => {
+    state.role = "both";
+    state.mode = "seller";
+    const view = show();
+    expect(screen.queryByRole("button")).not.toBeInTheDocument();
+    view.unmount();
+    state.mode = "buyer";
+    show();
+    await waitFor(() => expect(screen.getByRole("button", { name: "Save listing" })).toBeEnabled());
+  });
   it("lets guests sign in without loading private saved items", () => {
     state.user = undefined;
     show();
@@ -81,8 +114,8 @@ describe("listing bookmarks", () => {
   it("shares saved queries across cards and updates both after save/remove", async () => {
     show(
       <>
-        <ListingSaveButton id="listing" />
-        <ListingSaveButton id="listing" />
+        <ListingSaveButton id="listing" sellerId="supplier" />
+        <ListingSaveButton id="listing" sellerId="supplier" />
       </>,
     );
     await waitFor(() =>

@@ -3,7 +3,8 @@ import { useIsMutating, useMutation, useQuery, useQueryClient } from "@tanstack/
 import { Bookmark, BookmarkCheck, LoaderCircle } from "lucide-react";
 import { toast } from "sonner";
 import { Button } from "@/components/ui/button";
-import { useApiSession } from "@/lib/api/hooks/use-api";
+import { tradingMode } from "@/lib/api/account-roles";
+import { useApiSession, useProfile } from "@/lib/api/hooks/use-api";
 import { errorMessage } from "@/lib/api/client";
 import { readResource, record, rows, writeResource } from "@/lib/api/services/resources";
 
@@ -19,9 +20,16 @@ async function savedListingIds() {
     page++;
   }
 }
-export function ListingSaveButton({ id }: { id: string }) {
+export function ListingSaveButton({ id, sellerId }: { id: string; sellerId: string }) {
   const session = useApiSession();
   const user = session.data?.user.id;
+  const profile = useProfile();
+  const canSave = Boolean(
+    user &&
+    profile.data?.id === user &&
+    tradingMode(profile.data.preferences) === "buyer" &&
+    sellerId !== user,
+  );
   const qc = useQueryClient();
   const queryKey = ["api", "resource", user || "guest", "saved-listing-ids"];
   const mutationKey = ["saved-listing", user, id];
@@ -29,7 +37,7 @@ export function ListingSaveButton({ id }: { id: string }) {
   const saved = useQuery({
     queryKey,
     queryFn: savedListingIds,
-    enabled: Boolean(user),
+    enabled: canSave,
     staleTime: 15000,
     retry: false,
   });
@@ -59,6 +67,7 @@ export function ListingSaveButton({ id }: { id: string }) {
       toast.error(errorMessage(cause));
     },
   });
+  if (user && !canSave) return null;
   if (!user && !session.isPending)
     return (
       <Button

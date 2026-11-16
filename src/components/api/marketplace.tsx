@@ -302,7 +302,7 @@ export function ListingDetails({ id }: { id: string }) {
                 )}
                 {profile.data && (
                   <div className="space-y-4">
-                    <ListingSaveButton id={id} />
+                    <ListingSaveButton id={id} sellerId={text(row.sellerId)} />
                     {!own && (
                       <ActionForm
                         title="Report listing"
