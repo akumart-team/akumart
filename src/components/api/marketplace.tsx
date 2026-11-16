@@ -1,3 +1,4 @@
+import { ListingSaveButton } from "./listing-save-button";
 import { MaterialCard } from "./material-card";
 import { RecommendedListings, CampaignPlacements } from "./discovery";
 import { useState } from "react";
@@ -11,7 +12,6 @@ import { useApiSession, useProfile } from "@/lib/api/hooks/use-api";
 import { record, rows, text, field, type RecordValue } from "@/lib/api/services/resources";
 import { useTradeGate } from "@/components/gate";
 import {
-  ActionButton,
   ActionForm,
   DataTable,
   PrivateImage,
@@ -302,9 +302,7 @@ export function ListingDetails({ id }: { id: string }) {
                 )}
                 {profile.data && (
                   <div className="space-y-4">
-                    <ActionButton path={"/users/me/saved-listings/" + id} method="PUT">
-                      Save listing
-                    </ActionButton>
+                    <ListingSaveButton id={id} />
                     {!own && (
                       <ActionForm
                         title="Report listing"

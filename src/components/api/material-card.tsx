@@ -1,3 +1,6 @@
+import { ArrowUpRight } from "lucide-react";
+import { Button } from "@/components/ui/button";
+import { ListingSaveButton } from "./listing-save-button";
 import { Link } from "@tanstack/react-router";
 import { text, field, type RecordValue } from "@/lib/api/services/resources";
 import { PrivateImage } from "./data-view";
@@ -44,6 +47,14 @@ export function MaterialCard({ listing }: { listing: RecordValue }) {
                 .join(" "),
           )}
         </p>
+        <div className="flex items-center gap-2 pt-3">
+          <Button asChild className="flex-1">
+            <Link to="/marketplace/$id" params={{ id: text(listing.id) }}>
+              View <ArrowUpRight className="ml-1 size-4" />
+            </Link>
+          </Button>
+          <ListingSaveButton id={text(listing.id)} />
+        </div>
       </div>
     </article>
   );
